@@ -1,0 +1,4 @@
+assets/echoes.db filter=lfs diff=lfs merge=lfs -text
+test/data/app_support/echoes.db filter=lfs diff=lfs merge=lfs -text
+docs/assets/echoes_db.tbz filter=lfs diff=lfs merge=lfs -text
+docs/assets/sweet-*.zip filter=lfs diff=lfs merge=lfs -text

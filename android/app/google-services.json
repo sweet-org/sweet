@@ -1,0 +1,119 @@
+{
+  "project_info": {
+    "project_number": "624208120378",
+    "firebase_url": "https://eve-echoes-tool-5474b.firebaseio.com",
+    "project_id": "eve-echoes-tool-5474b",
+    "storage_bucket": "eve-echoes-tool-5474b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624208120378:android:d924948f6c316633a44303",
+        "android_client_info": {
+          "package_name": "com.sillykat.eve.sweet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "624208120378-u8r3kji0v7thajec87k67s56e3ol4lof.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYmQIKg-HPBP18c10vLdM-75d4TDxXWds"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "624208120378-u8r3kji0v7thajec87k67s56e3ol4lof.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "624208120378-7reu62edhqalpc4c49mb8g28m4q5d4t6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sillykat.eet.eet"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624208120378:android:160793bd232353faa44303",
+        "android_client_info": {
+          "package_name": "com.sillykat.eve.sweet.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "624208120378-u8r3kji0v7thajec87k67s56e3ol4lof.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYmQIKg-HPBP18c10vLdM-75d4TDxXWds"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "624208120378-u8r3kji0v7thajec87k67s56e3ol4lof.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "624208120378-7reu62edhqalpc4c49mb8g28m4q5d4t6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sillykat.eet.eet"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624208120378:android:3abac2b15965f20fa44303",
+        "android_client_info": {
+          "package_name": "dev.sillykat.eve.sweet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "624208120378-u8r3kji0v7thajec87k67s56e3ol4lof.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYmQIKg-HPBP18c10vLdM-75d4TDxXWds"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "624208120378-u8r3kji0v7thajec87k67s56e3ol4lof.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "624208120378-7reu62edhqalpc4c49mb8g28m4q5d4t6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sillykat.eet.eet"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

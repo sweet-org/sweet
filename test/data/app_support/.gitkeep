@@ -1,0 +1,7 @@
+run before tests
+
+```
+wget -O sweet-db.tbz https://sillykat.page.link/sweet-db
+tar -xjvf sweet-db.tbz
+mv -f echoes.db test/data/app_support/echoes.db
+```

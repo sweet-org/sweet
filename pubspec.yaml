@@ -1,0 +1,132 @@
+name: sweet
+description: Collection of tools to make Eve Echoes more fun :D.
+
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+version: 0.3.1+1
+
+environment:
+  sdk: ">=2.15.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  collection: ^1.17.0
+
+  # DB Layer
+  sqflite: ^2.0.0+3
+  sqflite_common_ffi: ^2.0.0+1
+
+  bloc: ^8.1.0
+  flutter_bloc: ^8.1.1
+  equatable: ^2.0.3
+  provider: ^6.0.0
+
+  # Utility
+  filesize: ^2.0.1 # For the best number formatting
+  adaptive_theme: ^3.0.0
+  json_annotation: ^4.8.0
+  shared_preferences: ^2.0.8
+  package_info_plus: ^3.0.2
+  uuid: ^3.0.4
+  # https://github.com/appsup-dart/expressions/issues/22
+  expressions:
+    git:
+      url: https://github.com/alexmarkley/expressions.git
+      ref: petitparser5
+
+  http: ^0.13.3
+  archive: ^3.3.8
+  csv: ^5.0.0
+  url_launcher: ^6.0.11
+  path_provider: ^2.0.5
+  flutter_local_notifications: ^13.0.0
+
+  sprintf: ^7.0.0
+  intl: ^0.18.0
+
+  # Scanning QR specific
+  scan: ^1.4.3
+  qr_flutter: ^4.0.0
+  image_picker: ^0.8.4
+  file_picker: ^5.2.5 #for native picking
+  permission_handler: ^10.2.0
+  recase: ^4.0.0
+
+  # UI
+  step_progress_indicator: ^1.0.1
+  flutter_svg: ^1.1.0
+  flutter_staggered_grid_view: ^0.4.0 # locked to version because I don't want to deal with it yet
+  auto_size_text: ^3.0.0
+  grouped_list: ^5.1.1
+  flutter_countdown_timer: ^4.1.0
+  tinycolor2: ^3.0.1
+
+  #Firebase
+  firebase_core: ^2.4.1
+  firebase_analytics: ^10.1.0
+  firebase_crashlytics: ^3.0.11
+
+  manup: ^4.0.2
+  path: ^1.8.2
+  timezone: ^0.9.1
+
+dev_dependencies:
+  lints: ^2.0.1
+  build_runner: ^2.3.3
+  json_serializable: ^6.2.0
+  flutter_launcher_icons: ^0.11.0
+  mockito: ^5.0.12
+
+  flutter_test:
+    sdk: flutter
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/logo.png"
+  adaptive_icon_foreground: "assets/icon/logo-transparent.png"
+  adaptive_icon_background: "#012966"
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/fitting-patterns.json
+    - assets/svg/logo-transparent.svg
+    - assets/icons/
+    - assets/branding/
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware.
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages

@@ -1,0 +1,76 @@
+{
+    "damage": [
+        {
+            "name": "Uniform",
+            "emPercent": 0.25,
+            "thermalPercent": 0.25,
+            "kineticPercent": 0.25,
+            "explosivePercent": 0.25
+        },
+        {
+            "name": "Lasers",
+            "emPercent": 0.6206896552,
+            "thermalPercent": 0.379310344827586000,
+            "kineticPercent": 0,
+            "explosivePercent": 0
+        },
+        {
+            "name": "Rails",
+            "emPercent": 0,
+            "thermalPercent": 0.379310344827586000,
+            "kineticPercent": 0.6206896552,
+            "explosivePercent": 0
+        },
+        {
+            "name": "Cannons",
+            "emPercent": 0,
+            "thermalPercent": 0.375,
+            "kineticPercent": 0.25,
+            "explosivePercent": 0.375
+        },
+        {
+            "name": "Decomposer",
+            "emPercent": 0,
+            "thermalPercent": 0,
+            "kineticPercent": 0.6206896552,
+            "explosivePercent": 0.379310344827586
+        },
+        {
+            "name": "All EM",
+            "emPercent": 1.0,
+            "thermalPercent": 0.0,
+            "kineticPercent": 0.0,
+            "explosivePercent": 0.0
+        },
+        {
+            "name": "All Thermal",
+            "emPercent": 0.0,
+            "thermalPercent": 1.0,
+            "kineticPercent": 0.0,
+            "explosivePercent": 0.0
+        },
+        {
+            "name": "All Kinetic",
+            "emPercent": 0.0,
+            "thermalPercent": 0.0,
+            "kineticPercent": 1.0,
+            "explosivePercent": 0.0
+        },
+        {
+            "name": "All Explosive",
+            "emPercent": 0.0,
+            "thermalPercent": 0.0,
+            "kineticPercent": 0.0,
+            "explosivePercent": 1.0
+        }
+    ],
+    "defence": [
+        {
+            "name": "All Explosive",
+            "emPercent": 0.0,
+            "thermalPercent": 0.0,
+            "kineticPercent": 0.0,
+            "explosivePercent": 1.0
+        }
+    ]
+}

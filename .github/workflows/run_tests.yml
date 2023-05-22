@@ -1,0 +1,36 @@
+name: Tests
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  job-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: "true"
+
+      - uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
+
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: "stable"
+
+      - name: "Fetch packages"
+        run: flutter pub get
+
+      - name: "Analyze project"
+        run: flutter analyze
+
+      - name: "Download latest data"
+        run: |
+          wget -O sweet-db.tbz https://sillykat.page.link/sweet-db
+          tar -xjvf sweet-db.tbz
+          mv -f echoes.db test/data/app_support/echoes.db
+
+      - name: "Run tests"
+        run: flutter test
