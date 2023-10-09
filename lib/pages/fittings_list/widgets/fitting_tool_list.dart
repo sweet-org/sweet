@@ -3,6 +3,8 @@ import 'package:sweet/bloc/item_repository_bloc/market_group_filters.dart';
 import 'package:sweet/database/entities/item.dart';
 import 'package:sweet/mixins/scan_qrcode_mixin.dart';
 import 'package:sweet/model/items/eve_echoes_categories.dart';
+import 'package:sweet/model/ship/ship_fitting_folder.dart';
+import 'package:sweet/pages/fittings_list/widgets/fitting_folder_card.dart';
 import 'package:sweet/repository/character_repository.dart';
 import 'package:sweet/service/fitting_simulator.dart';
 import 'package:sweet/model/ship/ship_fitting_loadout.dart';
@@ -61,6 +63,12 @@ class _FittingToolListState extends State<FittingToolList>
     );
 
     await _showFittingPage(loadout);
+  }
+
+  void addFolder() async {
+    context.read<ShipFittingBrowserBloc>().add(
+      CreateFittingFolder(),
+    );
   }
 
   Future<void> _showFittingPage(ShipFittingLoadout loadout) async {
@@ -129,16 +137,26 @@ class _FittingToolListState extends State<FittingToolList>
 
                     context.read<ShipFittingBrowserBloc>().add(
                           ReorderShipFitting(
-                              shipFitting: fitting, newIndex: newIndex),
+                              element: fitting, newIndex: newIndex),
                         );
                   },
                   itemBuilder: (context, index) {
                     var loadout = list[index];
-                    return ShipFittingCard(
-                      key: Key(loadout.id),
-                      loadout: loadout,
-                      onTap: _showFittingPage,
-                    );
+                    if (loadout is ShipFittingLoadout) {
+                      return ShipFittingCard(
+                        key: Key(loadout.getId()),
+                        loadout: loadout,
+                        onTap: _showFittingPage,
+                      );
+                    } else if (loadout is ShipFittingFolder) {
+                      return FittingFolderCard(
+                          key: Key(loadout.getId()),
+                          folder: loadout,
+                          onLoadoutTap: _showFittingPage
+                      );
+                    } else {
+                      return Text("Error, unknown element: ${loadout.getName()}\n${loadout.getId()}");
+                    }
                   },
                 );
               }
@@ -165,6 +183,18 @@ class _FittingToolListState extends State<FittingToolList>
     return SpeedDialFab(
       buttonClosedColor: Theme.of(context).primaryColor,
       children: [
+        SizedBox.fromSize(
+          size: Size.square(48),
+          child: RawMaterialButton(
+            onPressed: () => addFolder(),
+            fillColor: Theme.of(context).primaryColor,
+            shape: CircleBorder(),
+            child: Icon(
+              Icons.create_new_folder,
+              color: Colors.white,
+            ),
+          ),
+        ),
         SizedBox.fromSize(
           size: Size.square(48),
           child: RawMaterialButton(

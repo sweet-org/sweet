@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:sweet/model/ship/ship_fitting_folder.dart';
 import 'package:sweet/model/ship/ship_fitting_loadout.dart';
 import 'package:sweet/repository/item_repository.dart';
 import 'package:sweet/repository/ship_fitting_repository.dart';
@@ -33,6 +34,28 @@ class ShipFittingBrowserBloc
       emit(ShipFittingBrowserLoaded(fittingRepository.loadouts));
     }
 
+    if (event is CreateFittingFolder) {
+      emit(ShipFittingBrowserLoading());
+      var folder = ShipFittingFolder(name: "Unnamed Folder");
+      await fittingRepository.addLoadout(folder);
+      emit(ShipFittingBrowserLoaded(fittingRepository.loadouts));
+    }
+
+    if (event is RenameFittingFolder) {
+      emit(ShipFittingBrowserLoading());
+      event.folder.setName(event.newName);
+      await fittingRepository.saveLoadouts();
+      emit(ShipFittingBrowserLoaded(fittingRepository.loadouts));
+    }
+
+    if (event is MoveFittingToFolder) {
+      emit(ShipFittingBrowserLoading());
+      await fittingRepository.moveToFolder(
+          loadout: event.fitting, folderName: event.folderName
+      );
+      emit(ShipFittingBrowserLoaded(fittingRepository.loadouts));
+    }
+
     if (event is DeleteShipFitting) {
       emit(ShipFittingBrowserLoading());
       await fittingRepository.deleteLoadout(loadoutId: event.shipFittingId);
@@ -63,7 +86,7 @@ class ShipFittingBrowserBloc
     if (event is ReorderShipFitting) {
       emit(ShipFittingBrowserLoading());
       await fittingRepository.moveFitting(
-        fitting: event.shipFitting,
+        element: event.element,
         newIndex: event.newIndex,
       );
       emit(ShipFittingBrowserLoaded(fittingRepository.loadouts));

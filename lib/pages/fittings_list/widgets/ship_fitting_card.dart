@@ -74,6 +74,9 @@ class ShipFittingCard extends StatelessWidget {
                     ),
                   ),
                   IconButton(
+                      icon: Icon(Icons.snippet_folder_rounded),
+                      onPressed: () => moveLoadoutToFolder(context, loadout)),
+                  IconButton(
                     icon: Icon(Icons.delete),
                     onPressed: () => deleteLoadout(context, loadout),
                   ),
@@ -171,6 +174,56 @@ class ShipFittingCard extends StatelessWidget {
                 widgetContext
                     .read<ShipFittingBrowserBloc>()
                     .add(DeleteShipFitting(shipFittingId: loadout.id));
+                Navigator.of(context).pop();
+              },
+              child: LocalisedText(localiseId: LocalisationStrings.ok),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> moveLoadoutToFolder(
+      BuildContext widgetContext, ShipFittingLoadout loadout) {
+    final folderController = TextEditingController(text: '');
+    //ToDo: Replace with a dropdown or something similar. Drag&Drop would be cool but probably to complicated
+    return showDialog<void>(
+      context: widgetContext,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            title: Text(StaticLocalisationStrings.moveToFolder),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(
+                      'Please enter the target folder name where you want to move this fitting to.\n\n'
+                      'Empty if you want to move it outside of the current folder.'),
+                  TextField(
+                    controller: folderController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Folder Name',
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: LocalisedText(
+                localiseId: LocalisationStrings.cancel,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                widgetContext
+                    .read<ShipFittingBrowserBloc>()
+                    .add(MoveFittingToFolder(loadout, folderController.text));
                 Navigator.of(context).pop();
               },
               child: LocalisedText(localiseId: LocalisationStrings.ok),
