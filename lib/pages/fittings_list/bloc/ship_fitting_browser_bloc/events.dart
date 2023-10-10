@@ -36,15 +36,15 @@ class CreateFittingFolder extends ShipFittingBrowserEvent {
 }
 
 class MoveFittingToFolder extends ShipFittingBrowserEvent {
-  final String folderName;
+  final String folderId;
   final FittingListElement fitting;
 
-  MoveFittingToFolder(this.fitting, this.folderName);
+  MoveFittingToFolder(this.fitting, this.folderId);
 
   @override
   List<Object> get props => [
     fitting,
-    folderName,
+    folderId,
   ];
 }
 

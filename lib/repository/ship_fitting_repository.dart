@@ -78,16 +78,13 @@ class ShipFittingLoadoutRepository {
     //Check if the loadout is in the root list (= not inside any folder)
     FittingListElement? target = _loadouts.firstWhereOrNull((c) => c.getId() == id);
     if (target != null) {
-      print("Object found a root");
       return target;
     }
     //Search recursively in all folders for the element
     ShipFittingFolder? folder = _loadouts.whereType<ShipFittingFolder>().firstWhereOrNull((f) => f.hasElement(id));
     if (folder != null) {
-      print("Folder found");
       return folder.getElement(id);
     }
-    print("Object not found anywhere");
     return null;
   }
 
@@ -110,11 +107,10 @@ class ShipFittingLoadoutRepository {
     }
   }
 
-  moveToFolder({required FittingListElement loadout, required String folderName}) async {
+  moveToFolder({required FittingListElement loadout, required String folderId}) async {
     ShipFittingFolder? folder;
-    folderName = folderName.trim().toLowerCase();
 
-    if (folderName == "") {
+    if (folderId == "") {
       //Move item out of current folder into root list
       deleteLoadoutSync(loadout.getId());
       _loadouts.add(loadout);
@@ -124,13 +120,13 @@ class ShipFittingLoadoutRepository {
 
     for (final el in _loadouts) {
       if (el is! ShipFittingFolder) continue;
-      if (el.name.toLowerCase() == folderName) {
+      if (el.id == folderId) {
         folder = el;
         break;
       }
     }
     if (folder == null) {
-      print('Folder with name "$folderName" not found, can\'t move item ${loadout.getName()}');
+      print('Folder with id "$folderId" not found, can\'t move item ${loadout.getName()}');
       return;
     }
 

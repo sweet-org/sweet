@@ -51,7 +51,7 @@ class ShipFittingBrowserBloc
     if (event is MoveFittingToFolder) {
       emit(ShipFittingBrowserLoading());
       await fittingRepository.moveToFolder(
-          loadout: event.fitting, folderName: event.folderName
+          loadout: event.fitting, folderId: event.folderId
       );
       emit(ShipFittingBrowserLoaded(fittingRepository.loadouts));
     }

@@ -160,10 +160,7 @@ class _FittingFolderState extends State<FittingFolderCard> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text(
-                    'Please enter the new name of the folder\n\nNames should be '
-                        'unique, or else you won\'t be able to move fittings '
-                        'into the folder.'),
+                Text('Please enter the new name of the folder\n'),
                 TextField(
                   controller: folderController,
                   decoration: InputDecoration(

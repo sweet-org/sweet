@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sweet/model/ship/ship_fitting_loadout.dart';
 import 'package:sweet/pages/fittings_list/bloc/ship_fitting_browser_bloc/ship_fitting_browser_bloc.dart';
 import 'package:sweet/repository/item_repository.dart';
+import 'package:sweet/repository/ship_fitting_repository.dart';
 import 'package:sweet/util/localisation_constants.dart';
 import 'package:sweet/widgets/localised_text.dart';
 
@@ -186,30 +187,37 @@ class ShipFittingCard extends StatelessWidget {
 
   Future<void> moveLoadoutToFolder(
       BuildContext widgetContext, ShipFittingLoadout loadout) {
-    final folderController = TextEditingController(text: '');
+    var fittingRepo =
+        RepositoryProvider.of<ShipFittingLoadoutRepository>(widgetContext);
     //ToDo: Replace with a dropdown or something similar. Drag&Drop would be cool but probably to complicated
     return showDialog<void>(
       context: widgetContext,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-            title: Text(StaticLocalisationStrings.moveToFolder),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text(
-                      'Please enter the target folder name where you want to move this fitting to.\n\n'
-                      'Empty if you want to move it outside of the current folder.'),
-                  TextField(
-                    controller: folderController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Folder Name',
-                    ),
-                  ),
-                ],
-              ),
+          title: Text(StaticLocalisationStrings.moveToFolder),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Select the target folder or press "No Folder" to move it out of the current folder'),
+                DropdownButton<String>(
+                    isExpanded: true,
+                    items: fittingRepo
+                        .getAllFolders()
+                        .map<DropdownMenuItem<String>>((f) => DropdownMenuItem(
+                              child: Text(f.name),
+                              value: f.id,
+                            ))
+                        .toList(),
+                    onChanged: (id) {
+                      widgetContext
+                          .read<ShipFittingBrowserBloc>()
+                          .add(MoveFittingToFolder(loadout, id ?? ""));
+                      Navigator.of(context).pop();
+                    })
+              ],
             ),
+          ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -223,10 +231,10 @@ class ShipFittingCard extends StatelessWidget {
               onPressed: () {
                 widgetContext
                     .read<ShipFittingBrowserBloc>()
-                    .add(MoveFittingToFolder(loadout, folderController.text));
+                    .add(MoveFittingToFolder(loadout, ""));
                 Navigator.of(context).pop();
               },
-              child: LocalisedText(localiseId: LocalisationStrings.ok),
+              child: Text("No Folder"),
             ),
           ],
         );
