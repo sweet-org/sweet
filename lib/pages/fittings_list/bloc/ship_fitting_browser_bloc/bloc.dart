@@ -88,6 +88,7 @@ class ShipFittingBrowserBloc
       await fittingRepository.moveFitting(
         element: event.element,
         newIndex: event.newIndex,
+        folder: event.folder
       );
       emit(ShipFittingBrowserLoaded(fittingRepository.loadouts));
     }

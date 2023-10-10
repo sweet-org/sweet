@@ -189,7 +189,6 @@ class ShipFittingCard extends StatelessWidget {
       BuildContext widgetContext, ShipFittingLoadout loadout) {
     var fittingRepo =
         RepositoryProvider.of<ShipFittingLoadoutRepository>(widgetContext);
-    //ToDo: Replace with a dropdown or something similar. Drag&Drop would be cool but probably to complicated
     return showDialog<void>(
       context: widgetContext,
       barrierDismissible: false,

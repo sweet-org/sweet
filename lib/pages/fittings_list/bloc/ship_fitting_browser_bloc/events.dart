@@ -1,5 +1,3 @@
-
-
 import 'package:sweet/database/entities/item.dart';
 import 'package:sweet/model/ship/fitting_list_element.dart';
 import 'package:sweet/model/ship/ship_fitting_folder.dart';
@@ -10,7 +8,8 @@ import 'package:flutter/widgets.dart';
 @immutable
 abstract class ShipFittingBrowserEvent extends Equatable {
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
+
   ShipFittingBrowserEvent([List props = const []]) : super();
 }
 
@@ -28,7 +27,6 @@ class CreateShipFitting extends ShipFittingBrowserEvent {
 }
 
 class CreateFittingFolder extends ShipFittingBrowserEvent {
-
   CreateFittingFolder();
 
   @override
@@ -43,9 +41,9 @@ class MoveFittingToFolder extends ShipFittingBrowserEvent {
 
   @override
   List<Object> get props => [
-    fitting,
-    folderId,
-  ];
+        fitting,
+        folderId,
+      ];
 }
 
 class LoadAllShipFittings extends ShipFittingBrowserEvent {
@@ -101,16 +99,16 @@ class DeleteShipFitting extends ShipFittingBrowserEvent {
 class ReorderShipFitting extends ShipFittingBrowserEvent {
   final FittingListElement element;
   final int newIndex;
+  final ShipFittingFolder? folder;
 
-  ReorderShipFitting({
-    required this.element,
-    required this.newIndex,
-  });
+  ReorderShipFitting(
+      {required this.element, required this.newIndex, this.folder});
 
   @override
-  List<Object> get props => [
-    element,
+  List<Object?> get props => [
+        element,
         newIndex,
+        folder
       ];
 }
 
@@ -125,7 +123,7 @@ class RenameFittingFolder extends ShipFittingBrowserEvent {
 
   @override
   List<Object> get props => [
-    folder,
-    newName,
-  ];
+        folder,
+        newName,
+      ];
 }

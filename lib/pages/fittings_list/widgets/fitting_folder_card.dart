@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sweet/model/ship/ship_fitting_folder.dart';
 
@@ -15,7 +14,6 @@ import 'package:sweet/widgets/localised_text.dart';
 class FittingFolderCard extends StatefulWidget {
   final ShipFittingFolder folder;
   final Future<void> Function(ShipFittingLoadout loadout) onLoadoutTap;
-  // TODO: Make content rearrange-able
 
   const FittingFolderCard(
       {Key? key, required this.folder, required this.onLoadoutTap})
@@ -109,10 +107,26 @@ class _FittingFolderState extends State<FittingFolderCard> {
                           .of(context)
                           .dividerColor,
                     ),
-                    child: ListView.builder(
+                    child: ReorderableListView.builder(
                         itemCount: widget.folder.contents.length,
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
+                        onReorder: (oldIndex, newIndex) {
+                          final fitting = widget.folder.contents[oldIndex];
+                          if (oldIndex < newIndex) {
+                            // removing the item at oldIndex will shorten the list by 1.
+                            // https://api.flutter.dev/flutter/widgets/ReorderCallback.html
+                            newIndex -= 1;
+                          }
+
+                          context.read<ShipFittingBrowserBloc>().add(
+                            ReorderShipFitting(
+                                element: fitting,
+                                newIndex: newIndex,
+                                folder: widget.folder
+                            ),
+                          );
+                        },
                         itemBuilder: (context, index) {
                           var loadout = widget.folder.contents[index];
                           if (loadout is ShipFittingLoadout) {

@@ -94,16 +94,29 @@ class ShipFittingLoadoutRepository {
   Future<void> moveFitting({
     required FittingListElement element,
     required int newIndex,
+    ShipFittingFolder? folder
   }) async {
-    var index = _loadouts.indexWhere((e) => e.getId() == element.getId());
+    if (folder == null) {
+      var index = _loadouts.indexWhere((e) => e.getId() == element.getId());
 
-    if (index >= 0) {
-      print('Moving ${element.getName()} to $newIndex');
+      if (index >= 0) {
+        print('Moving ${element.getName()} to $newIndex');
 
-      _loadouts.removeAt(index);
-      _loadouts.insert(newIndex, element);
+        _loadouts.removeAt(index);
+        _loadouts.insert(newIndex, element);
 
-      await saveLoadouts();
+        await saveLoadouts();
+      }
+    } else {
+      var index = folder.contents.indexWhere((e) => e.getId() == element.getId());
+      if (index >= 0) {
+        print('Moving ${element.getName()} to $newIndex inside folder ${folder.name}');
+
+        folder.contents.removeAt(index);
+        folder.contents.insert(newIndex, element);
+
+        await saveLoadouts();
+      }
     }
   }
 
