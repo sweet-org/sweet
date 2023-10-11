@@ -15,11 +15,19 @@ class LoadCharacters extends CharacterBrowserEvent {}
 
 class AddNewCharacter extends CharacterBrowserEvent {
   final String characterName;
+  final int baseLvl;
+  final int advLvl;
+  final int expLvl;
 
-  AddNewCharacter({required this.characterName});
+  AddNewCharacter({
+    required this.characterName,
+    required this.baseLvl,
+    required this.advLvl,
+    required this.expLvl
+  });
 
   @override
-  List<Object> get props => [characterName];
+  List<Object> get props => [characterName, baseLvl, advLvl, expLvl];
 }
 
 class CloneCharacter extends CharacterBrowserEvent {

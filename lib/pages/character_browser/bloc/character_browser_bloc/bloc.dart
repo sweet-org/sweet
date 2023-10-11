@@ -27,8 +27,19 @@ class CharacterBrowserBloc
     var skillItems = await itemRepository.skillItems;
     emit(CharacterBrowserLoading());
     if (event is AddNewCharacter) {
-      await characterRepository
-          .addCharacter(Character(name: event.characterName));
+      if (event.baseLvl == 0 && event.advLvl == 0 && event.expLvl == 0) {
+        await characterRepository
+            .addCharacter(Character(name: event.characterName));
+      } else {
+        Character character = characterRepository.createAutoSkillCharacter(
+            skills: itemRepository.fittingSkills.values,
+            name: event.characterName,
+            baseLvl: event.baseLvl,
+            advLvl: event.advLvl,
+            expLvl: event.expLvl
+        );
+        await characterRepository.addCharacter(character);
+      }
     }
     if (event is CloneCharacter) {
       await characterRepository.addCharacter(

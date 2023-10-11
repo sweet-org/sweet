@@ -86,6 +86,33 @@ class CharacterRepository {
     );
   }
 
+  Character createAutoSkillCharacter({
+    required Iterable<FittingSkill> skills,
+    required String name,
+    int baseLvl = 0,
+    int advLvl = 0,
+    int expLvl = 0}) {
+    Character char = Character(
+      name: name,
+      learntSkills: skills
+          .map(
+            (s) {
+              int level = 0;
+              if (s.levelType == SkillLevelType.basic) {
+                level = baseLvl;
+              } else if (s.levelType == SkillLevelType.advanced) {
+                level = advLvl;
+              } else if (s.levelType == SkillLevelType.expert) {
+                level = expLvl;
+              }
+              return LearnedSkill(skillId: s.itemId, skillLevel: level);
+            },
+      )
+          .toList(),
+    );
+    return char;
+  }
+
   Future<bool> moveCharacter(
       {required Character character, required int newIndex}) async {
     var index = _characters.indexWhere((e) => e.id == character.id);
