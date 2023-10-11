@@ -221,6 +221,7 @@ enum EveEchoesAttribute {
   capacitorRechargeTimeAdjustment,
   enableCapacitorNeedAdjustment,
   warpJammerstrength,
+  warpDisruptDistance,
   scanResolutionAdjustment,
   rangeSkillBonus,
   accuracyFalloffAdjustment,
@@ -523,6 +524,8 @@ extension ShipAttributeExtenstion on EveEchoesAttribute {
         return 354;
       case EveEchoesAttribute.moduleSize:
         return 13;
+      case EveEchoesAttribute.warpDisruptDistance:
+        return 10010;
 
       case EveEchoesAttribute.moduleCanFitAttributeID:
         return 3000;

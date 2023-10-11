@@ -53,6 +53,7 @@ extension ItemUI on Item {
           EveEchoesAttribute.activationCost,
           EveEchoesAttribute.powerGridRequirement,
           EveEchoesAttribute.fuelNeed,
+          EveEchoesAttribute.warpDisruptDistance
         ];
 
       case 1040: // Combat Rigs
