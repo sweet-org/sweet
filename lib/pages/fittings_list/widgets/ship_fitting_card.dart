@@ -74,17 +74,7 @@ class ShipFittingCard extends StatelessWidget {
                       },
                     ),
                   ),
-                  IconButton(
-                      icon: Icon(Icons.snippet_folder_rounded),
-                      onPressed: () => moveLoadoutToFolder(context, loadout)),
-                  IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () => deleteLoadout(context, loadout),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.file_copy),
-                    onPressed: () => copyLoadout(context, loadout),
-                  ),
+                  FittingControls(loadout: loadout)
                 ],
               ),
             ),
@@ -92,6 +82,52 @@ class ShipFittingCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class FittingControls extends StatefulWidget {
+  final ShipFittingLoadout loadout;
+
+  const FittingControls({Key? key, required this.loadout}) : super(key: key);
+
+  @override
+  State<FittingControls> createState() => _FittingControlsState();
+}
+
+class _FittingControlsState extends State<FittingControls> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return _isExpanded
+        ? Row(
+            children: [
+              IconButton(
+                  icon: Icon(Icons.snippet_folder_rounded),
+                  onPressed: () =>
+                      moveLoadoutToFolder(context, widget.loadout)),
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () => deleteLoadout(context, widget.loadout),
+              ),
+              IconButton(
+                icon: Icon(Icons.file_copy),
+                onPressed: () => copyLoadout(context, widget.loadout),
+              ),
+              IconButton(
+                  onPressed: _toggleControls, icon: Icon(Icons.close_fullscreen)
+              )
+            ],
+          )
+        : IconButton(
+            onPressed: _toggleControls, icon: Icon(Icons.more_vert)
+    );
+  }
+
+  void _toggleControls() {
+    setState(() {
+      _isExpanded = !_isExpanded;
+    });
   }
 
   Future<void> copyLoadout(
@@ -198,7 +234,8 @@ class ShipFittingCard extends StatelessWidget {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Select the target folder or press "No Folder" to move it out of the current folder'),
+                Text(
+                    'Select the target folder or press "No Folder" to move it out of the current folder'),
                 DropdownButton<String>(
                     isExpanded: true,
                     items: fittingRepo
