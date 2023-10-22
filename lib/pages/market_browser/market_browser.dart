@@ -56,11 +56,12 @@ typedef ItemCallback = void Function(Item item);
 
 class MarketGroupTile extends StatelessWidget {
   const MarketGroupTile(
-      {Key? key, required this.marketGroup, required this.onItemSelected})
-      : super(key: key);
+      {Key? key, required this.marketGroup, required this.onItemSelected, List<String>? blacklistCalCodes })
+      : blacklistCalCodes = blacklistCalCodes ?? const [], super(key: key);
 
   final MarketGroup marketGroup;
   final ItemCallback onItemSelected;
+  final List<String> blacklistCalCodes;
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +73,7 @@ class MarketGroupTile extends StatelessWidget {
       var sorted = items;
       sorted.sort((a, b) => a.id < b.id ? -1 : 1);
       children = sorted
+          .where((item) => !blacklistCalCodes.any((calCode) => item.mainCalCode?.startsWith(calCode) ?? false))
           .map((item) => ItemListTile(item: item, onSelected: onItemSelected))
           .toList();
     } else {
@@ -81,6 +83,7 @@ class MarketGroupTile extends StatelessWidget {
           .map((mg) => MarketGroupTile(
                 marketGroup: mg,
                 onItemSelected: onItemSelected,
+                blacklistCalCodes: blacklistCalCodes,
               ))
           .toList();
     }

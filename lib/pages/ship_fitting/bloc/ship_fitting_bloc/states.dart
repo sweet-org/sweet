@@ -61,6 +61,7 @@ class OpenRigIntegratorDrawer extends ShipFittingState {
   final MarketGroup topGroup;
   final List<Item> initialItems;
   final int slotIndex;
+  final List<String> blacklistCalCodes;
 
   OpenRigIntegratorDrawer({
     required this.rigIntegrator,
@@ -68,6 +69,7 @@ class OpenRigIntegratorDrawer extends ShipFittingState {
     required this.initialItems,
     required this.slotIndex,
     required FittingSimulator fitting,
+    this.blacklistCalCodes = const []
   }) : super(fitting);
 
   @override
