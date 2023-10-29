@@ -106,6 +106,8 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
       await _itemRepository.openDatabase();
       print('${DateTime.now()}: Processing market groups');
       await _itemRepository.processMarketGroups();
+      print('${DateTime.now()}: Processing non integratable rigs');
+      await _itemRepository.processExcludeFusionRigs();
       print('${DateTime.now()}: Loading language strings');
       await _localisationRepository.loadStringsForLanguage('en');
       print(

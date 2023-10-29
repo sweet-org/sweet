@@ -55,6 +55,8 @@ typedef DownloadProgressCallback = void Function(int, int);
 
 class ItemRepository {
   Map<int, MarketGroup> marketGroupMap = {};
+  List<int> _excludeFusionRigs = [];
+  List<int> get excludeFusionRigs => _excludeFusionRigs;
 
   final Map<int, Item> _itemsCache = {};
   final Map<int, Attribute> _attributeCache = {};
@@ -228,6 +230,13 @@ class ItemRepository {
         marketGroupMap[mkg.parentId!]!.children.add(mkg);
       }
     }
+  }
+
+  Future<void> processExcludeFusionRigs() async {
+    // There are rigs (at the time of writing only the higgs anchors), that
+    // can't be integrated and have to get filtered out of the fitting menu for
+    // integrated rigs.
+    _excludeFusionRigs = [for (var id in await getExcludeFusionRigs()) id];
   }
 
   Future<Iterable<FittingSkill>> fittingSkillsFromDbSkills() async {

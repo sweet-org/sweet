@@ -11,17 +11,17 @@ import '../../../widgets/search_bar.dart';
 class ShipFittingContextDrawer extends StatefulWidget {
   final MarketGroup marketGroup;
   final List<Item> initialItems;
-  final List<String> blacklistCalCodes;
+  final List<int> blacklistItems;
 
   ShipFittingContextDrawer({
     Key? key,
     MarketGroup? marketGroup,
     List<Item>? initialFilteredItems,
-    List<String>? blacklistCalCodes,
+    List<int>? blacklistItems,
   })  : assert(marketGroup != null || initialFilteredItems != null),
         marketGroup = marketGroup ?? MarketGroup.invalid,
         initialItems = initialFilteredItems ?? [],
-        blacklistCalCodes = blacklistCalCodes ?? [],
+        blacklistItems = blacklistItems ?? List<int>.empty(),
         super(key: key);
 
   @override
@@ -111,7 +111,7 @@ class _ShipFittingContextDrawerState extends State<ShipFittingContextDrawer> {
         return MarketGroupTile(
           marketGroup: child,
           onItemSelected: (item) => Navigator.pop(context, item),
-          blacklistCalCodes: widget.blacklistCalCodes,
+          blacklistItems: widget.blacklistItems,
         );
       },
     );

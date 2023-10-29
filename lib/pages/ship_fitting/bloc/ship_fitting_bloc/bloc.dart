@@ -186,22 +186,17 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
         },
       ).toList();
     }
-    //ToDo: Replace hardcoded list to filter out "cannot be integrated" attributes
-    //The id of the attribute is 193
-    List<String> blacklist = [
-      // Higgs anchors
-      "/Fusion_Astronautic/Higgs_Anchor/"
-    ];
-    initialItems = initialItems.where((item) {
-      return !blacklist.any((calCode) => item.mainCalCode?.startsWith(calCode) ?? false);
-    }).toList();
+    // Filter out non integratable rigs
+    initialItems = initialItems.where(
+            (item) => !_itemRepository.excludeFusionRigs.any((itemId) => item.id == itemId)
+    ).toList();
     emit(OpenRigIntegratorDrawer(
       rigIntegrator: event.rigIntegrator,
       topGroup: filteredGroup,
       initialItems: initialItems,
       slotIndex: event.slotIndex,
       fitting: fitting,
-      blacklistCalCodes: blacklist
+      blacklistItems: _itemRepository.excludeFusionRigs
     ));
   }
 }
