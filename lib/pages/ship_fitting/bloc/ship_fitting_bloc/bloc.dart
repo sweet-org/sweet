@@ -186,13 +186,17 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
         },
       ).toList();
     }
-
+    // Filter out non integratable rigs
+    initialItems = initialItems.where(
+            (item) => !_itemRepository.excludeFusionRigs.any((itemId) => item.id == itemId)
+    ).toList();
     emit(OpenRigIntegratorDrawer(
       rigIntegrator: event.rigIntegrator,
       topGroup: filteredGroup,
       initialItems: initialItems,
       slotIndex: event.slotIndex,
       fitting: fitting,
+      blacklistItems: _itemRepository.excludeFusionRigs
     ));
   }
 }

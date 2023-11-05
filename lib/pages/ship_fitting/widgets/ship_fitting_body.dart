@@ -55,6 +55,7 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
         context,
         state.topGroup,
         state.initialItems,
+        null
       );
 
       await _handleDrawerSelection(
@@ -68,6 +69,7 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
         context,
         state.topGroup,
         state.initialItems,
+        state.blacklistItems
       );
 
       if (selectedItem != null) {
@@ -213,6 +215,7 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
     BuildContext context,
     MarketGroup? topGroup,
     List<Item>? initialItems,
+    List<int>? blacklistItems,
   ) async {
     return await showModalBottomSheet<Item>(
       context: context,
@@ -220,6 +223,7 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
       builder: (context) => ShipFittingContextDrawer(
         marketGroup: topGroup,
         initialFilteredItems: initialItems,
+        blacklistItems: blacklistItems,
       ),
     );
   }

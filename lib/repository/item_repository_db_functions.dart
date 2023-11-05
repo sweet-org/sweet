@@ -248,6 +248,15 @@ extension ItemRepositoryDb on ItemRepository {
     return value;
   }
 
+  Future<Iterable<int>> getExcludeFusionRigs() async {
+    return await _echoesDatabase.db.rawQuery('''
+      SELECT itemId FROM item_attributes
+      WHERE attributeId = 193 AND value <> 0.0;
+     ''').then(
+        (rows) => rows.map((r) => r["itemId"] as int? ?? 0).where((id) => id != 0)
+    );
+  }
+
   Future<Iterable<ItemAttributeValue>> attributeIdsForItem(
           {required Item item}) async =>
       await _echoesDatabase.itemAttributeDao.selectForItem(itemId: item.id);
