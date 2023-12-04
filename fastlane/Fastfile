@@ -1,0 +1,74 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+#default_platform(:ios)
+
+platform :ios do
+
+  desc "Build Locally"
+  lane :build_local do
+    match(
+      type: "appstore",
+      readonly: true,
+       keychain_name: "login.keychain"
+      # keychain_password: ENV["MATCH_PASSWORD"]
+    )
+
+    build_app(workspace: "ios/Runner.xcworkspace", scheme: "Runner")
+    
+  end
+
+
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    
+    setup_ci(force: true)
+
+    match(
+      type: "appstore",
+      git_basic_authorization: Base64.strict_encode64(ENV["SWEET_MATCH_ACCESS_TOKEN"]),
+      readonly: true
+    )
+
+    build_app(workspace: "ios/Runner.xcworkspace", scheme: "Runner")
+    
+    upload_to_testflight(
+      apple_id: '1664398994',
+      skip_waiting_for_build_processing: true
+    )
+  end
+  
+end
+
+platform :android do
+  desc "Play Store Alpha release"
+   lane :upload_playstore do
+    upload_to_play_store(
+      track: 'internal',
+      json_key_data: "#{ENV["SWEET_JSON_KEY_DATA"]}",
+      aab: "#{ENV["AAB_PATH"]}",
+      release_status: "draft",
+      skip_upload_changelogs: true
+    )
+  end
+end
+
+# platform :mac do
+#   desc "Push a new beta build to TestFlight"
+#   lane :beta do
+#     build_mac_app(workspace: "macos/Runner.xcworkspace", scheme: "Runner")
+#     #upload_to_testflight
+#   end
+# end

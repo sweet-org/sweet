@@ -1,0 +1,3 @@
+- Updated to handle new naming scheme
+- Fix issue - new characters could not set skills
+- Fix issue - fresh installs would not load if EE Market was down

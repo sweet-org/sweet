@@ -1,0 +1,9 @@
+Silky's Wonderful Eve Echoes Tool
+
+A companion app for Even Echoes
+
+Features include:
+* Character creation and sharing
+* Fitting simulation and sharing
+* Market browser (with comparisons later)
+* Downtime count down so you don't forget!
