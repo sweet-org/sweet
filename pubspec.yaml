@@ -27,7 +27,7 @@ dependencies:
   adaptive_theme: ^3.0.0
   json_annotation: ^4.8.0
   shared_preferences: ^2.0.8
-  package_info_plus: ^3.0.2
+  package_info_plus: ^4.2.0
   uuid: ^3.0.4
   # https://github.com/appsup-dart/expressions/issues/22
   expressions:
@@ -49,14 +49,14 @@ dependencies:
   scan: ^1.4.3
   qr_flutter: ^4.0.0
   image_picker: ^0.8.4
-  file_picker: ^5.2.5 #for native picking
+  file_picker: ^6.1.1 #for native picking
   permission_handler: ^10.2.0
   recase: ^4.0.0
 
   # UI
   step_progress_indicator: ^1.0.1
   flutter_svg: ^1.1.0
-  flutter_staggered_grid_view: ^0.4.0 # locked to version because I don't want to deal with it yet
+  flutter_staggered_grid_view: 0.4.1 # locked to version because I don't want to deal with it yet
   auto_size_text: ^3.0.0
   grouped_list: ^5.1.1
   flutter_countdown_timer: ^4.1.0
@@ -67,7 +67,7 @@ dependencies:
   firebase_analytics: ^10.1.0
   firebase_crashlytics: ^3.0.11
 
-  manup: ^4.0.2
+  manup: ^6.0.0
   path: ^1.8.2
   timezone: ^0.9.1
 

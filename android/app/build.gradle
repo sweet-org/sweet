@@ -48,19 +48,8 @@ android {
         minSdkVersion 22
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName        
+        versionName flutterVersionName
         multiDexEnabled true
-    }
-    
-    flavorDimensions "app"
-    productFlavors {
-        develop {
-            dimension "app"
-            applicationIdSuffix ".dev"
-        }
-        prod {
-            dimension "app"
-        }
     }
 
     signingConfigs {

@@ -39,7 +39,7 @@ class RootPage extends StatelessWidget with FileSelector {
                         final manup =
                             RepositoryProvider.of<ManUpService>(context);
                         _launchUpdateUrl(
-                          manup.configData!.updateUrl,
+                          manup.configData!.updateUrl!,
                           context,
                         );
                       }),
@@ -141,7 +141,7 @@ class RootPage extends StatelessWidget with FileSelector {
           ),
           TextButton(
             onPressed: () => _launchUpdateUrl(
-              manup.configData!.updateUrl,
+              manup.configData!.updateUrl!,
               context,
             ),
             child: Text(

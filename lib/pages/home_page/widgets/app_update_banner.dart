@@ -32,7 +32,7 @@ class AppUpdateBanner extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () => _launchUpdateUrl(
-                    manup.configData!.updateUrl,
+                    manup.configData!.updateUrl!,
                     context,
                   ),
                   child: Text(

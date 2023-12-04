@@ -12,15 +12,5 @@
             "args": [
             ]
         },
-        {
-            "name": "SWEET (Android)",
-            "type": "dart",
-            "request": "launch",
-            "program": "lib/main.dart",
-            "args": [
-                "--flavor",
-                "prod"
-            ]
-        },
     ]
 }
