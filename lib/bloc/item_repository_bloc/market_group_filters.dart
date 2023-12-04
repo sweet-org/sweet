@@ -18,6 +18,11 @@ enum MarketGroupFilters {
 
   lightweightShips,
   all,
+  structures,
+  pos,
+  structureWeapons,
+  structureModules,
+  structureServices,
 }
 
 final kMidslotExcludeMarketGroups = [
@@ -41,6 +46,16 @@ extension MarketGroupFilterExtension on MarketGroupFilters {
     switch (this) {
       case MarketGroupFilters.ship:
         return 1000;
+      case MarketGroupFilters.structures:
+        return 1100;
+      case MarketGroupFilters.pos:
+        return 110000010;
+      case MarketGroupFilters.structureWeapons:
+        return 110001000;
+      case MarketGroupFilters.structureModules:
+        return 110001010;
+      case MarketGroupFilters.structureServices:
+        return 110001020;
       case MarketGroupFilters.highSlot:
         return 1010;
       case MarketGroupFilters.midSlot:

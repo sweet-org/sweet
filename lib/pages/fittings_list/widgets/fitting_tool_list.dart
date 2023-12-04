@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:sweet/bloc/item_repository_bloc/market_group_filters.dart';
 import 'package:sweet/database/entities/item.dart';
+import 'package:sweet/database/entities/market_group.dart';
 import 'package:sweet/mixins/scan_qrcode_mixin.dart';
 import 'package:sweet/model/items/eve_echoes_categories.dart';
 import 'package:sweet/model/ship/ship_fitting_folder.dart';
@@ -32,18 +33,25 @@ class _FittingToolListState extends State<FittingToolList>
   void showShipList(BuildContext context) async {
     var shipsMarketGroup = RepositoryProvider.of<ItemRepository>(context)
         .marketGroupMap[MarketGroupFilters.ship.marketGroupId];
-
-    if (shipsMarketGroup == null) return;
+    var posMarketGroup = RepositoryProvider.of<ItemRepository>(context)
+        .marketGroupMap[MarketGroupFilters.pos.marketGroupId];
+    var pseudoGroup = MarketGroup(
+        id: -1, iconIndex: -1, localisationIndex: -1, sourceName: "No Name");
+    if (shipsMarketGroup == null && posMarketGroup == null) return;
+    if (shipsMarketGroup != null) pseudoGroup.children.add(shipsMarketGroup);
+    if (posMarketGroup != null) pseudoGroup.children.add(posMarketGroup);
 
     var ship = await showModalBottomSheet<Item?>(
       context: context,
       elevation: 16,
       builder: (context) => ShipFittingContextDrawer(
-        marketGroup: shipsMarketGroup,
+        marketGroup: pseudoGroup,
       ),
     );
 
-    if (ship == null || ship.categoryId != EveEchoesCategory.ships.categoryId) {
+    if (ship == null ||
+        ship.categoryId != EveEchoesCategory.ships.categoryId &&
+            ship.marketGroupId != MarketGroupFilters.pos.marketGroupId) {
       if (ship != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

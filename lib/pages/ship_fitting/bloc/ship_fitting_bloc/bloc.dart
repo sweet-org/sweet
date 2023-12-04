@@ -121,9 +121,34 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
       // We fall through here, and deal with any exclusions
       // which at present are only on Midslots
       case SlotType.high:
+        if (fitting.ship.marketGroupId == MarketGroupFilters.pos.marketGroupId) {
+          group = _itemRepository
+              .marketGroupMap[MarketGroupFilters.structureWeapons.marketGroupId]!;
+          initialItems  = group.items ?? [];
+          break;
+        } else { // This is not very nice
+          continue normalModules;
+        }
       case SlotType.mid:
+        if (fitting.ship.marketGroupId == MarketGroupFilters.pos.marketGroupId) {
+          group = _itemRepository
+              .marketGroupMap[MarketGroupFilters.structureModules.marketGroupId]!;
+          initialItems  = group.items ?? [];
+          break;
+        } else {
+          continue normalModules;
+        }
       case SlotType.low:
+        if (fitting.ship.marketGroupId == MarketGroupFilters.pos.marketGroupId) {
+          group = _itemRepository
+              .marketGroupMap[MarketGroupFilters.structureServices.marketGroupId]!;
+          initialItems  = group.items ?? [];
+          break;
+        } else {
+          continue normalModules;
+        }
       case SlotType.combatRig:
+      normalModules:
       case SlotType.engineeringRig:
         {
           group = _itemRepository.marketGroupMap[filter.marketGroupId]!;
@@ -146,6 +171,12 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
           }
           break;
         }
+    }
+
+    if (group == MarketGroup.invalid && initialItems.isEmpty) {
+      // No items found to show (e.g. no Nanocores found)
+      //ToDo: This handle this exception with a pop up or something similar
+      return;
     }
 
     emit(OpenContextDrawerState(
