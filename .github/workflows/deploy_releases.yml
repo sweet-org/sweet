@@ -187,7 +187,7 @@ jobs:
       id: app_build
 
     - name: Building ${{ steps.app_build.outputs.name }}.aab
-      run: flutter build appbundle --build-number $GITHUB_RUN_NUMBER --release --flavor prod
+      run: flutter build appbundle --build-number $GITHUB_RUN_NUMBER --release
 
     - name: Setup Ruby    
       uses: ruby/setup-ruby@v1.133.2
