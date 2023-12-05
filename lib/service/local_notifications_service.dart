@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -60,21 +62,23 @@ class LocalNotificationsService {
     required String message,
     required Duration duration,
   }) async {
-    await _notificationsPlugin.zonedSchedule(
-      0,
-      title,
-      message,
-      tz.TZDateTime.now(tz.local).add(duration),
-      const NotificationDetails(
-        android: AndroidNotificationDetails(
-          'sweet_notifications',
-          'Notifications', // TODO: Translate?
+    if (!Platform.isWindows) {
+      await _notificationsPlugin.zonedSchedule(
+        0,
+        title,
+        message,
+        tz.TZDateTime.now(tz.local).add(duration),
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'sweet_notifications',
+            'Notifications', // TODO: Translate?
+          ),
         ),
-      ),
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-    );
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+      );
+    }
 
     return 0;
   }
