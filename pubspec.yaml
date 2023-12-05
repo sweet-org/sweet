@@ -28,19 +28,19 @@ dependencies:
   json_annotation: ^4.8.0
   shared_preferences: ^2.0.8
   package_info_plus: ^4.2.0
-  uuid: ^3.0.4
+  uuid: ^4.2.1
   # https://github.com/appsup-dart/expressions/issues/22
   expressions:
     git:
       url: https://github.com/alexmarkley/expressions.git
       ref: petitparser5
 
-  http: ^0.13.3
+  http: ^1.1.2
   archive: ^3.3.8
   csv: ^5.0.0
   url_launcher: ^6.0.11
   path_provider: ^2.0.5
-  flutter_local_notifications: ^13.0.0
+  flutter_local_notifications: ^16.2.0
 
   sprintf: ^7.0.0
   intl: ^0.18.0
@@ -48,15 +48,15 @@ dependencies:
   # Scanning QR specific
   scan: ^1.4.3
   qr_flutter: ^4.0.0
-  image_picker: ^0.8.4
+  image_picker: ^1.0.4
   file_picker: ^6.1.1 #for native picking
-  permission_handler: ^10.2.0
+  permission_handler: ^11.1.0
   recase: ^4.0.0
 
   # UI
   step_progress_indicator: ^1.0.1
-  flutter_svg: ^1.1.0
-  flutter_staggered_grid_view: 0.4.1 # locked to version because I don't want to deal with it yet
+  flutter_svg: ^2.0.9
+  flutter_staggered_grid_view: '<=0.4.1' # locked to version because I don't want to deal with upgrading it as teh widget got removed
   auto_size_text: ^3.0.0
   grouped_list: ^5.1.1
   flutter_countdown_timer: ^4.1.0
@@ -72,10 +72,10 @@ dependencies:
   timezone: ^0.9.1
 
 dev_dependencies:
-  lints: ^2.0.1
+  lints: ^3.0.0
   build_runner: ^2.3.3
   json_serializable: ^6.2.0
-  flutter_launcher_icons: ^0.11.0
+  flutter_launcher_icons: ^0.13.1
   mockito: ^5.0.12
 
   flutter_test:
