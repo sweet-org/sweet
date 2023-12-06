@@ -1,5 +1,15 @@
 {
-    
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/.ruby-lsp": true,
+        ".dart_tool": true,
+        ".flutter-plugins*": true,
+    },
     "dart.flutterSdkPaths": [
         ".fvm/flutter_sdk"
     ],
