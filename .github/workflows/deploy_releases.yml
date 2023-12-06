@@ -91,7 +91,7 @@ jobs:
       uses: vimtor/action-zip@v1
       with:
         dest: ${{ steps.app_build.outputs.name }}-windows.zip
-        files: build/windows/runner/Release
+        files: build/windows/x64/runner/Release
 
     - name: 'Uploading artifact'
       uses: actions/upload-artifact@v2.2.3
