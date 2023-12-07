@@ -135,12 +135,27 @@ class _AppDrawerState extends State<AppDrawer> with FileSelector {
                       .color!
                       .withAlpha(128),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: SocialButton(
-                    assetName: 'assets/branding/discord-logo-white.svg',
-                    socialUrl: 'https://discord.gg/2QyVpSJKte',
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: SocialButton(
+                          assetName: 'assets/branding/discord-logo-white.svg',
+                          socialUrl: 'https://discord.gg/2QyVpSJKte',
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: SocialButton(
+                          assetName: 'assets/branding/github-logo-white.svg',
+                          socialUrl: 'https://github.com/sweet-org/sweet',
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
