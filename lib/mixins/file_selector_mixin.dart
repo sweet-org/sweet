@@ -8,8 +8,8 @@ mixin FileSelector {
     String? path;
     try {
       if (PlatformHelper.isMobile) {
-        final canUseStorage = await Permission.storage.isGranted;
-        if (!canUseStorage) {
+        final canUseStorage = await Permission.manageExternalStorage.request();
+        if (!canUseStorage.isGranted) {
           // The user opted to never again see the permission request dialog for this
           // app. The only way to change the permission's status now is to let the
           // user manually enable it in the system settings.
@@ -35,8 +35,8 @@ mixin FileSelector {
     String? path;
     try {
       if (PlatformHelper.isMobile) {
-        final canUseStorage = await Permission.storage.isGranted;
-        if (!canUseStorage) {
+        final canUseStorage = await Permission.manageExternalStorage.request();
+        if (!canUseStorage.isGranted) {
           // The user opted to never again see the permission request dialog for this
           // app. The only way to change the permission's status now is to let the
           // user manually enable it in the system settings.
