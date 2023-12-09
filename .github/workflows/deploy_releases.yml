@@ -171,8 +171,9 @@ jobs:
         lfs: 'true'
     
     - name: Decode Upload keystore
+      working-directory: ./android
       run: |
-        echo "${{ secrets.UPLOAD_KEYSTORE }}" > android/key.jks.asc
+        echo "${{ secrets.UPLOAD_KEYSTORE }}" > key.jks.asc
         gpg -d --passphrase ${{ secrets.UPLOAD_KEYSTORE_PASSPHRASE }} --batch key.jks.asc > key.jks
 
     - uses: actions/setup-java@v1
