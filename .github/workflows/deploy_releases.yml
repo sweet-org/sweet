@@ -207,7 +207,7 @@ jobs:
         bundle exec fastlane android upload_playstore
       env: 
         SWEET_JSON_KEY_DATA: ${{ secrets.SWEET_JSON_KEY_DATA }}
-        AAB_PATH: build/app/outputs/bundle/prodRelease/app-prod-release.aab
+        AAB_PATH: build/app/outputs/bundle/release/app-release.aab
 
   upload-release-s3:
     needs: [job-linux, job-apple, job-windows]
