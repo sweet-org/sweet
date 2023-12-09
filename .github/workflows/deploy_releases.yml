@@ -169,6 +169,12 @@ jobs:
     - uses: actions/checkout@v2
       with:
         lfs: 'true'
+    
+    - name: Decode Upload keystore
+      run: |
+        echo "${{ secrets.UPLOAD_KEYSTORE }}" > android/key.jks.asc
+        gpg -d --passphrase ${{ secrets.UPLOAD_KEYSTORE_PASSPHRASE }} --batch key.jks.asc > key.jks
+
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'

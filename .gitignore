@@ -51,3 +51,6 @@ app.*.map.json
 fastlane/report.xml
 .fvm/flutter_sdk
 ios/build
+
+# Ignore Podfile.lock as we expect Flutter Pub to handle all versioning
+**/Podfile.lock
