@@ -207,6 +207,15 @@ class FittingRigIntegrator extends FittingModule {
     _selectedRigs[index] = rig.copyWith(slot: slot, index: index);
   }
 
+  int? findEmptySlot() {
+    for (int i = 0; i < _selectedRigs.length; i++) {
+      if (_selectedRigs[i] == FittingModule.empty) {
+        return i;
+      }
+    }
+    return null;
+  }
+
   FittingModule rigAtIndex(int index) {
     if (_selectedRigs.length < index) return FittingModule.empty;
     return _selectedRigs[index];

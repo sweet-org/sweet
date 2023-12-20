@@ -20,12 +20,14 @@ import 'fitting_module_tile_details.dart';
 import 'fitting_nanocore_tile_details.dart';
 
 typedef FittingModuleTileTapCallback = void Function(int index);
+typedef ModuleCloneCallback = void Function(int index);
 
 class FittingModuleTile extends StatelessWidget with FittingItemDetailsMixin {
   final int index;
   final FittingModule module;
   final FittingModuleTileTapCallback onTap;
   final VoidCallback onClearPressed;
+  final ModuleCloneCallback onClonePressed;
   final ModuleStateToggleCallback onStateToggle;
 
   const FittingModuleTile({
@@ -34,6 +36,7 @@ class FittingModuleTile extends StatelessWidget with FittingItemDetailsMixin {
     required this.module,
     required this.onTap,
     required this.onClearPressed,
+    required this.onClonePressed,
     required this.onStateToggle,
   }) : super(key: key);
 
@@ -100,6 +103,12 @@ class FittingModuleTile extends StatelessWidget with FittingItemDetailsMixin {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Spacer(),
+            IconButton(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              constraints: BoxConstraints.tight(Size.square(32)),
+              icon: Icon(Icons.copy),
+              onPressed: () => onClonePressed(index),
+            ),
             IconButton(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               constraints: BoxConstraints.tight(Size.square(32)),

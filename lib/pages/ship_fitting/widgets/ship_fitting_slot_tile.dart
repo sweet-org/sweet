@@ -155,6 +155,12 @@ class ShipFittingSlotTile extends StatelessWidget {
                     slot: slotType,
                     index: index,
                   ),
+                  onClonePressed: (int index) =>
+                      Provider.of<FittingSimulator>(context, listen: false)
+                          .cloneFittedItem(
+                    slot: slotType,
+                    index: index,
+                  ),
                 ),
               ),
             );

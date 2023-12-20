@@ -219,9 +219,8 @@ class _FittingFolderState extends State<FittingFolderCard> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(StaticLocalisationStrings.deleteFolder),
-          backgroundColor: Colors.deepOrangeAccent,
           content: Text(
-              'Are you sure you want to delete this folder? This will include ALL it\'s contents!'
+              'Are you sure you want to delete this folder? This will include ALL of it\'s contents!'
                   '\n\nThis action cannot be reversed.'),
           actions: <Widget>[
             Container(

@@ -173,11 +173,7 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
         }
     }
 
-    if (group == MarketGroup.invalid && initialItems.isEmpty) {
-      // No items found to show (e.g. no Nanocores found)
-      //ToDo: This handle this exception with a pop up or something similar
-      return;
-    }
+    //ToDo: This handle the exception when trying to open the nanocore list for a ship that does not have any
 
     emit(OpenContextDrawerState(
       group,
