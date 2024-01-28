@@ -42,10 +42,7 @@ const kPatchDayManUpKey = 'patch_day';
 const kPatchHourManUpKey = 'patch_hour';
 const kPatchMinuteManUpKey = 'patch_minute';
 
-const kManUpUrl = 'https://sillykat.page.link/sweet-manup-s3';
-const kDBUrl = 'https://sillykat.page.link/sweet-db';
-
-const kDBUrlFormat =
-    'https://firebasestorage.googleapis.com/v0/b/eve-echoes-tool-5474b.appspot.com/o/game_data%%2Fechoes_%d.tbz?alt=media&token=2cf07c7e-8883-46fa-97f4-63dc10b15087';
+const kManUpUrl = 'https://sweet.silkypants.dev/manup.json';
+const kDBUrl = 'https://sweet.silkypants.dev/game_data/echoes_db.tbz';
 
 const kNihilusCapAdjustmentModifierTypeCode = '/Nihilus/ChargeDe/';

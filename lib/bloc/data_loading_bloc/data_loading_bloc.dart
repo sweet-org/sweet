@@ -82,7 +82,6 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
       if (downloadDb) {
         await _itemRepository.downloadDatabase(
           latestVersion: version,
-          useNewDbLocation: useNewDbLocation,
           emitter: emit,
         );
       }

@@ -8,7 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:archive/archive.dart';
 import 'package:http/http.dart' as http;
-import 'package:sprintf/sprintf.dart';
 import 'package:sweet/bloc/item_repository_bloc/market_group_filters.dart';
 import 'package:sweet/model/fitting/fitting_nanocore.dart';
 import 'package:sweet/model/fitting/fitting_rig_integrator.dart';
@@ -138,7 +137,6 @@ class ItemRepository {
 
   Future<void> downloadDatabase({
     required int latestVersion,
-    required bool useNewDbLocation,
     required Emitter<DataLoadingBlocState> emitter,
   }) async {
     final dbFile = await PlatformHelper.dbFile();
@@ -147,8 +145,7 @@ class ItemRepository {
     // Download the latest DB
     print('Downloading DB...');
     emitter(LoadingRepositoryState('Downloading DB for v$latestVersion...'));
-    final dbUrlString = sprintf(kDBUrlFormat, [latestVersion]);
-    final dbTestUrl = Uri.parse(useNewDbLocation ? kDBUrl : dbUrlString);
+    final dbTestUrl = Uri.parse(kDBUrl);
     print('Downloading DB from $dbTestUrl');
 
     var response = await http.Client().send(http.Request('GET', dbTestUrl));
