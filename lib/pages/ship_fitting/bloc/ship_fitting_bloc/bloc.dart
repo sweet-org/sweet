@@ -33,11 +33,11 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
   ) async {
     emit(UpdatingShipFitting(fitting));
     if (event is ShowFittingsMenu) {
-      mapShowFittingMenuEvent(event, emit);
+      await mapShowFittingMenuEvent(event, emit);
     }
 
     if (event is ShowRigIntegrationMenu) {
-      mapShowRigIntegrationMenu(event, emit);
+      await mapShowRigIntegrationMenu(event, emit);
     }
 
     if (event is ChangePilotForFitting) {
