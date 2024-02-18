@@ -16,6 +16,41 @@ import 'character_card.dart';
 
 final lvlRegex = RegExp(r"^[0-5]$");
 
+bool checkLvlController(TextEditingController controller) {
+  if (controller.text.isEmpty) {
+    controller.text = "0";
+  }
+  if (!lvlRegex.hasMatch(controller.text)) {
+    return false;
+  }
+  return true;
+}
+
+bool isValidLvlInput(
+    {required TextEditingController baseController,
+    required TextEditingController advController,
+    required TextEditingController expController}) {
+  if (!checkLvlController(baseController)) {
+    return false;
+  }
+  if (!checkLvlController(advController)) {
+    return false;
+  }
+  if (!checkLvlController(expController)) {
+    return false;
+  }
+  int base = int.parse(baseController.text);
+  int adv = int.parse(advController.text);
+  int exp = int.parse(expController.text);
+  if (exp > 0 && adv < 5) {
+    return false;
+  }
+  if (adv > 0 && base < 4) {
+    return false;
+  }
+  return true;
+}
+
 class CharacterListView extends StatelessWidget with ScanQrCode {
   final _characterNameController = TextEditingController();
   final _characterBaseLvlController = TextEditingController();
@@ -129,22 +164,17 @@ class CharacterListView extends StatelessWidget with ScanQrCode {
                 if (!_characterNameController.text.isNotEmpty) {
                   return;
                 }
-                if (!checkLvlController(_characterBaseLvlController)) {
+                if (!isValidLvlInput(
+                    baseController: _characterBaseLvlController,
+                    advController: _characterAdvLvlController,
+                    expController: _characterExpLvlController)) {
                   return;
                 }
-                if (!checkLvlController(_characterAdvLvlController)) {
-                  return;
-                }
-                if (!checkLvlController(_characterExpLvlController)) {
-                  return;
-                }
-                widgetContext.read<CharacterBrowserBloc>().add(
-                    AddNewCharacter(
-                        characterName: _characterNameController.text,
-                        baseLvl: int.parse(_characterBaseLvlController.text),
-                        advLvl: int.parse(_characterAdvLvlController.text),
-                        expLvl: int.parse(_characterExpLvlController.text)
-                    ));
+                widgetContext.read<CharacterBrowserBloc>().add(AddNewCharacter(
+                    characterName: _characterNameController.text,
+                    baseLvl: int.parse(_characterBaseLvlController.text),
+                    advLvl: int.parse(_characterAdvLvlController.text),
+                    expLvl: int.parse(_characterExpLvlController.text)));
                 Navigator.of(context).pop();
               },
               child: LocalisedText(localiseId: LocalisationStrings.ok),
@@ -153,16 +183,6 @@ class CharacterListView extends StatelessWidget with ScanQrCode {
         );
       },
     );
-  }
-
-  bool checkLvlController(TextEditingController controller) {
-    if (controller.text.isEmpty) {
-      controller.text = "0";
-    }
-    if (!lvlRegex.hasMatch(controller.text)) {
-      return false;
-    }
-    return true;
   }
 
   @override
