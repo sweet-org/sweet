@@ -58,6 +58,11 @@ class CapacitorSimulator {
         item: module,
         attribute: EveEchoesAttribute.moduleReactivationDelay,
       );
+      if (duration + reactivationDelay == 0) {
+        // Some items like the gravity well traps have no 
+        // cycle time/reactivation delay
+        continue;
+      }
 
       var avgCapNeed = 0.0;
       var capNeed = 0.0;

@@ -24,6 +24,7 @@ enum EveEchoesCategory {
   structureModuleBlueprint,
   commodityBlueprint,
   accessoriesBlueprint,
+  structure,
 }
 
 extension CategoryIdExtension on EveEchoesCategory {
@@ -37,6 +38,8 @@ extension CategoryIdExtension on EveEchoesCategory {
         return 10;
       case EveEchoesCategory.modules:
         return 11;
+      case EveEchoesCategory.structure:
+        return 23;
       case EveEchoesCategory.skills:
         return 49;
       case EveEchoesCategory.minerals:

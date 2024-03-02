@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:manup/manup.dart';
 import 'package:sweet/model/character/character.dart';
+import 'package:sweet/model/ship/fitting_list_element.dart';
+import 'package:sweet/model/ship/ship_fitting_folder.dart';
 import 'package:sweet/model/ship/ship_fitting_loadout.dart';
 
 import 'package:sweet/service/fitting_simulator.dart';
@@ -136,7 +138,7 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
 
       emit(RepositoryLoadException(
         message: 'Unknown exception',
-        exception: e as Exception?,
+        exception: e is Exception ? e as Exception? : e,
         stackTrace: stacktrace,
       ));
     }
@@ -172,9 +174,18 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
         (x) => Character.fromJson(x),
       ),
     );
-    final fittings = List<ShipFittingLoadout>.from(
+    final fittings = List<FittingListElement>.from(
       data['fittings'].map(
-        (x) => ShipFittingLoadout.fromJson(x),
+        (x) => {
+          if (x['type'] == null || x['type'] == 'LOADOUT') {
+            ShipFittingLoadout.fromJson(x)
+          } else if (x['type'] == "FOLDER") {
+            ShipFittingFolder.fromJson(x)
+          } else {
+            //Should never happen
+            null
+          }
+        }
       ),
     );
 

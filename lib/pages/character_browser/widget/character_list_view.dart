@@ -14,8 +14,48 @@ import '../bloc/character_browser_bloc/bloc.dart';
 import '../bloc/character_browser_bloc/events.dart';
 import 'character_card.dart';
 
+final lvlRegex = RegExp(r"^[0-5]$");
+
+bool checkLvlController(TextEditingController controller) {
+  if (controller.text.isEmpty) {
+    controller.text = "0";
+  }
+  if (!lvlRegex.hasMatch(controller.text)) {
+    return false;
+  }
+  return true;
+}
+
+bool isValidLvlInput(
+    {required TextEditingController baseController,
+    required TextEditingController advController,
+    required TextEditingController expController}) {
+  if (!checkLvlController(baseController)) {
+    return false;
+  }
+  if (!checkLvlController(advController)) {
+    return false;
+  }
+  if (!checkLvlController(expController)) {
+    return false;
+  }
+  int base = int.parse(baseController.text);
+  int adv = int.parse(advController.text);
+  int exp = int.parse(expController.text);
+  if (exp > 0 && adv < 5) {
+    return false;
+  }
+  if (adv > 0 && base < 4) {
+    return false;
+  }
+  return true;
+}
+
 class CharacterListView extends StatelessWidget with ScanQrCode {
   final _characterNameController = TextEditingController();
+  final _characterBaseLvlController = TextEditingController();
+  final _characterAdvLvlController = TextEditingController();
+  final _characterExpLvlController = TextEditingController();
 
   Future<void> fittingFromClipboard(BuildContext context) async {
     final data = await Clipboard.getData('text/plain');
@@ -63,6 +103,50 @@ class CharacterListView extends StatelessWidget with ScanQrCode {
                     labelText: 'Character name',
                   ),
                 ),
+                Text("Initial skills"),
+                Row(
+                  children: [
+                    Flexible(
+                      child: TextField(
+                        controller: _characterBaseLvlController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r"[0-5]"))
+                        ],
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Basic',
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      child: TextField(
+                        controller: _characterAdvLvlController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r"[0-5]"))
+                        ],
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Adv',
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      child: TextField(
+                        controller: _characterExpLvlController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r"[0-5]"))
+                        ],
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Exp',
+                        ),
+                      ),
+                    )
+                  ],
+                )
               ],
             ),
           ),
@@ -77,12 +161,21 @@ class CharacterListView extends StatelessWidget with ScanQrCode {
             ),
             TextButton(
               onPressed: () {
-                if (_characterNameController.text.isNotEmpty) {
-                  widgetContext.read<CharacterBrowserBloc>().add(
-                      AddNewCharacter(
-                          characterName: _characterNameController.text));
-                  Navigator.of(context).pop();
+                if (!_characterNameController.text.isNotEmpty) {
+                  return;
                 }
+                if (!isValidLvlInput(
+                    baseController: _characterBaseLvlController,
+                    advController: _characterAdvLvlController,
+                    expController: _characterExpLvlController)) {
+                  return;
+                }
+                widgetContext.read<CharacterBrowserBloc>().add(AddNewCharacter(
+                    characterName: _characterNameController.text,
+                    baseLvl: int.parse(_characterBaseLvlController.text),
+                    advLvl: int.parse(_characterAdvLvlController.text),
+                    expLvl: int.parse(_characterExpLvlController.text)));
+                Navigator.of(context).pop();
               },
               child: LocalisedText(localiseId: LocalisationStrings.ok),
             ),

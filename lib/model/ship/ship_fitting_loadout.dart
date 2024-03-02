@@ -5,6 +5,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:sweet/model/fitting/fitting_module.dart';
+import 'package:sweet/model/ship/fitting_list_element.dart';
+import 'package:sweet/model/ship/ship_fitting_folder.dart';
 import 'package:sweet/model/ship/ship_fitting_slot_module.dart';
 import 'package:sweet/model/ship/slot_type.dart';
 import 'package:uuid/uuid.dart';
@@ -15,19 +17,39 @@ import 'ship_loadout_definition.dart';
 
 part 'ship_fitting_loadout.g.dart';
 
-List<ShipFittingLoadout> loadoutsFromJson(String str) =>
-    List<ShipFittingLoadout>.from(
-        jsonDecode(str).map((x) => ShipFittingLoadout.fromJson(x)));
+List<FittingListElement> loadoutsFromJson(String str) =>
+    List<FittingListElement>.from(jsonDecode(str).map((x) {
+      if (x['type'] == null || x['type'] == 'LOADOUT') {
+        return ShipFittingLoadout.fromJson(x);
+      } else if (x['type'] == "FOLDER") {
+        return ShipFittingFolder.fromJson(x);
+      } else {
+        print("Unknown json object $x");
+        return null;
+      }
+    }));
 
 @JsonSerializable()
-class ShipFittingLoadout extends ChangeNotifier with EquatableMixin {
+class ShipFittingLoadout extends ChangeNotifier
+    with FittingListElement, EquatableMixin {
   final String _id;
+  final String _type = 'LOADOUT';
 
   static String get defaultName => 'Unnamed Fitting';
+
   String get id => _id;
   final int shipItemId;
   String _name;
+
   String get name => _name;
+  String get type => _type;
+
+  @override
+  String getId() => _id;
+
+  @override
+  String getName() => _name;
+
   void setName(String newName) {
     _name = newName;
     notifyListeners();
@@ -58,6 +80,7 @@ class ShipFittingLoadout extends ChangeNotifier with EquatableMixin {
     required this.lightFrigatesSlots,
     required this.lightDestroyersSlots,
     required this.hangarRigSlots,
+    String? type,  // Only attributes included in the constructor are serialized
   })  : _id = id ?? Uuid().v1(),
         _name = name;
 

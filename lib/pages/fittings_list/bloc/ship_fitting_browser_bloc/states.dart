@@ -1,6 +1,6 @@
 
 
-import 'package:sweet/model/ship/ship_fitting_loadout.dart';
+import 'package:sweet/model/ship/fitting_list_element.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 
@@ -14,7 +14,7 @@ abstract class ShipFittingBrowserState extends Equatable {
 class ShipFittingBrowserLoading extends ShipFittingBrowserState {}
 
 class ShipFittingBrowserLoaded extends ShipFittingBrowserState {
-  final Iterable<ShipFittingLoadout> fittings;
+  final Iterable<FittingListElement> fittings;
 
   ShipFittingBrowserLoaded(this.fittings);
 

@@ -1,6 +1,6 @@
-
-
 import 'package:sweet/database/entities/item.dart';
+import 'package:sweet/model/ship/fitting_list_element.dart';
+import 'package:sweet/model/ship/ship_fitting_folder.dart';
 import 'package:sweet/model/ship/ship_fitting_loadout.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
@@ -8,7 +8,8 @@ import 'package:flutter/widgets.dart';
 @immutable
 abstract class ShipFittingBrowserEvent extends Equatable {
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
+
   ShipFittingBrowserEvent([List props = const []]) : super();
 }
 
@@ -22,6 +23,26 @@ class CreateShipFitting extends ShipFittingBrowserEvent {
   List<Object> get props => [
         name,
         ship,
+      ];
+}
+
+class CreateFittingFolder extends ShipFittingBrowserEvent {
+  CreateFittingFolder();
+
+  @override
+  List<Object> get props => [];
+}
+
+class MoveFittingToFolder extends ShipFittingBrowserEvent {
+  final String folderId;
+  final FittingListElement fitting;
+
+  MoveFittingToFolder(this.fitting, this.folderId);
+
+  @override
+  List<Object> get props => [
+        fitting,
+        folderId,
       ];
 }
 
@@ -76,17 +97,33 @@ class DeleteShipFitting extends ShipFittingBrowserEvent {
 }
 
 class ReorderShipFitting extends ShipFittingBrowserEvent {
-  final ShipFittingLoadout shipFitting;
+  final FittingListElement element;
   final int newIndex;
+  final ShipFittingFolder? folder;
 
-  ReorderShipFitting({
-    required this.shipFitting,
-    required this.newIndex,
+  ReorderShipFitting(
+      {required this.element, required this.newIndex, this.folder});
+
+  @override
+  List<Object?> get props => [
+        element,
+        newIndex,
+        folder
+      ];
+}
+
+class RenameFittingFolder extends ShipFittingBrowserEvent {
+  final ShipFittingFolder folder;
+  final String newName;
+
+  RenameFittingFolder({
+    required this.folder,
+    required this.newName,
   });
 
   @override
   List<Object> get props => [
-        shipFitting,
-        newIndex,
+        folder,
+        newName,
       ];
 }

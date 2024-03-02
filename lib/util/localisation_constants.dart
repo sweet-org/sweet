@@ -86,6 +86,9 @@ abstract class StaticLocalisationStrings {
   static const defaultPilot = 'Default Pilot';
   static const deleteClone = 'Delete Clone';
   static const deleteFitting = 'Delete Fitting';
+  static const moveToFolder = 'Move to Folder';
+  static const renameFolder = 'Rename Folder';
+  static const deleteFolder = 'Delete Folder';
   static const delete = 'Delete';
   static const discard = 'Discard';
   static const done = 'Done';

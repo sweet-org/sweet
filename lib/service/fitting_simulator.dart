@@ -783,6 +783,25 @@ class FittingSimulator extends ChangeNotifier {
     return true;
   }
 
+  bool cloneFittedItem({
+        required SlotType slot,
+        required int index,
+        bool notify = true,
+        ModuleState state = ModuleState.active,
+      }) {
+    int? emptySlot;
+    for (int i = 0; i < _fitting[slot]!.length; i++) {
+      if (_fitting[slot]![i] == FittingModule.empty) {
+        emptySlot = i;
+        break;
+      }
+    }
+    if (emptySlot == null) return false;
+    FittingModule module = _fitting[slot]![index];
+    if (module == FittingModule.empty) return false;
+    return fitItem(module, slot: slot, index: emptySlot, notify: notify, state: state);
+  }
+
   void fitItemIntoAll(
     FittingModule module, {
     required SlotType slot,

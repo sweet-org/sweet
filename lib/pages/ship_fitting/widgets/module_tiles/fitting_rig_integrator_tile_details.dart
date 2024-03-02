@@ -64,6 +64,10 @@ class FittingRigIntegratorTileDetails extends StatelessWidget {
                       index: integrator.index,
                     );
                   },
+                  onClonePressed: (int index) {
+                    // We don't want to allow cloning of items, as only one rig
+                    // of a kind is allowed in a integrated rig
+                  },
                   onStateToggle: (_) {},
                 ),
               ),
