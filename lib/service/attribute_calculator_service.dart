@@ -20,6 +20,16 @@ import 'package:sweet/model/ship/module_state.dart';
 import 'package:sweet/repository/item_repository.dart';
 import 'package:sweet/util/constants.dart';
 
+// ToDo: This is not optimal, but I don't know a better way to filter out the duplicated attributes
+// This is a list of blacklisted attributes which exists twice in the game
+// The duplicate version has often /LightShipLaun/ as (one) of its changeRange
+// codes, while the normal version only has /Laun/.
+// See https://github.com/sweet-org/sweet/issues/11
+final Set<int> blacklistedAttrIds = {
+  40010, 40020, 40110, 40120, 40130, 40140, 40150, 40160, 40210, 40320, 40330,
+  40340, 40350, 40380
+};
+
 class AttributeCalculatorService {
   final ItemRepository itemRepository;
 
@@ -282,9 +292,15 @@ class AttributeCalculatorService {
       return 0.0;
     }
 
-    final itemAttribute = item.baseAttributes
-            .firstWhereOrNull((attr) => attr.id == attributeId) ??
-        _attributeDefinitions[attributeId];
+    if (blacklistedAttrIds.contains(attributeId)) {
+      _log(
+        message: "Skipping blacklisted attribute $attributeId with value 0.0"
+      );
+      return 0.0;
+    }
+      final itemAttribute = item.baseAttributes
+          .firstWhereOrNull((attr) => attr.id == attributeId) ??
+          _attributeDefinitions[attributeId];
 
     if (itemAttribute == null) {
       _log(message: 'No item attribute');

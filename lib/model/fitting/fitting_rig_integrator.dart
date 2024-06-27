@@ -119,9 +119,15 @@ class FittingRigIntegrator extends FittingModule {
           (a) => !att.containsKey(a.id) && !kIgnoreAttributeIds.contains(a.id),
         )
         .forEach((a) {
-      att[a.id] = a.copyWith(
-        baseValue: a.baseValue * integrationMultiplier,
-      );
+      if (a.id != EveEchoesAttribute.moduleCanFitAttributeID.attributeId) {
+        att[a.id] = a.copyWith(
+          baseValue: a.baseValue * integrationMultiplier,
+        );
+      } else {
+        att[a.id] = a.copyWith(
+          baseValue: a.baseValue,
+        );
+      }
     });
 
     return att.values.toList();
