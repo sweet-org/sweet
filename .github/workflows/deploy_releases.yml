@@ -1,7 +1,13 @@
 name: Deploy
 
-on: 
+on:   
   workflow_dispatch:
+    inputs:
+      build_android:
+        description: 'Build and Deploy Android'
+        required: true
+        type: boolean
+        default: true
 
 jobs:
   job-linux:
@@ -163,6 +169,7 @@ jobs:
 
   job-android:
     runs-on: ubuntu-latest
+    if: ${{ inputs.build_android }}
     env:
       KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
 
