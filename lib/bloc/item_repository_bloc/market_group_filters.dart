@@ -69,7 +69,7 @@ extension MarketGroupFilterExtension on MarketGroupFilters {
       case MarketGroupFilters.drones:
         return 1020020;
       case MarketGroupFilters.fighters:
-        return 1020210;
+        return 1020030;
       case MarketGroupFilters.nanocores:
         return 3950;
       case MarketGroupFilters.blueprints:
@@ -81,11 +81,11 @@ extension MarketGroupFilterExtension on MarketGroupFilters {
       case MarketGroupFilters.implants:
         return 2000;
       case MarketGroupFilters.lightweightShips:
-        return 1020211;
+        return 300001022;
       case MarketGroupFilters.lightweightFrigates:
-        return 102021101;
+        return 102003021;
       case MarketGroupFilters.lightweightDestroyers:
-        return 102021102;
+        return 102003022;
 
       case MarketGroupFilters.hangarRigs:
         return 105008000;
