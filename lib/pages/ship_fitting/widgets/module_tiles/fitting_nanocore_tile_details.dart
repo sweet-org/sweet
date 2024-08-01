@@ -87,8 +87,8 @@ class NanocoreAttributeListTile extends StatelessWidget {
       builder: (context, snapshot) {
         final subtitle = snapshot.data ?? '';
         return ExpansionTile(
-          backgroundColor: Theme.of(context).cardColor.darken(),
-          collapsedBackgroundColor: Theme.of(context).cardColor.darken(),
+          backgroundColor: Theme.of(context).cardColor.darken(2),
+          collapsedBackgroundColor: Theme.of(context).cardColor.darken(2),
           childrenPadding: EdgeInsets.only(bottom: 8),
           title: title,
           subtitle: subtitle.isNotEmpty
