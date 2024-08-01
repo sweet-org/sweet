@@ -105,7 +105,7 @@ class _FittingFolderState extends State<FittingFolderCard> {
                       borderRadius: BorderRadius.circular(4),
                       color: Theme
                           .of(context)
-                          .dividerColor,
+                          .hoverColor,
                     ),
                     child: ReorderableListView.builder(
                         itemCount: widget.folder.contents.length,
