@@ -23,7 +23,7 @@ class FittingTotalPrice extends StatelessWidget {
 
     final totalModuleBuy = moduleDetails.fold<double>(
       0.0,
-      (previousValue, element) => previousValue + element.value.lowestSell,
+      (previousValue, element) => previousValue + element.value.price,
     );
 
     final formatter = NumberFormat.decimalPattern();
@@ -41,7 +41,7 @@ class FittingTotalPrice extends StatelessWidget {
               height: 32,
             ),
             Text(
-              formatter.format(shipMarketDetails.lowestSell),
+              formatter.format(shipMarketDetails.price),
               style: TextStyle(color: Colors.white),
             ),
           ],
@@ -69,7 +69,7 @@ class FittingTotalPrice extends StatelessWidget {
               height: 32,
             ),
             Text(
-              formatter.format(shipMarketDetails.lowestSell + totalModuleBuy),
+              formatter.format(shipMarketDetails.price + totalModuleBuy),
               style: TextStyle(color: Colors.white),
             ),
           ],

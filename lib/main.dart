@@ -14,6 +14,7 @@ import 'package:sweet/repository/character_repository.dart';
 import 'package:sweet/repository/localisation_repository.dart';
 import 'package:sweet/repository/ship_fitting_repository.dart';
 import 'package:sweet/service/attribute_calculator_service.dart';
+import 'package:sweet/service/ee_market_api/ee_market_api_service.dart';
 import 'package:sweet/service/local_notifications_service.dart';
 import 'package:sweet/util/constants.dart';
 import 'package:sweet/util/platform_helper.dart';
@@ -48,6 +49,11 @@ MultiRepositoryProvider buildRepositories({required Widget child}) {
           kManUpUrl,
           http: client,
           os: Platform.operatingSystem,
+        ),
+      ),
+      RepositoryProvider<EEMarketApiService>(
+        create: (_) => EEMarketApiService(
+          http: client,
         ),
       ),
       RepositoryProvider<ItemRepository>(
@@ -119,6 +125,7 @@ Widget buildBlocProviders({required Widget child}) {
                 RepositoryProvider.of<CharacterRepository>(context),
                 RepositoryProvider.of<ShipFittingLoadoutRepository>(context),
                 RepositoryProvider.of<LocalisationRepository>(context),
+                RepositoryProvider.of<EEMarketApiService>(context),
                 RepositoryProvider.of<ManUpService>(context),
               )),
       BlocProvider<ItemRepositoryBloc>(
