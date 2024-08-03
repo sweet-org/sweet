@@ -2,7 +2,7 @@ name: sweet
 description: Collection of tools to make Eve Echoes more fun :D.
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
-version: 0.3.2+1
+version: 0.3.3+1
 
 environment:
   sdk: ">=2.15.0 <3.0.0"
