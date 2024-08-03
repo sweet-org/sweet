@@ -1,3 +1,4 @@
+import 'package:sweet/bloc/item_repository_bloc/market_group_filters.dart';
 import 'package:sweet/database/entities/item.dart';
 import 'package:sweet/model/ship/eve_echoes_attribute.dart';
 
@@ -24,6 +25,44 @@ extension ItemUI on Item {
               EveEchoesAttribute.activationTime,
               EveEchoesAttribute.optimalRange,
             ];
+          case 101019000: //Burst Projectors
+            return [
+              EveEchoesAttribute.optimalRange,
+              EveEchoesAttribute.optimalEffectiveRange,
+              EveEchoesAttribute.falloffRange,
+              EveEchoesAttribute.duration,
+              // Energy Neutralization
+              EveEchoesAttribute.neutralizationAmount,
+              EveEchoesAttribute.energyTransferAmount,
+              // Fire Control Disruption
+              EveEchoesAttribute.accuracyFalloffAdjustmentMod,
+              EveEchoesAttribute.rangeSkillBonusMod,
+              // Radar Disruption
+              EveEchoesAttribute.trackingSpeedAdjustmentMod,
+              EveEchoesAttribute.flightVelocityAdjustment,
+              EveEchoesAttribute.scanResolutionAdjustment,
+              EveEchoesAttribute.signatureRadiusAdjustment,
+              EveEchoesAttribute.explosionVelocityBonusMod,
+              EveEchoesAttribute.explosionRadiusBonusMod,
+              EveEchoesAttribute.flightTimeBonusMod,
+              // Power Disruption
+              EveEchoesAttribute.capacitorCapacityMultiplierMod,
+              EveEchoesAttribute.capacitorRechargeTimeMod,
+              // Defense Disruption
+              EveEchoesAttribute.shieldDamageTaken,
+              EveEchoesAttribute.armorDamageTaken,
+            ];
+          case 101019010: // Doomsday weapons
+              return [
+                EveEchoesAttribute.warmupTime,
+                EveEchoesAttribute.beamRadius,
+                EveEchoesAttribute.attackInterval,
+                EveEchoesAttribute.effectDuration,
+                EveEchoesAttribute.targetLimit,
+                EveEchoesAttribute.shieldBoostEffect,
+                EveEchoesAttribute.armorRepairEffect,
+                // ToDo: Implement additional effects like 'Turrets Damage'
+              ];
         }
 
         return [

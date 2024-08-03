@@ -163,6 +163,25 @@ enum EveEchoesAttribute {
   explosionVelocity,
   missileRange,
 
+  // Doomsday Weapons
+  warmupTime,
+  beamRadius,
+  attackInterval,
+  effectDuration,
+  targetLimit,
+  shieldBoostEffect,
+  armorRepairEffect,
+
+  // Burst projectors
+  optimalEffectiveRange,
+  duration,
+  falloffRange,
+  signatureRadiusAdjustment,
+
+  // Capacitor Warfare
+  neutralizationAmount,
+  energyTransferAmount,
+
   // Rig Bonuses
   damageBonus,
   activationTimeAdjustment,
@@ -200,6 +219,18 @@ enum EveEchoesAttribute {
   moduleCanFitCommandLink,
   moduleCanFitStripMiner,
   moduleCanFitWarpDisruptionField,
+
+  // Effect modifiers
+  accuracyFalloffAdjustmentMod,
+  trackingSpeedAdjustmentMod,
+  rangeSkillBonusMod,
+  explosionVelocityBonusMod,
+  explosionRadiusBonusMod,
+  flightTimeBonusMod,
+  capacitorCapacityMultiplierMod,
+  capacitorRechargeTimeMod,
+  shieldDamageTaken,
+  armorDamageTaken,
 
   // SORT!!
   metalevel,
@@ -705,6 +736,57 @@ extension ShipAttributeExtenstion on EveEchoesAttribute {
         return 531;
       case EveEchoesAttribute.fighterNumberLimit:
         return 489;
+
+      case EveEchoesAttribute.warmupTime:
+        return 855;
+      case EveEchoesAttribute.beamRadius:
+        return 90;
+      case EveEchoesAttribute.effectDuration:
+        return 466;
+      case EveEchoesAttribute.targetLimit:
+        return 661;
+      case EveEchoesAttribute.attackInterval:
+        return 93;
+      case EveEchoesAttribute.shieldBoostEffect:
+        return 10196;
+      case EveEchoesAttribute.armorRepairEffect:
+        return 10197;
+      case EveEchoesAttribute.optimalEffectiveRange:
+        return 460;
+      case EveEchoesAttribute.duration:
+        return 1516;
+      case EveEchoesAttribute.neutralizationAmount:
+        return 324;
+      case EveEchoesAttribute.energyTransferAmount:
+        return 320;
+      case EveEchoesAttribute.falloffRange:
+        return 463;
+
+      case EveEchoesAttribute.accuracyFalloffAdjustmentMod:
+        return 10015;
+      case EveEchoesAttribute.rangeSkillBonusMod:
+        return 10016;
+      case EveEchoesAttribute.trackingSpeedAdjustmentMod:
+        return 10017;
+      case EveEchoesAttribute.explosionVelocityBonusMod:
+        return 10120;
+      case EveEchoesAttribute.explosionRadiusBonusMod:
+        return 10121;
+      case EveEchoesAttribute.flightTimeBonusMod:
+        return 10122;
+
+      case EveEchoesAttribute.signatureRadiusAdjustment:
+        return 364;
+
+
+      case EveEchoesAttribute.capacitorCapacityMultiplierMod:
+        return 306;
+      case EveEchoesAttribute.capacitorRechargeTimeMod:
+        return 307;
+      case EveEchoesAttribute.shieldDamageTaken:
+        return 98010;
+      case EveEchoesAttribute.armorDamageTaken:
+        return 98020;
     }
   }
 }

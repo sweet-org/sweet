@@ -43,7 +43,7 @@ class FittingSkill extends FittingItem {
     } else if (regexExpert.hasMatch(item.mainCalCode ?? "")) {
       _levelType = SkillLevelType.expert;
     } else {
-      print("Skill ${item.id} has unknown main cal code ${item.mainCalCode}");
+      // print("Skill ${item.id} has unknown main cal code ${item.mainCalCode}");
     }
   }
 

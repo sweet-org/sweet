@@ -27,7 +27,7 @@ class ThemedApp extends StatelessWidget {
         backgroundColor: Color(0xFF012966),
       ),
       appBarTheme: AppBarTheme(
-        color: Color(0xFF012966),
+        color: Color(0xFF0247D9),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
     );

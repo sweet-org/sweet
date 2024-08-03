@@ -30,8 +30,8 @@ class FittingRigIntegratorTileDetails extends StatelessWidget {
           ),
         ),
         ExpansionTile(
-          backgroundColor: Theme.of(context).cardColor.darken(),
-          collapsedBackgroundColor: Theme.of(context).cardColor.darken(),
+          backgroundColor: Theme.of(context).cardColor.darken(2),
+          collapsedBackgroundColor: Theme.of(context).cardColor.darken(2),
           title: Text('Rigs'),
           children: List.generate(
             integrator.numberOfSlots,

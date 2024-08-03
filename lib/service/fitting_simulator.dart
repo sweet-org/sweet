@@ -551,14 +551,17 @@ class FittingSimulator extends ChangeNotifier {
   }) {
     final activationTimeDefinition = item.baseAttributes.firstWhereOrNull(
       (element) => element.id == EveEchoesAttribute.activationTime.attributeId,
-    )!;
-    var activationTime = getValueForItem(
-      attribute: EveEchoesAttribute.activationTime,
-      item: item,
     );
-
-    activationTime =
-        activationTimeDefinition.calculatedValue(fromValue: activationTime);
+    var activationTime = 0.0;
+    if (activationTimeDefinition != null) {
+      activationTime = getValueForItem(
+        attribute: EveEchoesAttribute.activationTime,
+        item: item,
+      );
+      activationTime =
+          activationTimeDefinition.calculatedValue(fromValue: activationTime);
+    }
+    if (activationTime == 0.0) return 0;
 
     return calculateAlphaStrikeForItem(item: item) / activationTime;
   }
