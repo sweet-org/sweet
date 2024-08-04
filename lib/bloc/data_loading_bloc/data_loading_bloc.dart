@@ -165,6 +165,7 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
     Emitter<DataLoadingBlocState> emit,
   ) async {
     emit(LoadingRepositoryState('Importing data'));
+    print("Importing data from $path");
 
     final json = await File(path).readAsString();
     final data = jsonDecode(json);
@@ -176,24 +177,26 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
     );
     final fittings = List<FittingListElement>.from(
       data['fittings'].map(
-        (x) => {
+        (x) {
           if (x['type'] == null || x['type'] == 'LOADOUT') {
-            ShipFittingLoadout.fromJson(x)
+            return ShipFittingLoadout.fromJson(x);
           } else if (x['type'] == "FOLDER") {
-            ShipFittingFolder.fromJson(x)
+            return ShipFittingFolder.fromJson(x);
           } else {
-            //Should never happen
-            null
+            //Should not happen unless we try to import data from a newer version
+            throw Exception('Invalid fitting type ${x['type']}');
           }
         }
       ),
     );
+    print("Converted json data");
 
     await _characterRepository.loadCharacters(
       data: characters,
       defaultPilot: data[CharacterRepository.defaultPilotPrefsKey],
     );
     await _fittingRepository.loadLoadouts(data: fittings);
+    print("Loaded data");
 
     emit(RepositoryLoadedState());
   }

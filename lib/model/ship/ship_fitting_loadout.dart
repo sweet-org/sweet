@@ -90,6 +90,7 @@ class ShipFittingLoadout extends ChangeNotifier
     json['lightDestroyersSlots'] =
         json['lightDestroyersSlots'] ?? <String, dynamic>{};
     json['hangarRigSlots'] = json['hangarRigSlots'] ?? <String, dynamic>{};
+    json['type'] = json['type'] ?? 'LOADOUT';
     return _$ShipFittingLoadoutFromJson(json);
   }
 
