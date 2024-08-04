@@ -33,6 +33,13 @@ jobs:
         flutter doctor
 
         flutter pub get
+    
+    # This is to give an offset since builds before this repo were in the 100's
+    - name: Generate run number with offset
+      env:
+        NUM: ${{ github.run_number }}
+      run: |
+        echo "BUILD_NUMBER=$(($NUM + 200))" >> $GITHUB_ENV
 
     - name: Generate app build name
       shell: bash
