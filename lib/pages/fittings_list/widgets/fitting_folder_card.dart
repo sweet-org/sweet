@@ -223,37 +223,26 @@ class _FittingFolderState extends State<FittingFolderCard> {
               'Are you sure you want to delete this folder? This will include ALL of it\'s contents!'
                   '\n\nThis action cannot be reversed.'),
           actions: <Widget>[
-            Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(8)
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: LocalisedText(
+                localiseId: LocalisationStrings.cancel,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: LocalisedText(
-                      localiseId: LocalisationStrings.cancel,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: TextButton(
-                      onPressed: () {
-                        widgetContext
-                            .read<ShipFittingBrowserBloc>()
-                            .add(DeleteShipFitting(shipFittingId: folder.id));
-                        Navigator.of(context).pop();
-                      },
-                      child: LocalisedText(localiseId: LocalisationStrings.ok),
-                    ),
-                  ),
-                ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: TextButton(
+                onPressed: () {
+                  widgetContext
+                      .read<ShipFittingBrowserBloc>()
+                      .add(DeleteShipFitting(shipFittingId: folder.id));
+                  Navigator.of(context).pop();
+                },
+                child: LocalisedText(localiseId: LocalisationStrings.ok),
               ),
-            )
+            ),
           ],
         );
       },
