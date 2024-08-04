@@ -84,6 +84,7 @@ jobs:
     
     # This is to give an offset since builds before this repo were in the 100's
     - name: Generate run number with offset
+      shell: bash
       env:
         NUM: ${{ github.run_number }}
       run: |
