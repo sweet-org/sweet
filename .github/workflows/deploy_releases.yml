@@ -9,6 +9,11 @@ on:
         type: boolean
         default: true
 
+# Enter in project properties here
+env:
+  # Bumping version code to 200 + run number - this will indicate builds since Open Source
+  BUILD_NUMBER: 200 + ${{ github.run_number }}
+
 jobs:
   job-linux:
     runs-on: ubuntu-latest
@@ -36,7 +41,7 @@ jobs:
 
     - name: Generate app build name
       shell: bash
-      run: echo "##[set-output name=name;]$(echo sweet_$GITHUB_RUN_NUMBER)"
+      run: echo "##[set-output name=name;]$(echo sweet_$BUILD_NUMBER)"
       id: app_build
 
     - name: Building ${{ steps.app_build.outputs.name }} Linux
@@ -77,14 +82,14 @@ jobs:
 
     - name: Generate app build name
       shell: bash
-      run: echo "##[set-output name=name;]$(echo sweet_$GITHUB_RUN_NUMBER)"
+      run: echo "##[set-output name=name;]$(echo sweet_$BUILD_NUMBER)"
       id: app_build
 
     - name: Update Windows build number
       shell: bash
       run: |
         VERSION_FROM_PUBSPEC=$(sed -n -e '/version: / s///p' pubspec.yaml | tr -d '\r\n')
-        VERSION=$(echo -n $VERSION_FROM_PUBSPEC | sed -E -e "s/((([0-9])+\.([0-9])+\.([0-9])+)\+(([0-9])+))/\2+$GITHUB_RUN_NUMBER/")
+        VERSION=$(echo -n $VERSION_FROM_PUBSPEC | sed -E -e "s/((([0-9])+\.([0-9])+\.([0-9])+)\+(([0-9])+))/\2+$BUILD_NUMBER/")
 
         echo "Setting windows version to $VERSION"
         sed -i -E -e "s/((([0-9])+\.([0-9])+\.([0-9])+(([\+])([0-9])+)?))/$VERSION/" windows/runner/Runner.rc
@@ -126,11 +131,11 @@ jobs:
 
     - name: Generate app build name
       shell: bash
-      run: echo "##[set-output name=name;]$(echo sweet_$GITHUB_RUN_NUMBER)"
+      run: echo "##[set-output name=name;]$(echo sweet_$BUILD_NUMBER)"
       id: app_build
 
     # - name: Building ${{ steps.app_build.outputs.name }} iOS
-    #   run: flutter build ios --build-number $GITHUB_RUN_NUMBER --release --no-codesign --config-only
+    #   run: flutter build ios --build-number $BUILD_NUMBER --release --no-codesign --config-only
 
     # - name: Setup Ruby
     #   uses: ruby/setup-ruby@v1.133.2
@@ -151,7 +156,7 @@ jobs:
     #     FASTLANE_TEAM_ID: ${{ secrets.FASTLANE_TEAM_ID }}
 
     - name: Building ${{ steps.app_build.outputs.name }} MacOS
-      run: flutter build macos --build-number $GITHUB_RUN_NUMBER --release
+      run: flutter build macos --build-number $BUILD_NUMBER --release
 
     - name: 'Zipping build'
       run: |
@@ -198,11 +203,11 @@ jobs:
 
     - name: Generate app build name
       shell: bash
-      run: echo "##[set-output name=name;]$(echo sweet_$GITHUB_RUN_NUMBER)"
+      run: echo "##[set-output name=name;]$(echo sweet_$BUILD_NUMBER)"
       id: app_build
 
     - name: Building ${{ steps.app_build.outputs.name }}.aab
-      run: flutter build appbundle --build-number $GITHUB_RUN_NUMBER --release
+      run: flutter build appbundle --build-number $BUILD_NUMBER --release
 
     - name: Setup Ruby
       uses: ruby/setup-ruby@v1.133.2
@@ -225,7 +230,7 @@ jobs:
 
     - name: Generate app build name
       shell: bash
-      run: echo "##[set-output name=name;]$(echo sweet_$GITHUB_RUN_NUMBER)"
+      run: echo "##[set-output name=name;]$(echo sweet_$BUILD_NUMBER)"
       id: app_build
 
     - name: 'Download Linux artifact'
