@@ -1,6 +1,6 @@
 name: Deploy
 
-on:   
+on:
   workflow_dispatch:
     inputs:
       build_android:
@@ -105,7 +105,7 @@ jobs:
         name: ${{ steps.app_build.outputs.name }}-windows
         path: ${{ steps.app_build.outputs.name }}-windows.zip
         retention-days: 5
-        
+
   job-apple:
     runs-on: macos-latest
 
@@ -130,18 +130,18 @@ jobs:
       id: app_build
 
     # - name: Building ${{ steps.app_build.outputs.name }} iOS
-    #   run: flutter build ios --build-number $GITHUB_RUN_NUMBER --release --no-codesign --config-only 
+    #   run: flutter build ios --build-number $GITHUB_RUN_NUMBER --release --no-codesign --config-only
 
-    # - name: Setup Ruby    
+    # - name: Setup Ruby
     #   uses: ruby/setup-ruby@v1.133.2
     #   with:
     #     bundler-cache: true
-    
+
     # - name: Build and upload to TestFlight
     #   run: |
     #     bundle install
     #     bundle exec fastlane ios beta
-    #   env: 
+    #   env:
     #     SWEET_MATCH_ACCESS_TOKEN: ${{ secrets.SWEET_MATCH_ACCESS_TOKEN }}
     #     MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
     #     FASTLANE_USER: ${{ secrets.FASTLANE_APPLE_ID }}
@@ -177,7 +177,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         lfs: 'true'
-    
+
     - name: Decode Upload keystore
       working-directory: ./android
       run: |
@@ -204,16 +204,16 @@ jobs:
     - name: Building ${{ steps.app_build.outputs.name }}.aab
       run: flutter build appbundle --build-number $GITHUB_RUN_NUMBER --release
 
-    - name: Setup Ruby    
+    - name: Setup Ruby
       uses: ruby/setup-ruby@v1.133.2
       with:
         bundler-cache: true
-    
-    - name: Upload to Play Store    
+
+    - name: Upload to Play Store
       run: |
         bundle install --jobs 4 --retry 3
         bundle exec fastlane android upload_playstore
-      env: 
+      env:
         SWEET_JSON_KEY_DATA: ${{ secrets.SWEET_JSON_KEY_DATA }}
         AAB_PATH: build/app/outputs/bundle/release/app-release.aab
 
@@ -241,33 +241,30 @@ jobs:
     - name: 'Download Windows artifact'
       uses: actions/download-artifact@v2.0.9
       with:
-        name: ${{ steps.app_build.outputs.name }}-windows      
+        name: ${{ steps.app_build.outputs.name }}-windows
 
-    # Disabled for now for testing
-    # - name: Upload Windows releases to S3
-    #   uses: qoqa/action-s3-cp@v1.1
-    #   env:
-    #     AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET }}
-    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
-    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #     FILE: './${{ steps.app_build.outputs.name }}-windows.zip'
-    #     AWS_S3_PATH: '/releases/${{ steps.app_build.outputs.name }}-windows.zip'
-
-    # - name: Upload MacOS releases to S3
-    #   uses: qoqa/action-s3-cp@v1.1
-    #   env:
-    #     AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET }}
-    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
-    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #     FILE: './${{ steps.app_build.outputs.name }}-macos.zip'
-    #     AWS_S3_PATH: '/releases/${{ steps.app_build.outputs.name }}-macos.zip'
-
-    # - name: Upload Linux releases to S3
-    #   uses: qoqa/action-s3-cp@v1.1
-    #   env:
-    #     AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET }}
-    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
-    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #     FILE: './${{ steps.app_build.outputs.name }}-linux.zip'
-    #     AWS_S3_PATH: '/releases/${{ steps.app_build.outputs.name }}-linux.zip'
+    - name: Upload Windows releases to S3
+      uses: qoqa/action-s3-cp@v1.1
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        FILE: './${{ steps.app_build.outputs.name }}-windows.zip'
+        AWS_S3_PATH: '/releases/${{ steps.app_build.outputs.name }}-windows.zip'
+    - name: Upload MacOS releases to S3
+      uses: qoqa/action-s3-cp@v1.1
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        FILE: './${{ steps.app_build.outputs.name }}-macos.zip'
+        AWS_S3_PATH: '/releases/${{ steps.app_build.outputs.name }}-macos.zip'
+    - name: Upload Linux releases to S3
+      uses: qoqa/action-s3-cp@v1.1
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        FILE: './${{ steps.app_build.outputs.name }}-linux.zip'
+        AWS_S3_PATH: '/releases/${{ steps.app_build.outputs.name }}-linux.zip'
 
