@@ -28,6 +28,9 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     if (event is ShowFittingToolPage) {
       emit(ResetRootState(RootPages.FittingTool));
     }
+    if (event is ShowImplantToolPage) {
+      emit(ResetRootState(RootPages.ImplantFittings));
+    }
     if (event is ShowPatchNotesPage) {
       emit(ResetRootState(RootPages.PatchNotes));
     }

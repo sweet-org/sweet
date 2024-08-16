@@ -123,6 +123,28 @@ extension ItemRepositoryFitting on ItemRepository {
     );
   }
 
+  Future<FittingImplantModule> implantModule({
+    required int id,
+    ModuleState initialState = ModuleState.active,
+  }) async {
+    final item = await itemWithId(id: id);
+    final baseAttributes = await getBaseAttributesForItemId(id: id);
+    final modifiers = await getModifiersForItemId(id: id);
+
+    if (item == null) {
+      throw Exception('Cannot find Module with ID: $id');
+    }
+
+    return FittingImplantModule(
+      item: item,
+      level: -1,
+      slot: ImplantSlotType.common,
+      baseAttributes: baseAttributes.toList(),
+      modifiers: modifiers.toList(),
+      state: initialState,
+    );
+  }
+
   Future<FittingModule> rig({
     required int id,
     Map<String, dynamic> metadata = const {},
@@ -261,6 +283,17 @@ extension ItemRepositoryFitting on ItemRepository {
     return fitting;
   }
 
+  Future<FittingImplantModule> _getImplantModulesForSlot(
+      ImplantFittingSlotModule slotModule) {
+    var mod = slotModule.moduleId == 0
+        ? Future.value(FittingImplantModule.emptyCommon)
+        : implantModule(
+            id: slotModule.moduleId,
+            initialState: slotModule.state,
+          );
+    return mod;
+  }
+
   Future<List<FittingModule>> _getModulesForSlot(
     SlotType slot, {
     required List<ShipFittingSlotModule> slotModules,
@@ -394,6 +427,42 @@ extension ItemRepositoryFitting on ItemRepository {
       numLightDestroyersSlots: numLightDestroyersSlots,
       numHangarRigSlots: numHangarRigSlots,
     );
+  }
+
+  Future<ImplantLoadoutDefinition> getImplantLoadoutDefinition(int implantId) async {
+    var implant = await (_echoesDatabase.implantDao.selectWithId(id: implantId));
+    print("item_repo_fitting $implantId");
+    if (implant == null) {
+      throw Exception('Cannot find Implant $implantId');
+    }
+    print("item_repo_fitting: ${implant.implantFramework.length}");
+    if (implant.implantType != 0) {
+      throw Exception('Item is not an implant (got type ${implant.implantType})');
+    }
+    /*
+     * Type   Item
+     * null   Neural Compilers, Blueprints
+     * 0      Implant
+     * 1      Fixed Branch choices (don't know why they have different levels)
+     * 2      General Units
+     */
+    final slots = <int, ImplantSlotType>{};
+    final restrictions = <int, List<int>>{};
+
+    implant.implantFramework.forEach((slotId, value) {
+      final int typeId = value[0];
+      final int slotNum = int.parse(slotId);
+      final slotType = ImplantSlotType.values.firstWhere(
+              (element) => element.typeId == typeId);
+      slots[slotNum] = slotType;
+
+      if (slotType == ImplantSlotType.common) return;
+
+      // The remaining values in "value" contain the allowed items
+      restrictions[slotNum] = value.sublist(1);
+    });
+
+    return ImplantLoadoutDefinition(slots: slots, restrictions: restrictions);
   }
 
   Future<List<NihilusSpaceModifier>> nSpaceModifiers() async {

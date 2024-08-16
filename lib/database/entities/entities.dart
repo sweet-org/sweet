@@ -17,3 +17,4 @@ export 'modifier_value.dart';
 export 'npc_equipment.dart';
 export 'ship_default_mode.dart';
 export 'unit.dart';
+export 'implant.dart';

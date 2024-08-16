@@ -11,6 +11,7 @@ import 'package:sweet/bloc/data_loading_bloc/data_loading.dart';
 import 'package:sweet/bloc/item_repository_bloc/item_repository_bloc.dart';
 import 'package:sweet/bloc/navigation_bloc/navigation.dart';
 import 'package:sweet/repository/character_repository.dart';
+import 'package:sweet/repository/implant_fitting_loadout_repository.dart';
 import 'package:sweet/repository/localisation_repository.dart';
 import 'package:sweet/repository/ship_fitting_repository.dart';
 import 'package:sweet/service/attribute_calculator_service.dart';
@@ -69,6 +70,9 @@ MultiRepositoryProvider buildRepositories({required Widget child}) {
       RepositoryProvider<ShipFittingLoadoutRepository>(
         create: (_) => ShipFittingLoadoutRepository(),
       ),
+      RepositoryProvider<ImplantFittingLoadoutRepository>(
+        create: (_) => ImplantFittingLoadoutRepository(),
+      ),
       if (PlatformHelper.hasFirebase)
         RepositoryProvider<FirebaseAnalytics>(
           create: (_) => FirebaseAnalytics.instance,
@@ -118,6 +122,7 @@ Widget buildBlocProviders({required Widget child}) {
                 RepositoryProvider.of<ItemRepository>(context),
                 RepositoryProvider.of<CharacterRepository>(context),
                 RepositoryProvider.of<ShipFittingLoadoutRepository>(context),
+                RepositoryProvider.of<ImplantFittingLoadoutRepository>(context),
                 RepositoryProvider.of<LocalisationRepository>(context),
                 RepositoryProvider.of<ManUpService>(context),
               )),

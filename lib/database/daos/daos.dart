@@ -18,3 +18,4 @@ export 'npc_equipment_dao.dart';
 export 'unit_dao.dart';
 export 'ship_modes_dao.dart';
 export 'ship_nanocore_dao.dart';
+export 'implant_dao.dart';

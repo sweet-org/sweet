@@ -149,6 +149,12 @@ extension ItemRepositoryDb on ItemRepository {
       await _echoesDatabase.itemDao
           .select(whereClause: 'WHERE marketGroupId = $marketGroupId');
 
+  Future<Implant?> implantWithId({required int id}) async {
+    var implant = await _echoesDatabase.implantDao.selectWithId(id: id);
+
+    return implant;
+  }
+
   Future<int?> shipModeForShip({required int shipId}) async {
     final rows = await _echoesDatabase.db.rawQuery('''
       SELECT modeId

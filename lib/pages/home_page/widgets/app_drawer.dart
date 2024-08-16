@@ -100,6 +100,12 @@ class _AppDrawerState extends State<AppDrawer> with FileSelector {
                       ),
                       buildDrawerListTile(
                         context,
+                        title: 'Implant List',
+                        icon: Icons.construction,
+                        event: ShowImplantToolPage(),
+                      ),
+                      buildDrawerListTile(
+                        context,
                         title: 'Announcements',
                         icon: Icons.announcement,
                         event: ShowPatchNotesPage(),

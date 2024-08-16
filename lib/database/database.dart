@@ -28,6 +28,8 @@ class EveEchoesDatabase {
   late ShipModesDao shipModesDao;
   late ShipNanocoreDao shipNanocoreDao;
 
+  late ImplantDao implantDao;
+
   late UnitDao unitDao;
 
   late List<BaseDao> _allDaos;
@@ -48,6 +50,7 @@ class EveEchoesDatabase {
     marketGroupDao = MarketGroupDao(this);
     shipModesDao = ShipModesDao(this);
     shipNanocoreDao = ShipNanocoreDao(this);
+    implantDao = ImplantDao(this);
     unitDao = UnitDao(this);
 
     _allDaos = [
@@ -67,6 +70,7 @@ class EveEchoesDatabase {
       shipModesDao,
       shipNanocoreDao,
       unitDao,
+      implantDao
     ];
   }
 

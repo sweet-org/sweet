@@ -9,8 +9,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:archive/archive.dart';
 import 'package:http/http.dart' as http;
 import 'package:sweet/bloc/item_repository_bloc/market_group_filters.dart';
+import 'package:sweet/model/fitting/fitting_implant_module.dart';
 import 'package:sweet/model/fitting/fitting_nanocore.dart';
 import 'package:sweet/model/fitting/fitting_rig_integrator.dart';
+import 'package:sweet/model/implant/implant_fitting_slot_module.dart';
+import 'package:sweet/model/implant/implant_loadout_definition.dart';
+import 'package:sweet/model/implant/slot_type.dart';
 import 'package:sweet/model/nihilus_space_modifier.dart';
 import 'package:sweet/model/ship/ship_fitting_slot_module.dart';
 
@@ -42,6 +46,9 @@ import '../model/ship/module_state.dart';
 import '../model/ship/ship_fitting_loadout.dart';
 import '../model/ship/slot_type.dart';
 
+import '../model/implant/implant_fitting_loadout.dart';
+import '../model/fitting/fitting_implant.dart';
+
 import '../service/fitting_simulator.dart';
 import '../service/attribute_calculator_service.dart';
 
@@ -49,6 +56,7 @@ import '../util/crc32.dart' as crc;
 
 part 'item_repository_fitting.dart';
 part 'item_repository_db_functions.dart';
+part 'item_repository_implant.dart';
 
 typedef DownloadProgressCallback = void Function(int, int);
 
@@ -80,6 +88,7 @@ class ItemRepository {
       dbCrc: dbCrc,
       performCrcCheck: performCrcCheck,
     );
+    print("DB check completed: dbVersion=$dbVersion, latestVersion=$latestVersion, dbOk=$dbIsOK");
     return dbVersion == null || dbVersion != latestVersion || !dbIsOK;
   }
 
@@ -109,12 +118,15 @@ class ItemRepository {
         throw Exception(
             'ETag is missing: \n ${response.headers.keys.join(', ')}');
       }
-
-      if (storedEtag != dbEtag) return false;
+      if (storedEtag != dbEtag) {
+        print("DB not ok: storedEtag != dbEtag ($storedEtag != $dbEtag)");
+        return false;
+      }
     }
 
     if (performCrcCheck) {
       final crc32 = await databaseCrc();
+      if (crc32 != dbCrc) print("DB not ok: crc mismatch, local != remote: $crc32 != $dbCrc");
       return crc32 == dbCrc;
     }
 
