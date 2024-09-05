@@ -9,7 +9,6 @@ class StringToIntListMapTypeConverter extends TypeConverter<Map<String, List<int
     final converted = data.map(
             (key, val) => MapEntry(key, val.cast<int>())
     );
-    print("Test converted");
     return Map<String, List<int>>.from(converted ?? {});
   }
 

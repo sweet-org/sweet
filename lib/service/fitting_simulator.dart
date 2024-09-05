@@ -11,6 +11,7 @@ import 'package:sweet/model/implant/implant_handler.dart';
 import 'package:sweet/model/items/eve_echoes_categories.dart';
 import 'package:sweet/model/nihilus_space_modifier.dart';
 import 'package:sweet/model/ship/ship_loadout_definition.dart';
+import 'package:sweet/repository/implant_fitting_loadout_repository.dart';
 
 import '../database/database_exports.dart';
 import '../model/character/character.dart';
@@ -87,8 +88,15 @@ class FittingSimulator extends ChangeNotifier {
 
   void setImplant(ImplantHandler? implant) {
     _implant = implant;
-    // ToDo: Add listeners and stuff
-    _updateFitting();
+    if (_implant == null) {
+      loadout.setImplant(null);
+    } else {
+      loadout.setImplant(implant!.fitting.id);
+    }
+    _attributeCalculatorService
+        .updateItems(allFittedModules: _allFittedModules)
+        .then((_) => _updateFitting())
+        .then((_) => notifyListeners());
   }
 
   final ShipFittingLoadout loadout;
@@ -148,6 +156,7 @@ class FittingSimulator extends ChangeNotifier {
           loadout: loadout,
           attributeCalculatorService: attributeCalculatorService,
         ),
+        implant: implant,
       );
 
   static Future<FittingSimulator> fromDrone(

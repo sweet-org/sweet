@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:manup/manup.dart';
 import 'package:sweet/model/character/character.dart';
+import 'package:sweet/model/implant/implant_fitting_loadout.dart';
 import 'package:sweet/model/ship/fitting_list_element.dart';
 import 'package:sweet/model/ship/ship_fitting_folder.dart';
 import 'package:sweet/model/ship/ship_fitting_loadout.dart';
@@ -156,6 +157,7 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
     final data = {
       'fittings': _fittingRepository.loadouts.toList(),
       'characters': _characterRepository.characters.toList(),
+      'implants': _implantRepository.implants.toList(),
       CharacterRepository.defaultPilotPrefsKey:
           _characterRepository.defaultPilot.id,
     };
@@ -194,6 +196,11 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
         }
       ),
     );
+    final implants = List<ImplantFittingLoadout>.from(
+      data['implants'].map(
+          (x) => ImplantFittingLoadout.fromJson(x )
+      )
+    );
     print("Converted json data");
 
     await _characterRepository.loadCharacters(
@@ -201,6 +208,7 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
       defaultPilot: data[CharacterRepository.defaultPilotPrefsKey],
     );
     await _fittingRepository.loadLoadouts(data: fittings);
+    await _implantRepository.loadImplants(data: implants);
     print("Loaded data");
 
     emit(RepositoryLoadedState());
