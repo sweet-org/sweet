@@ -44,6 +44,11 @@ class ImplantFittingLoadout extends ChangeNotifier with EquatableMixin {
     notifyListeners();
   }
 
+  void setLevel(int newLevel) {
+    _level = newLevel;
+    notifyListeners();
+  }
+
   final Map<int, ImplantFittingSlotModule> modules;
 
   ImplantFittingLoadout({

@@ -11,7 +11,6 @@ import 'package:sweet/repository/implant_fitting_loadout_repository.dart';
 import '../../../database/entities/item.dart';
 import '../../../database/entities/market_group.dart';
 import '../../../model/fitting/fitting_implant_module.dart';
-import '../../../model/fitting/fitting_module.dart';
 import '../../../model/implant/slot_type.dart';
 import '../../../repository/item_repository.dart';
 import '../bloc/implant_fitting_bloc/events.dart';

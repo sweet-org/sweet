@@ -1,11 +1,8 @@
 import 'package:provider/provider.dart';
 import 'package:sweet/model/implant/implant_fitting_loadout.dart';
 import 'package:sweet/model/implant/implant_handler.dart';
-import 'package:sweet/model/ship/ship_fitting_loadout.dart';
 import 'package:sweet/repository/implant_fitting_loadout_repository.dart';
 import 'package:sweet/repository/localisation_repository.dart';
-import 'package:sweet/repository/ship_fitting_repository.dart';
-import 'package:sweet/service/fitting_simulator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sweet/util/localisation_constants.dart';
@@ -25,6 +22,7 @@ class _ShipFittingHeaderState extends State<ImplantFittingHeader> {
   final _formKey = GlobalKey<FormState>();
 
   String? _name;
+  int? _level;
 
   void toggleEdit(ImplantHandler fitting) {
     setState(() {
@@ -35,9 +33,9 @@ class _ShipFittingHeaderState extends State<ImplantFittingHeader> {
         }
 
         fitting.setName(_name ?? '[NO NAME]');
+        fitting.setLevel(_level ?? 1);
         saveFitting(fitting);
       }
-
       editMode = !editMode;
     });
   }
@@ -114,7 +112,7 @@ class _ShipFittingHeaderState extends State<ImplantFittingHeader> {
                                 ? _buildFittingDetailsForm(fitting)
                                 : _buildFittingDetails(fitting),
                             Text(
-                              implantName,
+                              "$implantName (Lvl. ${fitting.loadout.level})",
                               style: TextStyle(
                                 color: Colors.white.withAlpha(96),
                                 fontSize: 14,
@@ -160,6 +158,36 @@ class _ShipFittingHeaderState extends State<ImplantFittingHeader> {
             onSaved: (value) {
               setState(() {
                 _name = value;
+              });
+            },
+          ),
+          TextFormField(
+            initialValue: fitting.loadout.level.toString(),
+            cursorColor: Colors.white,
+            style: TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              labelText: 'Enter Level (1-45)',
+              hintText: 'Level',
+              labelStyle: TextStyle(color: Colors.white.withAlpha(150)),
+              hintStyle: TextStyle(color: Colors.white.withAlpha(150)),
+              fillColor: Colors.white,
+            ),
+            validator: (value) {
+              if (value!.trim().isEmpty) {
+                return 'Please enter the level';
+              }
+              final num = int.tryParse(value);
+              if (num == null) {
+                return 'Level must be a number';
+              }
+              if (num < 1 || num > 45) {
+                return 'Level must be between 1 and 45';
+              }
+              return null;
+            },
+            onSaved: (value) {
+              setState(() {
+                _level = int.tryParse(value!);
               });
             },
           ),

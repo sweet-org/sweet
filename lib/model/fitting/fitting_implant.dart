@@ -24,6 +24,7 @@ class ImplantFitting extends FittingModule {
   ImplantFitting({
     required this.id,
     required this.name,
+    required this.trainedLevel,
     required Item item,
     required List<Attribute> baseAttributes,
     required List<ItemModifier> modifiers,
@@ -56,6 +57,7 @@ class ImplantFitting extends FittingModule {
 
   void setFromLoadout(ImplantFittingLoadout loadout) {
     _implantSlots.clear();
+    trainedLevel = loadout.level;
 
     loadout.modules.forEach((slotIndex, module) {
       _implantSlots[slotIndex] = FittingImplantModule.getEmpty(module.type);

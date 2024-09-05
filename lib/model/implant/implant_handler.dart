@@ -32,10 +32,9 @@ class ImplantHandler extends ChangeNotifier {
     required ItemRepository itemRepository,
     required this.implant,
     required this.loadout,
-    required ImplantFitting fitting,
+    required this.fitting,
     required Map<int, List<int>> restrictions,
-  })  : fitting = fitting,
-        _itemRepository = itemRepository,
+  })  : _itemRepository = itemRepository,
         _restrictions = restrictions;
 
   static Future<ImplantHandler> fromImplantLoadout({
@@ -78,6 +77,12 @@ class ImplantHandler extends ChangeNotifier {
   String get name => loadout.name;
   void setName(String newName) {
     loadout.setName(newName);
+    notifyListeners();
+  }
+
+  void setLevel(int newLevel) {
+    fitting.trainedLevel = newLevel;
+    loadout.setLevel(newLevel);
     notifyListeners();
   }
 

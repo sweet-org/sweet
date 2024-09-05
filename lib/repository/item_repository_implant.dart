@@ -16,7 +16,9 @@ extension ItemRepositoryImplant on ItemRepository {
     // final implant = await implantModule(id: loadout.implantItemId);
 
     final fitting = ImplantFitting(
-        id: loadout.id, name: loadout.name,
+        id: loadout.id,
+        name: loadout.name,
+        trainedLevel: loadout.level,
         item: item,
         baseAttributes: baseAttributes.toList(),
         modifiers: modifiers.toList()

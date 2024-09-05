@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sweet/model/fitting/fitting_implant_module.dart';
-import 'package:sweet/model/implant/implant_fitting_loadout.dart';
 import 'package:sweet/model/implant/implant_handler.dart';
 import 'package:sweet/model/implant/slot_type.dart';
 
