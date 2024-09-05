@@ -14,7 +14,7 @@ class FittingItem {
   bool get excludeInCapacitorSimulation => item.excludeInCapacitorSimulation;
 
   List<String> get mainCalCode => [item.mainCalCode ?? ''];
-  String get activeCalCode => item.activeCalCode ?? item.onlineCalCode ?? '';
+  List<String> get activeCalCode => [item.activeCalCode ?? item.onlineCalCode ?? ''];
 
   final List<Attribute> baseAttributes;
   final List<ItemModifier> modifiers;

@@ -78,6 +78,15 @@ class OpenRigIntegratorDrawer extends ShipFittingState {
       ];
 }
 
+class OpenImplantDrawer extends ShipFittingState {
+  OpenImplantDrawer(FittingSimulator fitting) : super(fitting);
+
+  @override
+  List<Object?> get props => [
+        DateTime.now(),
+      ];
+}
+
 class ShipFittingUpdatedState extends ShipFittingState {
   ShipFittingUpdatedState(FittingSimulator fitting) : super(fitting);
 

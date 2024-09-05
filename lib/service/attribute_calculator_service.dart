@@ -5,6 +5,7 @@ import 'package:sprintf/sprintf.dart';
 
 import 'package:sweet/database/entities/attribute.dart';
 import 'package:sweet/database/entities/item_modifier.dart';
+import 'package:sweet/model/fitting/fitting_implant.dart';
 import 'package:sweet/model/fitting/fitting_item.dart';
 import 'package:sweet/model/modifier_change_type.dart';
 import 'package:sweet/model/nihilus_space_modifier.dart';
@@ -19,6 +20,7 @@ import 'package:sweet/model/ship/module_state.dart';
 
 import 'package:sweet/repository/item_repository.dart';
 import 'package:sweet/util/constants.dart';
+import 'package:sweet/util/implant_level_func.dart';
 
 // ToDo: This is not optimal, but I don't know a better way to filter out the duplicated attributes
 // This is a list of blacklisted attributes which exists twice in the game
@@ -135,11 +137,15 @@ class AttributeCalculatorService {
     for (var moduleSlot in activeMods) {
       moduleSlot.selfModifiers.clear();
       final modifiers = [...moduleSlot.mainCalCode];
-      final activeModifier = moduleSlot.activeCalCode;
+      final activeModifiers = moduleSlot.activeCalCode;
 
-      if (moduleSlot.state != ModuleState.inactive &&
-          !moduleSlot.mainCalCode.contains(activeModifier)) {
-        modifiers.add(activeModifier);
+      if (moduleSlot.state != ModuleState.inactive || moduleSlot is ImplantFitting) {
+        // Implants handle their state on their own
+        for (final activeModifier in activeModifiers) {
+          if (!moduleSlot.mainCalCode.contains(activeModifier)) {
+            modifiers.add(activeModifier);
+          }
+        }
       }
 
       final mods = moduleSlot.modifiers
@@ -298,9 +304,9 @@ class AttributeCalculatorService {
       );
       return 0.0;
     }
-      final itemAttribute = item.baseAttributes
-          .firstWhereOrNull((attr) => attr.id == attributeId) ??
-          _attributeDefinitions[attributeId];
+    final itemAttribute = item.baseAttributes
+        .firstWhereOrNull((attr) => attr.id == attributeId) ??
+        _attributeDefinitions[attributeId];
 
     if (itemAttribute == null) {
       _log(message: 'No item attribute');
@@ -337,6 +343,11 @@ class AttributeCalculatorService {
     ];
 
     var value = baseValue ?? itemAttribute.baseValue;
+
+    // ToDo: Offload levelFunctions into database, also the implant level can also effect other items
+    if (item is ImplantFitting && levelFunctions.containsKey(itemAttribute.id)) {
+      value = levelFunctions[itemAttribute.id]!.call(item.trainedLevel);
+    }
 
     // NOTE: Scripts seem to run through a map of
     // [ Operation ] [ Attr ID] [ Attr List]

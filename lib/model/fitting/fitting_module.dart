@@ -20,7 +20,7 @@ class FittingModule extends FittingItem with EquatableMixin {
   bool get canActivate =>
       slot != SlotType.combatRig &&
       slot != SlotType.engineeringRig &&
-      slot != SlotType.nanocore;
+      slot != SlotType.nanocore && slot != SlotType.implantSlots;
 
   bool inSameSlot(FittingModule other) =>
       other.slot == slot && other.index == index;

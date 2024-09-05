@@ -5,6 +5,8 @@ import 'package:sweet/database/entities/market_group.dart';
 import 'package:sweet/mixins/fitting_item_details_mixin.dart';
 import 'package:sweet/model/fitting/fitting_module.dart';
 import 'package:sweet/model/fitting/fitting_rig_integrator.dart';
+import 'package:sweet/model/implant/implant_fitting_loadout.dart';
+import 'package:sweet/model/implant/implant_handler.dart';
 import 'package:sweet/pages/ship_fitting/widgets/offense_widgets/damage_pattern_row.dart';
 import 'package:sweet/service/fitting_simulator.dart';
 import 'package:sweet/model/ship/slot_type.dart';
@@ -19,6 +21,7 @@ import 'package:sweet/repository/ship_fitting_repository.dart';
 import 'package:sweet/service/attribute_calculator_service.dart';
 import 'package:sweet/util/localisation_constants.dart';
 
+import 'implant_context_drawer.dart';
 import 'ship_fitting_detail_panel.dart';
 import 'ship_fitting_toolbar.dart';
 import 'ship_mode_toggle.dart';
@@ -83,6 +86,10 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
 
     if (state is OpenPilotDrawerState) {
       await showPilotDrawer(context, state);
+    }
+
+    if (state is OpenImplantDrawer) {
+      await showImplantDrawer(context, state);
     }
 
     if (state is OpenFittingStatsDrawerState) {
@@ -172,6 +179,29 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
     if (selection != null) {
       state.fitting.setPilot(selection);
     }
+  }
+
+  Future<void> showImplantDrawer(
+      BuildContext context, OpenImplantDrawer state) async {
+    ImplantFittingLoadout? loadout = await showModalBottomSheet(
+      context: context,
+      elevation: 16,
+      builder: (context) => ImplantContextDrawer(),
+    );
+    if (loadout == null) {
+      state.fitting.setImplant(null);
+      return;
+    }
+    final itemRepo = Provider.of<ItemRepository>(context, listen: false);
+
+    final fitting = await ImplantHandler.fromImplantLoadout(
+      implant: await itemRepo.implantModule(id: loadout.implantItemId),
+      itemRepository: itemRepo,
+      definition: await itemRepo.getImplantLoadoutDefinition(loadout.implantItemId),
+      loadout: loadout,
+    );
+
+    state.fitting.setImplant(fitting);
   }
 
   Future<void> showDamagePatternDrawer(

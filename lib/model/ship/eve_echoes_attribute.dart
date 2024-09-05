@@ -73,6 +73,13 @@ final kIgnoreAttributes = [
   EveEchoesAttribute.maxGroupActive,
 ];
 
+// There are way to many attributes when it comes to implants,
+// this is the easy way...
+final kIgnoreImplantAttributes = [
+  EveEchoesAttribute.volume.attributeId,
+  EveEchoesAttribute.cargoHoldCapacity.attributeId,
+];
+
 final kIgnoreAttributeIds = kIgnoreAttributes.map((e) => e.attributeId);
 
 enum EveEchoesAttribute {
@@ -231,6 +238,11 @@ enum EveEchoesAttribute {
   capacitorRechargeTimeMod,
   shieldDamageTaken,
   armorDamageTaken,
+
+  // Implant Attributes
+  implantCBBuff,
+  implantCBDamageModX,
+  implantCBDamageDroneMod,
 
   // SORT!!
   metalevel,
@@ -787,6 +799,13 @@ extension ShipAttributeExtenstion on EveEchoesAttribute {
         return 98010;
       case EveEchoesAttribute.armorDamageTaken:
         return 98020;
+
+      case EveEchoesAttribute.implantCBBuff:
+        return 8681;
+      case EveEchoesAttribute.implantCBDamageModX:
+        return 8683;
+      case EveEchoesAttribute.implantCBDamageDroneMod:
+        return 8682;
     }
   }
 }

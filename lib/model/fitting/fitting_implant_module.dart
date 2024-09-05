@@ -24,6 +24,8 @@ class FittingImplantModule extends FittingItem with EquatableMixin {
 
   List<EveEchoesAttribute> get uiAttributes => item.uiAttributes;
 
+  bool get canActivate => activeCalCode.any((e) => e != "");
+
   static final FittingImplantModule _empty = FittingImplantModule(
     item: Item.invalid,
     slot: ImplantSlotType.common,
@@ -51,6 +53,8 @@ class FittingImplantModule extends FittingItem with EquatableMixin {
         return emptyCommon;
       case ImplantSlotType.upgrade:
         return emptyUpgrade;
+      default:
+        return null;
     }
   }
 
@@ -78,6 +82,7 @@ class FittingImplantModule extends FittingItem with EquatableMixin {
       level: level ?? this.level,
       baseAttributes: baseAttributes,
       modifiers: modifiers,
+      state: state ?? this.state
     );
   }
 

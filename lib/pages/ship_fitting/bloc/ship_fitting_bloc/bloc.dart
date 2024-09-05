@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:sweet/bloc/item_repository_bloc/market_group_filters.dart';
 import 'package:sweet/database/database_exports.dart';
 import 'package:sweet/model/character/character.dart';
+import 'package:sweet/repository/implant_fitting_loadout_repository.dart';
 import 'package:sweet/service/fitting_simulator.dart';
 import 'package:sweet/model/ship/slot_type.dart';
 import 'package:sweet/repository/item_repository.dart';
@@ -15,12 +16,17 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
 
   final ItemRepository _itemRepository;
   final ShipFittingLoadoutRepository fittingRepository;
+  final ImplantFittingLoadoutRepository implantRepository;
 
   late Character _pilot;
   Character get pilot => _pilot;
 
-  ShipFittingBloc(this._itemRepository, this.fittingRepository, this.fitting)
-      : super(InitialShipFitting(fitting)) {
+  ShipFittingBloc(
+      this._itemRepository,
+      this.fittingRepository,
+      this.implantRepository,
+      this.fitting
+      ) : super(InitialShipFitting(fitting)) {
     on<ShipFittingEvent>((event, emit) => mapEventToState(event, emit));
   }
 
@@ -71,6 +77,9 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
     var initialItems = <Item>[];
 
     switch (event.slotType) {
+      case SlotType.implantSlots:
+        emit(OpenImplantDrawer(fitting));
+        return;
       case SlotType.drone:
         {
           // Because Drones are buried under Mid Slot..

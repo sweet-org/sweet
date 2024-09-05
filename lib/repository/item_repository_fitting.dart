@@ -263,8 +263,10 @@ extension ItemRepositoryFitting on ItemRepository {
     }
 
     for (var slotIndex = 0; slotIndex < loadout.allSlots.length; slotIndex++) {
-      final slotLoadout = loadout.allSlots[slotIndex];
       final slot = SlotType.values[slotIndex];
+      if (slot == SlotType.implantSlots) continue;
+      final slotLoadout = loadout.allSlots[slotIndex];
+
       final slotModules = await _getModulesForSlot(
         slot,
         slotModules: slotLoadout.modules,
@@ -431,11 +433,11 @@ extension ItemRepositoryFitting on ItemRepository {
 
   Future<ImplantLoadoutDefinition> getImplantLoadoutDefinition(int implantId) async {
     var implant = await (_echoesDatabase.implantDao.selectWithId(id: implantId));
-    print("item_repo_fitting $implantId");
+    // print("item_repo_fitting $implantId");
     if (implant == null) {
       throw Exception('Cannot find Implant $implantId');
     }
-    print("item_repo_fitting: ${implant.implantFramework.length}");
+    // print("item_repo_fitting: ${implant.implantFramework.length}");
     if (implant.implantType != 0) {
       throw Exception('Item is not an implant (got type ${implant.implantType})');
     }

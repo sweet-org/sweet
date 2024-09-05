@@ -2,6 +2,7 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:sweet/repository/implant_fitting_loadout_repository.dart';
 import 'package:sweet/service/fitting_simulator.dart';
 import 'package:sweet/pages/ship_fitting/bloc/ship_fitting_bloc/ship_fitting.dart';
 import 'package:sweet/pages/ship_fitting/widgets/ship_fitting_body.dart';
@@ -23,6 +24,7 @@ class ShipFittingPage extends StatelessWidget {
         create: (context) => ShipFittingBloc(
               RepositoryProvider.of<ItemRepository>(context),
               RepositoryProvider.of<ShipFittingLoadoutRepository>(context),
+              RepositoryProvider.of<ImplantFittingLoadoutRepository>(context),
               fitting,
             ),
         child: ChangeNotifierProvider.value(

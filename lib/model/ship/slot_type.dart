@@ -1,6 +1,7 @@
 import 'package:sweet/bloc/item_repository_bloc/market_group_filters.dart';
 
 enum SlotType {
+  implantSlots,
   high,
   mid,
   low,
@@ -14,7 +15,6 @@ enum SlotType {
   // lightBCSlot,
   // lightBBSlot,
   hangarRigSlots,
-  // implantSlots,
 }
 
 extension SlotTypeExtensions on SlotType {
@@ -45,6 +45,8 @@ extension SlotTypeExtensions on SlotType {
       //   return MarketGroupFilters.all;
       // case SlotType.lightBBSlot:
       //   return MarketGroupFilters.all;
+      case SlotType.implantSlots:
+        return MarketGroupFilters.implants;
 
       case SlotType.hangarRigSlots:
         return MarketGroupFilters.hangarRigs;

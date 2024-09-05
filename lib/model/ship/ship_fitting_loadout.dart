@@ -40,9 +40,11 @@ class ShipFittingLoadout extends ChangeNotifier
   String get id => _id;
   final int shipItemId;
   String _name;
+  String? _implantId;
 
   String get name => _name;
   String get type => _type;
+  String? get implant => _implantId;
 
   @override
   String getId() => _id;
@@ -52,6 +54,11 @@ class ShipFittingLoadout extends ChangeNotifier
 
   void setName(String newName) {
     _name = newName;
+    notifyListeners();
+  }
+
+  void setImplant(String? newImplant) {
+    _implantId = newImplant;
     notifyListeners();
   }
 
@@ -180,6 +187,7 @@ class ShipFittingLoadout extends ChangeNotifier
       );
 
   List<ShipFittingSlot> get allSlots => [
+        ShipFittingSlot.empty,
         highSlots,
         midSlots,
         lowSlots,

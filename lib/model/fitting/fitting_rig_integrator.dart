@@ -142,7 +142,7 @@ class FittingRigIntegrator extends FittingModule {
   }
 
   @override
-  String get activeCalCode => '';
+  List<String> get activeCalCode => [''];
 
   @override
   FittingRigIntegrator copyWith({
