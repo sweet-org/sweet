@@ -40,6 +40,9 @@ extension ItemRepositoryDb on ItemRepository {
   Future<Unit?> unitWithId({required int id}) async =>
       await _echoesDatabase.unitDao.selectWithId(id: id);
 
+  Future<Iterable<LevelAttribute>> levelAttributes() async =>
+      await _echoesDatabase.levelAttributeDao.selectAll();
+
   Future<Iterable<eve.Category>> categories(
           {bool includeEmpty = false}) async =>
       await (includeEmpty

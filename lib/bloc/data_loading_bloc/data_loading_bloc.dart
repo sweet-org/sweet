@@ -112,6 +112,8 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
       emit(LoadingRepositoryState('Loading data...\nProcessing data'));
       print('${DateTime.now()}: Processing market groups');
       await _itemRepository.processMarketGroups();
+      print('${DateTime.now()}: Processing level attributes');
+      await _itemRepository.processLevelAttributes();
       print('${DateTime.now()}: Processing non integratable rigs');
       await _itemRepository.processExcludeFusionRigs();
       print('${DateTime.now()}: Loading language strings');

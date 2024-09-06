@@ -32,6 +32,8 @@ class EveEchoesDatabase {
 
   late UnitDao unitDao;
 
+  late LevelAttributeDao levelAttributeDao;
+
   late List<BaseDao> _allDaos;
 
   EveEchoesDatabase() {
@@ -52,6 +54,7 @@ class EveEchoesDatabase {
     shipNanocoreDao = ShipNanocoreDao(this);
     implantDao = ImplantDao(this);
     unitDao = UnitDao(this);
+    levelAttributeDao = LevelAttributeDao(this);
 
     _allDaos = [
       attributeDao,
@@ -70,6 +73,7 @@ class EveEchoesDatabase {
       shipModesDao,
       shipNanocoreDao,
       unitDao,
+      levelAttributeDao,
       implantDao
     ];
   }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
+import 'package:expressions/expressions.dart';
 import 'package:filesize/filesize.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,6 +63,7 @@ typedef DownloadProgressCallback = void Function(int, int);
 
 class ItemRepository {
   Map<int, MarketGroup> marketGroupMap = {};
+  Map<int, Expression> levelAttributeMap = {};
   List<int> _excludeFusionRigs = [];
   List<int> get excludeFusionRigs => _excludeFusionRigs;
 
@@ -238,6 +240,14 @@ class ItemRepository {
       if (mkg.parentId != null) {
         marketGroupMap[mkg.parentId!]!.children.add(mkg);
       }
+    }
+  }
+
+  Future<void> processLevelAttributes() async {
+    var lvlAttrs = await _echoesDatabase.levelAttributeDao.selectAll();
+    levelAttributeMap = {};
+    for (var lvlAttr in lvlAttrs) {
+      levelAttributeMap[lvlAttr.attrId] = Expression.parse(lvlAttr.formula);
     }
   }
 

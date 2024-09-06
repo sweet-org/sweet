@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
+import 'package:expressions/expressions.dart';
 import 'package:sprintf/sprintf.dart';
 
 import 'package:sweet/database/entities/attribute.dart';
@@ -20,7 +21,6 @@ import 'package:sweet/model/ship/module_state.dart';
 
 import 'package:sweet/repository/item_repository.dart';
 import 'package:sweet/util/constants.dart';
-import 'package:sweet/util/implant_level_func.dart';
 
 // ToDo: This is not optimal, but I don't know a better way to filter out the duplicated attributes
 // This is a list of blacklisted attributes which exists twice in the game
@@ -345,8 +345,13 @@ class AttributeCalculatorService {
     var value = baseValue ?? itemAttribute.baseValue;
 
     // ToDo: Offload levelFunctions into database, also the implant level can also effect other items
-    if (item is ImplantFitting && levelFunctions.containsKey(itemAttribute.id)) {
-      value = levelFunctions[itemAttribute.id]!.call(item.trainedLevel);
+    if (item is ImplantFitting && itemRepository.levelAttributeMap.containsKey(itemAttribute.id)) {
+      final expr = itemRepository.levelAttributeMap[itemAttribute.id]!;
+      var context = {
+        "lv": item.trainedLevel
+      };
+      final evaluator = const ExpressionEvaluator();
+      value = evaluator.eval(expr, context);
     }
 
     // NOTE: Scripts seem to run through a map of

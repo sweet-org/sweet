@@ -103,7 +103,6 @@ class _ImplantFittingBodyState extends State<ImplantFittingBody>
       );
       await RepositoryProvider.of<ImplantFittingLoadoutRepository>(context)
           .saveImplants();
-      print("Fitted item to implant slot $slotIndex!");
     }
   }
 }
