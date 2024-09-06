@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'package:sweet/repository/item_repository.dart';
 import 'package:sweet/util/localisation_constants.dart';
+import 'package:sweet/util/sweet_icons.dart';
 import 'package:sweet/widgets/localised_text.dart';
 
 import 'package:sweet/model/implant/implant_fitting_loadout.dart';
@@ -43,7 +44,7 @@ class ImplantFittingCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: Icon(
-                      Icons.polymer,
+                      SweetIcons.implant,
                       size: 48.0,
                     ),
                   ),

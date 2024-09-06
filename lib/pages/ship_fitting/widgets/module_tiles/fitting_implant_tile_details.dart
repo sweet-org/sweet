@@ -40,6 +40,13 @@ class FittingImplantTileDetails extends StatelessWidget {
       children: [
         Column(
           children: [
+            Text(
+              "Warning: Main effects not supported, "
+                  "they won't be included in calculations.",
+              style: TextStyle(
+                  fontSize: 12,
+                  color: Theme.of(context).colorScheme.error),
+            ),
             Row(children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -74,7 +81,8 @@ class FittingImplantTileDetails extends StatelessWidget {
         ),
         Column(
           children: List<Widget>.of(
-            attributes.map(((e) => buildAttrSection(e.key as FittingItem, e.value))),
+            attributes
+                .map(((e) => buildAttrSection(e.key as FittingItem, e.value))),
           ),
         ),
       ],
@@ -90,10 +98,7 @@ class FittingImplantTileDetails extends StatelessWidget {
             children: [
               LocalisedText(
                 item: item.item,
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold
-                ),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
             ],
           ),

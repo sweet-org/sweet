@@ -11,6 +11,7 @@ import 'package:sweet/pages/home_page/widgets/app_update_banner.dart';
 import 'package:sweet/pages/home_page/widgets/pi_reminder.dart';
 import 'package:sweet/util/localisation_constants.dart';
 import 'package:sweet/util/platform_helper.dart';
+import 'package:sweet/util/sweet_icons.dart';
 
 import '../../ship_fitting/widgets/pilot_context_drawer.dart';
 import '../../../bloc/navigation_bloc/navigation.dart';
@@ -95,13 +96,13 @@ class _AppDrawerState extends State<AppDrawer> with FileSelector {
                       buildDrawerListTile(
                         context,
                         title: 'Fitting Tool',
-                        icon: Icons.construction,
+                        icon: SweetIcons.fitting,
                         event: ShowFittingToolPage(),
                       ),
                       buildDrawerListTile(
                         context,
                         title: 'Implant List',
-                        icon: Icons.construction,
+                        icon: SweetIcons.implant,
                         event: ShowImplantToolPage(),
                       ),
                       buildDrawerListTile(
