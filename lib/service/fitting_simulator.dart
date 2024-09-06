@@ -85,18 +85,22 @@ class FittingSimulator extends ChangeNotifier {
   }
 
   ImplantFitting? get implant => _implant?.fitting;
+  ImplantHandler? get implantHandler => _implant;
 
   void setImplant(ImplantHandler? implant) {
+    _implant?.removeListener(_implantListener);
     _implant = implant;
+    _implant?.addListener(_implantListener);
     if (_implant == null) {
       loadout.setImplant(null);
     } else {
       loadout.setImplant(implant!.fitting.id);
     }
-    _attributeCalculatorService
-        .updateItems(allFittedModules: _allFittedModules)
-        .then((_) => _updateFitting())
-        .then((_) => notifyListeners());
+    _implantListener();
+  }
+
+  void _implantListener() {
+    _updateFitting();
   }
 
   final ShipFittingLoadout loadout;
