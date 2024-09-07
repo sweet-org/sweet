@@ -51,6 +51,18 @@ class ShowFittingsMenu extends ShipFittingEvent {
       ];
 }
 
+class ShowNanocoreAffixMenu extends ShipFittingEvent {
+  final int slotIndex;
+
+  ShowNanocoreAffixMenu({required this.slotIndex});
+
+  @override
+  List<Object?> get props => [
+    slotIndex,
+    DateTime.now(),
+  ];
+}
+
 class ShowRigIntegrationMenu extends ShipFittingEvent {
   final FittingRigIntegrator rigIntegrator;
   final int parentMarketGroupId;

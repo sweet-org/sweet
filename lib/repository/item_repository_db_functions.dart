@@ -152,6 +152,11 @@ extension ItemRepositoryDb on ItemRepository {
       await _echoesDatabase.itemDao
           .select(whereClause: 'WHERE marketGroupId = $marketGroupId');
 
+  Future<Iterable<ItemNanocoreAffix>> nanocoreAffixesForSecondClass(
+      {required int classId}) async =>
+      await _echoesDatabase.itemNanocoreAffixDao
+          .select(whereClause: 'WHERE attrSecondClass = $classId');
+
   Future<Implant?> implantWithId({required int id}) async {
     var implant = await _echoesDatabase.implantDao.selectWithId(id: id);
 
@@ -206,6 +211,15 @@ extension ItemRepositoryDb on ItemRepository {
       FROM items
       JOIN item_modifiers ON items.mainCalCode = item_modifiers.code OR items.onlineCalCode = item_modifiers.code OR items.activeCalCode = item_modifiers.code 
       WHERE items.id = $id
+    ''').then((rows) => rows.map((json) => _echoesDatabase.itemModifierDao.convertRowToItem(json)));
+  }
+
+  Future<Iterable<ItemModifier>> getPassiveModifiersForModifier({required String code}) async {
+    final calCode = getPassiveCalCode(code);
+    return await _echoesDatabase.db.rawQuery('''
+      SELECT item_modifiers.*
+      FROM item_modifiers
+      WHERE item_modifiers.code = '$calCode'
     ''').then((rows) => rows.map((json) => _echoesDatabase.itemModifierDao.convertRowToItem(json)));
   }
 

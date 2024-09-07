@@ -116,6 +116,8 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
       await _itemRepository.processLevelAttributes();
       print('${DateTime.now()}: Processing non integratable rigs');
       await _itemRepository.processExcludeFusionRigs();
+      print('${DateTime.now()}: Processing nanocore affix library');
+      await _itemRepository.processGoldNanoAttrClasses();
       print('${DateTime.now()}: Loading language strings');
       await _localisationRepository.loadStringsForLanguage('en');
       print(

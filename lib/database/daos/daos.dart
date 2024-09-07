@@ -20,3 +20,5 @@ export 'ship_modes_dao.dart';
 export 'ship_nanocore_dao.dart';
 export 'implant_dao.dart';
 export 'level_attribute_dao.dart';
+export 'gold_nano_attr_class_dao.dart';
+export 'item_nanocore_affix_dao.dart';

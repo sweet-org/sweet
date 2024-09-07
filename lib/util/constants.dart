@@ -32,6 +32,11 @@ const kMinute = 60 * kSec;
 const kHour = 60 * 60 * kSec;
 const kCapStableTime = kHour;
 
+final reCalCodeLevel = RegExp(r'/\d+/$');
+
+String getPassiveCalCode(String code) =>
+    code.replaceAllMapped(reCalCodeLevel, (match) => "/被动${match.group(0)}");
+
 const kGroupRepairersHealSelf = true;
 
 const kEEVersionManUpKey = 'echoes_version';

@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
+import 'package:sweet/database/database_exports.dart';
 import 'package:sweet/database/entities/item.dart';
 import 'package:sweet/database/entities/market_group.dart';
 import 'package:sweet/mixins/fitting_item_details_mixin.dart';
@@ -7,6 +8,7 @@ import 'package:sweet/model/fitting/fitting_module.dart';
 import 'package:sweet/model/fitting/fitting_rig_integrator.dart';
 import 'package:sweet/model/implant/implant_fitting_loadout.dart';
 import 'package:sweet/model/implant/implant_handler.dart';
+import 'package:sweet/pages/ship_fitting/widgets/nanocore_affix_context_drawer.dart';
 import 'package:sweet/pages/ship_fitting/widgets/offense_widgets/damage_pattern_row.dart';
 import 'package:sweet/service/fitting_simulator.dart';
 import 'package:sweet/model/ship/slot_type.dart';
@@ -55,11 +57,7 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
       ShipFittingState state, BuildContext context) async {
     if (state is OpenContextDrawerState) {
       final selectedItem = await showMarketGroupDrawer(
-        context,
-        state.topGroup,
-        state.initialItems,
-        null
-      );
+          context, state.topGroup, state.initialItems, null);
 
       await _handleDrawerSelection(
         selectedItem,
@@ -69,11 +67,7 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
     }
     if (state is OpenRigIntegratorDrawer) {
       final selectedItem = await showMarketGroupDrawer(
-        context,
-        state.topGroup,
-        state.initialItems,
-        state.blacklistItems
-      );
+          context, state.topGroup, state.initialItems, state.blacklistItems);
 
       if (selectedItem != null) {
         await _handleRigIntegratorSelection(
@@ -82,6 +76,12 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
           index: state.slotIndex,
         );
       }
+    }
+    if (state is OpenNanocoreAffixDrawer) {
+      final selectedAffix = await showGoldLibraryDrawer(
+          context, state.topClasses, state.initialItems, []);
+
+      await _handleNanocoreAffixSelection(selectedAffix, state.slotIndex);
     }
 
     if (state is OpenPilotDrawerState) {
@@ -197,7 +197,8 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
     final fitting = await ImplantHandler.fromImplantLoadout(
       implant: await itemRepo.implantModule(id: loadout.implantItemId),
       itemRepository: itemRepo,
-      definition: await itemRepo.getImplantLoadoutDefinition(loadout.implantItemId),
+      definition:
+          await itemRepo.getImplantLoadoutDefinition(loadout.implantItemId),
       loadout: loadout,
     );
 
@@ -252,6 +253,22 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
       elevation: 16,
       builder: (context) => ShipFittingContextDrawer(
         marketGroup: topGroup,
+        initialFilteredItems: initialItems,
+        blacklistItems: blacklistItems,
+      ),
+    );
+  }
+
+  Future<ItemNanocoreAffix?> showGoldLibraryDrawer(
+    BuildContext context,
+    List<GoldNanoAttrClass>? topClasses,
+    List<ItemNanocoreAffix>? initialItems,
+    List<int>? blacklistItems,
+  ) async {
+    return await showModalBottomSheet<ItemNanocoreAffix>(
+      context: context,
+      builder: (context) => NanocoreAffixContextDrawer(
+        topClasses: topClasses,
         initialFilteredItems: initialItems,
         blacklistItems: blacklistItems,
       ),
@@ -352,5 +369,17 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
       await RepositoryProvider.of<ShipFittingLoadoutRepository>(context)
           .saveLoadouts();
     }
+  }
+
+  Future<void> _handleNanocoreAffixSelection(
+    ItemNanocoreAffix? item,
+    int slotIndex,
+  ) async {
+    final itemRepo = RepositoryProvider.of<ItemRepository>(context);
+    final fitting = Provider.of<FittingSimulator>(context, listen: false);
+    final affix =
+        item == null ? null : await itemRepo.nanocoreAffix(affix: item);
+    fitting.fitNanocoreAffix(affix, index: slotIndex);
+    fitting.updateLoadout();
   }
 }

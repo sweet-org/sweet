@@ -196,14 +196,24 @@ extension ItemRepositoryFitting on ItemRepository {
   }) async {
     final item = await itemWithId(id: id);
     final nanocoreDetails = await nanocoreWithId(id: id);
+    ItemNanocore? purpleCore;
 
     if (item == null || nanocoreDetails == null) {
       throw Exception('Cannot find Nanocore $id');
     }
+    if (nanocoreDetails.isGold) {
+      purpleCore = await nanocoreWithId(id: nanocoreDetails.otherItemId);
+      if (purpleCore == null) {
+        throw Exception('Cannot find Purple Nanocore '
+            '${nanocoreDetails.otherItemId} for nanocore $id');
+      }
+    } else {
+      purpleCore = nanocoreDetails;
+    }
 
     final modifierIds = <int>{
       ...nanocoreDetails.selectableModifierItems,
-      ...nanocoreDetails.trainableModifierItems.expand((e) => e),
+      ...purpleCore.trainableModifierItems.expand((e) => e),
     };
 
     final modifiers = await Future.wait(
@@ -219,7 +229,7 @@ extension ItemRepositoryFitting on ItemRepository {
         )
         .toList();
 
-    final trainableableModifiers = nanocoreDetails.trainableModifierItems
+    final trainableableModifiers = purpleCore.trainableModifierItems
         .map(
           (level) => level
               .map(
@@ -231,12 +241,78 @@ extension ItemRepositoryFitting on ItemRepository {
         )
         .toList();
 
+    final affixFutures =
+        (metadata[FittingNanocore.kAffixesKey] as List<dynamic>?)
+            ?.cast<int?>()
+            .map((affixId) => affixId == null
+                ? Future<FittingNanocoreAffix?>.value(null)
+                : nanocoreAffixWithId(itemId: affixId));
+    final affixes =
+        affixFutures == null ? null : await Future.wait(affixFutures);
+
     return FittingNanocore.fromItems(
       baseItem: item,
+      isGolden: nanocoreDetails.isGold,
       mainAttributes: selectableModifiers,
       trainableAttributes: trainableableModifiers,
+      affixes: affixes,
       metadata: metadata,
     );
+  }
+
+  Future<FittingNanocoreAffixItem> _nanocoreAffixItem({
+    required ItemNanocoreAffix affix,
+  }) async {
+    affix.item ??= await itemWithId(id: affix.attrId);
+    final baseAttributes = await getBaseAttributesForItemId(id: affix.attrId);
+    final modifiers = (await getModifiersForItemId(id: affix.attrId)).toList();
+    final passiveMods =
+        await getPassiveModifiersForModifier(code: modifiers[0].code);
+
+    if (affix.item == null) {
+      throw Exception('Cannot find affix item with ID: ${affix.attrId}');
+    }
+
+    return FittingNanocoreAffixItem(
+      affix: affix,
+      baseAttributes: baseAttributes.toList(),
+      modifiers: modifiers,
+      passiveModifiers: passiveMods.toList(),
+    );
+  }
+
+  Future<FittingNanocoreAffix> nanocoreAffix(
+      {required ItemNanocoreAffix affix}) async {
+    final levels = <int, ItemNanocoreAffix>{};
+    levels[affix.attrLevel] = affix;
+    if (affix.children != null) {
+      for (var a in affix.children!) {
+        levels[a.attrLevel] = a;
+      }
+    }
+    var futures = levels.values.map((e) => _nanocoreAffixItem(affix: e));
+    final res = await Future.wait(futures);
+    final items = Map<int, FittingNanocoreAffixItem>.fromEntries(
+        res.map((e) => MapEntry(e.affix.attrLevel, e)));
+
+    return FittingNanocoreAffix(items);
+  }
+
+  Future<FittingNanocoreAffix> nanocoreAffixWithId(
+      {required int itemId}) async {
+    var affix = goldAttrSecondClassMap.values
+        .map((e) => e.items ?? [])
+        .expand((e) => e)
+        .firstWhere((e) =>
+            e.attrId == itemId ||
+            (e.children?.any((e) => e.attrId == itemId) ?? false));
+    final itemAffix = await nanocoreAffix(affix: affix);
+    final level = affix.attrId == itemId
+        ? 0
+        : affix.children!.firstWhere((e) => e.attrId == itemId).attrLevel;
+    itemAffix.selectLevel(level);
+
+    return itemAffix;
   }
 
   Future<FittingItem> loadFittingCharacter() => _item(id: 93000000000);
@@ -431,15 +507,18 @@ extension ItemRepositoryFitting on ItemRepository {
     );
   }
 
-  Future<ImplantLoadoutDefinition> getImplantLoadoutDefinition(int implantId) async {
-    var implant = await (_echoesDatabase.implantDao.selectWithId(id: implantId));
+  Future<ImplantLoadoutDefinition> getImplantLoadoutDefinition(
+      int implantId) async {
+    var implant =
+        await (_echoesDatabase.implantDao.selectWithId(id: implantId));
     // print("item_repo_fitting $implantId");
     if (implant == null) {
       throw Exception('Cannot find Implant $implantId');
     }
     // print("item_repo_fitting: ${implant.implantFramework.length}");
     if (implant.implantType != 0) {
-      throw Exception('Item is not an implant (got type ${implant.implantType})');
+      throw Exception(
+          'Item is not an implant (got type ${implant.implantType})');
     }
     /*
      * Type   Item
@@ -454,8 +533,8 @@ extension ItemRepositoryFitting on ItemRepository {
     implant.implantFramework.forEach((slotId, value) {
       final int typeId = value[0];
       final int slotNum = int.parse(slotId);
-      final slotType = ImplantSlotType.values.firstWhere(
-              (element) => element.typeId == typeId);
+      final slotType = ImplantSlotType.values
+          .firstWhere((element) => element.typeId == typeId);
       slots[slotNum] = slotType;
 
       if (slotType == ImplantSlotType.common) return;

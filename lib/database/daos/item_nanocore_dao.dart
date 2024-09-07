@@ -21,6 +21,7 @@ class ItemNanocoreDao extends BaseDao<ItemNanocore> with BaseDaoMixin {
     'availableShips': IntListTypeConverter(),
     'selectableModifierItems': IntListTypeConverter(),
     'trainableModifierItems': IntListListTypeConverter(),
+    'isGold': BoolTypeConverter(),
   };
 
   @override
@@ -35,6 +36,8 @@ class ItemNanocoreDao extends BaseDao<ItemNanocore> with BaseDaoMixin {
         'itemId': 'INTEGER NOT NULL',
         'filmGroup': 'TEXT NOT NULL',
         'filmQuality': 'INTEGER NOT NULL',
+        'isGold': 'INTEGER NOT NULL',
+        'otherItemId': 'INTEGER NOT NULL',
         'availableShips': 'TEXT NOT NULL',
         'selectableModifierItems': 'TEXT NOT NULL',
         'trainableModifierItems': 'TEXT NOT NULL',

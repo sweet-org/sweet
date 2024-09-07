@@ -19,19 +19,18 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
   final ImplantFittingLoadoutRepository implantRepository;
 
   late Character _pilot;
+
   Character get pilot => _pilot;
 
-  ShipFittingBloc(
-      this._itemRepository,
-      this.fittingRepository,
-      this.implantRepository,
-      this.fitting
-      ) : super(InitialShipFitting(fitting)) {
+  ShipFittingBloc(this._itemRepository, this.fittingRepository,
+      this.implantRepository, this.fitting)
+      : super(InitialShipFitting(fitting)) {
     on<ShipFittingEvent>((event, emit) => mapEventToState(event, emit));
   }
 
   MarketGroupFilters filterForSlot(SlotType slotType) =>
       slotType.marketGroupFilter;
+
   // TODO: This is the old way, I should updated it
   Future<void> mapEventToState(
     ShipFittingEvent event,
@@ -44,6 +43,10 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
 
     if (event is ShowRigIntegrationMenu) {
       await mapShowRigIntegrationMenu(event, emit);
+    }
+
+    if (event is ShowNanocoreAffixMenu) {
+      await mapShowNanocoreAffixMenu(event, emit);
     }
 
     if (event is ChangePilotForFitting) {
@@ -130,28 +133,32 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
       // We fall through here, and deal with any exclusions
       // which at present are only on Midslots
       case SlotType.high:
-        if (fitting.ship.marketGroupId == MarketGroupFilters.pos.marketGroupId) {
-          group = _itemRepository
-              .marketGroupMap[MarketGroupFilters.structureWeapons.marketGroupId]!;
-          initialItems  = group.items ?? [];
+        if (fitting.ship.marketGroupId ==
+            MarketGroupFilters.pos.marketGroupId) {
+          group = _itemRepository.marketGroupMap[
+              MarketGroupFilters.structureWeapons.marketGroupId]!;
+          initialItems = group.items ?? [];
           break;
-        } else { // This is not very nice
+        } else {
+          // This is not very nice
           continue normalModules;
         }
       case SlotType.mid:
-        if (fitting.ship.marketGroupId == MarketGroupFilters.pos.marketGroupId) {
-          group = _itemRepository
-              .marketGroupMap[MarketGroupFilters.structureModules.marketGroupId]!;
-          initialItems  = group.items ?? [];
+        if (fitting.ship.marketGroupId ==
+            MarketGroupFilters.pos.marketGroupId) {
+          group = _itemRepository.marketGroupMap[
+              MarketGroupFilters.structureModules.marketGroupId]!;
+          initialItems = group.items ?? [];
           break;
         } else {
           continue normalModules;
         }
       case SlotType.low:
-        if (fitting.ship.marketGroupId == MarketGroupFilters.pos.marketGroupId) {
-          group = _itemRepository
-              .marketGroupMap[MarketGroupFilters.structureServices.marketGroupId]!;
-          initialItems  = group.items ?? [];
+        if (fitting.ship.marketGroupId ==
+            MarketGroupFilters.pos.marketGroupId) {
+          group = _itemRepository.marketGroupMap[
+              MarketGroupFilters.structureServices.marketGroupId]!;
+          initialItems = group.items ?? [];
           break;
         } else {
           continue normalModules;
@@ -223,16 +230,27 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
       ).toList();
     }
     // Filter out non integratable rigs
-    initialItems = initialItems.where(
-            (item) => !_itemRepository.excludeFusionRigs.any((itemId) => item.id == itemId)
-    ).toList();
+    initialItems = initialItems
+        .where((item) => !_itemRepository.excludeFusionRigs
+            .any((itemId) => item.id == itemId))
+        .toList();
     emit(OpenRigIntegratorDrawer(
-      rigIntegrator: event.rigIntegrator,
-      topGroup: filteredGroup,
-      initialItems: initialItems,
-      slotIndex: event.slotIndex,
-      fitting: fitting,
-      blacklistItems: _itemRepository.excludeFusionRigs
-    ));
+        rigIntegrator: event.rigIntegrator,
+        topGroup: filteredGroup,
+        initialItems: initialItems,
+        slotIndex: event.slotIndex,
+        fitting: fitting,
+        blacklistItems: _itemRepository.excludeFusionRigs));
+  }
+
+  Future<void> mapShowNanocoreAffixMenu(
+    ShowNanocoreAffixMenu event,
+    Emitter<ShipFittingState> emit,
+  ) async {
+    emit(OpenNanocoreAffixDrawer(
+        topClasses: _itemRepository.goldAttrFirstClassMap.values.toList(),
+        initialItems: [],
+        slotIndex: event.slotIndex,
+        fitting: fitting));
   }
 }

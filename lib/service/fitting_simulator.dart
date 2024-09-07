@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:sweet/extensions/item_modifier_ui_extension.dart';
 import 'package:sweet/model/fitting/fitting_implant.dart';
 import 'package:sweet/model/fitting/fitting_nanocore.dart';
+import 'package:sweet/model/fitting/fitting_nanocore_affix.dart';
 import 'package:sweet/model/fitting/fitting_rig_integrator.dart';
 import 'package:sweet/model/implant/implant_handler.dart';
 import 'package:sweet/model/items/eve_echoes_categories.dart';
@@ -867,6 +868,20 @@ class FittingSimulator extends ChangeNotifier {
     if (notify) {
       _updateFitting();
     }
+  }
+
+  bool fitNanocoreAffix(FittingNanocoreAffix? affix, {
+    required int index,
+    bool notify = true
+  }) {
+    final FittingNanocore? nanocore = modules(
+        slotType: SlotType.nanocore).firstOrNull as FittingNanocore?;
+    if (nanocore == null) {
+      return false;
+    }
+    nanocore.extraAffixes[index] = affix;
+    if (notify) _updateFitting();
+    return true;
   }
 
   // FUTURENOTE: This would be better in another spot

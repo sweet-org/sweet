@@ -10,8 +10,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:archive/archive.dart';
 import 'package:http/http.dart' as http;
 import 'package:sweet/bloc/item_repository_bloc/market_group_filters.dart';
+import 'package:sweet/database/entities/item_nanocore_affix.dart';
 import 'package:sweet/model/fitting/fitting_implant_module.dart';
 import 'package:sweet/model/fitting/fitting_nanocore.dart';
+import 'package:sweet/model/fitting/fitting_nanocore_affix.dart';
 import 'package:sweet/model/fitting/fitting_rig_integrator.dart';
 import 'package:sweet/model/implant/implant_fitting_slot_module.dart';
 import 'package:sweet/model/implant/implant_loadout_definition.dart';
@@ -63,6 +65,8 @@ typedef DownloadProgressCallback = void Function(int, int);
 
 class ItemRepository {
   Map<int, MarketGroup> marketGroupMap = {};
+  Map<int, GoldNanoAttrClass> goldAttrFirstClassMap = {};
+  Map<int, GoldNanoAttrClass> goldAttrSecondClassMap = {};
   Map<int, Expression> levelAttributeMap = {};
   List<int> _excludeFusionRigs = [];
   List<int> get excludeFusionRigs => _excludeFusionRigs;
@@ -248,6 +252,79 @@ class ItemRepository {
     levelAttributeMap = {};
     for (var lvlAttr in lvlAttrs) {
       levelAttributeMap[lvlAttr.attrId] = Expression.parse(lvlAttr.formula);
+    }
+  }
+
+  Future<void> processGoldNanoAttrClasses() async {
+    /*
+     * The hierarchy for the nanocore affixes that
+     * has to be loaded is as follows:
+     *
+     * GoldNanoAttrClass (first)
+     *  - children: GoldNanoAttrClass (second)
+     *     - items: ItemNanocoreAffix (group/level 0)
+     *        - item: Item (for localisation)
+     *        - children: ItemNanocoreAffix (level 1+)
+     */
+    var classes = await _echoesDatabase.goldNanoAttrClassDao.selectAll();
+    goldAttrFirstClassMap = {};
+    goldAttrSecondClassMap = {};
+    for (var attrClass in classes) {
+      if (attrClass.classLevel == 1) {
+        goldAttrFirstClassMap[attrClass.classId] = attrClass;
+        continue;
+      }
+      if (attrClass.classLevel != 2) {
+        print("Error, invalid class level for ${attrClass.classId}-${attrClass.classLevel}");
+        continue;
+      }
+      goldAttrSecondClassMap[attrClass.classId] = attrClass;
+    }
+    final attrIds = <int>[];
+    for (var attrClass in goldAttrSecondClassMap.values) {
+      goldAttrFirstClassMap[attrClass.parentClassId]!.children.add(attrClass);
+
+      var affixes = await nanocoreAffixesForSecondClass(
+          classId: attrClass.classId);
+      if (affixes.isEmpty) continue;
+      affixes = affixes.toList();
+      final sortedAffixes = <int, ItemNanocoreAffix>{};
+      for (var affix in affixes) {
+        if (affix.attrGroup == affix.attrId) {
+          affix.children = [];
+          sortedAffixes[affix.attrId] = affix;
+          attrIds.add(affix.attrId);
+        }
+      }
+      attrClass.items = [];
+      for (var affix in affixes) {
+        if (affix.children != null) {
+          attrClass.items!.add(affix);
+          continue;
+        }
+
+        final parent = sortedAffixes[affix.attrGroup];
+        if (parent == null) {
+          print("Error, nanocore affix ${affix.attrId} has unknown group ${affix.attrGroup}");
+          continue;
+        }
+
+        parent.children!.add(affix);
+      }
+    }
+    final items = await itemsWithIds(ids: attrIds);
+    final itemsMap = {for (var i in items) i.id: i};
+    for (var attrClass in goldAttrSecondClassMap.values) {
+      if (attrClass.items == null) continue;
+
+      for (var affix in attrClass.items!) {
+        var item = itemsMap[affix.attrId];
+        if (item == null) {
+          print("Error, nanocore affix ${affix.attrId} has no item");
+          continue;
+        }
+        affix.item = item;
+      }
     }
   }
 

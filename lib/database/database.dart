@@ -16,6 +16,8 @@ class EveEchoesDatabase {
   late ItemEffectDao itemEffectDao;
   late ItemModifierDao itemModifierDao;
   late ItemNanocoreDao itemNanocoreDao;
+  late ItemNanocoreAffixDao itemNanocoreAffixDao;
+  late GoldNanoAttrClassDao goldNanoAttrClassDao;
   late ItemDao itemDao;
   late LocalisedStringDao localisedStringDao;
 
@@ -44,6 +46,8 @@ class EveEchoesDatabase {
     itemEffectDao = ItemEffectDao(this);
     itemModifierDao = ItemModifierDao(this);
     itemNanocoreDao = ItemNanocoreDao(this);
+    itemNanocoreAffixDao = ItemNanocoreAffixDao(this);
+    goldNanoAttrClassDao = GoldNanoAttrClassDao(this);
     itemDao = ItemDao(this);
     localisedStringDao = LocalisedStringDao(this);
     categoryDao = CategoryDao(this);
@@ -64,6 +68,8 @@ class EveEchoesDatabase {
       itemEffectDao,
       itemModifierDao,
       itemNanocoreDao,
+      itemNanocoreAffixDao,
+      goldNanoAttrClassDao,
       itemDao,
       localisedStringDao,
       categoryDao,

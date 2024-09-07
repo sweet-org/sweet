@@ -87,6 +87,24 @@ class OpenImplantDrawer extends ShipFittingState {
       ];
 }
 
+class OpenNanocoreAffixDrawer extends ShipFittingState {
+  final List<GoldNanoAttrClass> topClasses;
+  final List<ItemNanocoreAffix> initialItems;
+  final int slotIndex;
+
+  OpenNanocoreAffixDrawer({
+    required this.topClasses,
+    required this.initialItems,
+    required this.slotIndex,
+    required FittingSimulator fitting,
+  }) : super(fitting);
+
+  @override
+  List<Object> get props => [
+    DateTime.now(),
+  ];
+}
+
 class ShipFittingUpdatedState extends ShipFittingState {
   ShipFittingUpdatedState(FittingSimulator fitting) : super(fitting);
 
