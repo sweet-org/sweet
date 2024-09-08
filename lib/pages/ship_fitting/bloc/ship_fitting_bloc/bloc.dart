@@ -251,6 +251,7 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
         topClasses: _itemRepository.goldAttrFirstClassMap.values.toList(),
         initialItems: [],
         slotIndex: event.slotIndex,
+        active: event.active,
         fitting: fitting));
   }
 }

@@ -872,6 +872,7 @@ class FittingSimulator extends ChangeNotifier {
 
   bool fitNanocoreAffix(FittingNanocoreAffix? affix, {
     required int index,
+    required bool active,
     bool notify = true
   }) {
     final FittingNanocore? nanocore = modules(
@@ -879,7 +880,18 @@ class FittingSimulator extends ChangeNotifier {
     if (nanocore == null) {
       return false;
     }
-    nanocore.extraAffixes[index] = affix;
+    if (active) {
+      nanocore.extraAffixes[index] = affix;
+    } else {
+      if (affix == null) {
+        nanocore.passiveAffixes.removeAt(index);
+      } else {
+        nanocore.passiveAffixes[index] = affix;
+        if (nanocore.passiveAffixes.last != null) {
+          nanocore.passiveAffixes.add(null);
+        }
+      }
+    }
     if (notify) _updateFitting();
     return true;
   }

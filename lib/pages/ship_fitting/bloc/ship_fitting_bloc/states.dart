@@ -91,11 +91,13 @@ class OpenNanocoreAffixDrawer extends ShipFittingState {
   final List<GoldNanoAttrClass> topClasses;
   final List<ItemNanocoreAffix> initialItems;
   final int slotIndex;
+  final bool active;
 
   OpenNanocoreAffixDrawer({
     required this.topClasses,
     required this.initialItems,
     required this.slotIndex,
+    required this.active,
     required FittingSimulator fitting,
   }) : super(fitting);
 

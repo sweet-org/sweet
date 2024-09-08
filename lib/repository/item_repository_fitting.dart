@@ -249,6 +249,15 @@ extension ItemRepositoryFitting on ItemRepository {
                 : nanocoreAffixWithId(itemId: affixId));
     final affixes =
         affixFutures == null ? null : await Future.wait(affixFutures);
+    final passiveAffixFutures =
+        (metadata[FittingNanocore.kAffixesPassiveKey] as List<dynamic>?)
+            ?.cast<int?>()
+            .map((affixId) => affixId == null
+                ? Future<FittingNanocoreAffix?>.value(null)
+                : nanocoreAffixWithId(itemId: affixId));
+    final passiveAffixes = passiveAffixFutures == null
+        ? null
+        : await Future.wait(passiveAffixFutures);
 
     return FittingNanocore.fromItems(
       baseItem: item,
@@ -256,6 +265,7 @@ extension ItemRepositoryFitting on ItemRepository {
       mainAttributes: selectableModifiers,
       trainableAttributes: trainableableModifiers,
       affixes: affixes,
+      passiveAffixes: passiveAffixes,
       metadata: metadata,
     );
   }

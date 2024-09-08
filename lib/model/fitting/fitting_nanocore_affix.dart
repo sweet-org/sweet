@@ -42,14 +42,16 @@ class FittingNanocoreAffix with EquatableMixin {
            (called Min/Max), that do the same
 
    */
-  List<String> get mainCalCode => [item.mainCalCode.first];
+  List<String> get passiveMainCalCode => [item.passiveModifiers.first.code];
 
-  List<String> get activeCalCode => [item.activeCalCode.first];
+  List<String> get mainCalCode => [item.mainCalCode.first, ...passiveMainCalCode];
+
+  // List<String> get activeCalCode => [item.activeCalCode.first];
 
   List<Attribute> get baseAttributes => [item.baseAttributes.first];
 
   List<ItemModifier> get modifiers => [
-    item.modifiers.first, item.passiveModifiers.first
+    item.modifiers.first, ...passiveModifiers
   ];
 
   List<ItemModifier> get passiveModifiers => [

@@ -10,10 +10,12 @@ import 'fitting_nanocore_attribute_list.dart';
 
 class FittingNanocore extends FittingModule {
   static const String kSelectableAttributeIdKey = 'selectableAttributeId';
-  static const String kSelectableSecondAttributeIdKey = 'selectableSecondAttributeId';
+  static const String kSelectableSecondAttributeIdKey =
+      'selectableSecondAttributeId';
   static const String kSelectedAttributeLevelKey = 'selectedAttributeLevel';
   static const String kTrainableAttributesKey = 'trainableAttributes';
   static const String kAffixesKey = 'affixes';
+  static const String kAffixesPassiveKey = 'affixesPassive';
 
   bool get isTrainable => trainableAttributes.isNotEmpty;
   final List<FittingNanocoreAttributeList> trainableAttributes;
@@ -21,11 +23,16 @@ class FittingNanocore extends FittingModule {
   final FittingNanocoreAttributeList? secondMainAttribute;
   final bool isGolden;
   final List<FittingNanocoreAffix?> extraAffixes = [];
+  final List<FittingNanocoreAffix?> passiveAffixes = [null];
+
+  List<FittingNanocoreAffix?> getAffixes(bool active) =>
+      active ? extraAffixes : passiveAffixes;
 
   @override
   Map<String, dynamic> get metadata => {
         kSelectableAttributeIdKey: mainAttribute.selectedAttribute?.itemId ?? 0,
-        kSelectableSecondAttributeIdKey: secondMainAttribute?.selectedAttribute?.itemId ?? 0,
+        kSelectableSecondAttributeIdKey:
+            secondMainAttribute?.selectedAttribute?.itemId ?? 0,
         kTrainableAttributesKey: trainableAttributes
             .map((e) => {
                   kSelectableAttributeIdKey: e.selectedAttribute?.itemId ?? 0,
@@ -33,7 +40,11 @@ class FittingNanocore extends FittingModule {
                       e.selectedAttribute?.selectedLevelIndex ?? -1,
                 })
             .toList(),
-        kAffixesKey: extraAffixes.map((e) => e?.selected.itemId).toList()
+        kAffixesKey: extraAffixes.map((e) => e?.selected.itemId).toList(),
+        kAffixesPassiveKey: passiveAffixes
+            .whereNotNull()
+            .map((e) => e.selected.itemId)
+            .toList(),
       };
 
   @override
@@ -42,9 +53,10 @@ class FittingNanocore extends FittingModule {
       mainAttribute.selectedModifier,
       secondMainAttribute?.selectedModifier,
       ...trainableAttributes.map((e) => e.selectedModifier),
-      ...extraAffixes
-          .where((e) => e != null)
-          .map((e) => e!.modifiers)
+      ...extraAffixes.whereNotNull().map((e) => e.modifiers).expand((e) => e),
+      ...passiveAffixes
+          .whereNotNull()
+          .map((e) => e.passiveModifiers)
           .expand((e) => e),
     ].whereNotNull().toList();
 
@@ -59,8 +71,12 @@ class FittingNanocore extends FittingModule {
             .map((e) => e.selectedAttribute?.baseAttributes ?? [])
             .expand((e) => e),
         ...extraAffixes
-            .where((e) => e != null)
-            .map((e) => e!.baseAttributes)
+            .whereNotNull()
+            .map((e) => e.baseAttributes)
+            .expand((e) => e),
+        ...passiveAffixes
+            .whereNotNull()
+            .map((e) => e.baseAttributes)
             .expand((e) => e),
       ].toList();
 
@@ -72,8 +88,12 @@ class FittingNanocore extends FittingModule {
             .map((e) => e.selectedAttribute?.mainCalCode ?? [])
             .expand((e) => e),
         ...extraAffixes
-            .where((e) => e != null)
-            .map((e) => e!.mainCalCode)
+            .whereNotNull()
+            .map((e) => e.mainCalCode)
+            .expand((e) => e),
+        ...passiveAffixes
+            .whereNotNull()
+            .map((e) => e.passiveMainCalCode)
             .expand((e) => e),
       ].toList();
 
@@ -90,7 +110,8 @@ class FittingNanocore extends FittingModule {
       mainAttribute: mainAttribute,
       secondMainAttribute: secondMainAttribute,
       trainableAttributes: trainableAttributes,
-      extraAffixes: extraAffixes.whereNotNull(),
+      extraAffixes: extraAffixes,
+      passiveAffixes: passiveAffixes,
       metadata: metadata,
     );
   }
@@ -102,6 +123,7 @@ class FittingNanocore extends FittingModule {
     required Iterable<FittingItem> mainAttributes,
     required Iterable<Iterable<FittingItem>> trainableAttributes,
     Iterable<FittingNanocoreAffix?>? affixes,
+    Iterable<FittingNanocoreAffix?>? passiveAffixes,
     required Map<String, dynamic> metadata,
   }) =>
       FittingNanocore(
@@ -115,6 +137,7 @@ class FittingNanocore extends FittingModule {
             .map((e) => FittingNanocoreAttributeList(e))
             .toList(),
         extraAffixes: affixes,
+        passiveAffixes: passiveAffixes,
         metadata: metadata,
       );
 
@@ -126,6 +149,7 @@ class FittingNanocore extends FittingModule {
     this.secondMainAttribute,
     required this.trainableAttributes,
     Iterable<FittingNanocoreAffix?>? extraAffixes,
+    Iterable<FittingNanocoreAffix?>? passiveAffixes,
     required Map<String, dynamic> metadata,
   }) : super(
           item: baseItem,
@@ -136,20 +160,30 @@ class FittingNanocore extends FittingModule {
           state: ModuleState.inactive,
         ) {
     final mainAttributeId = metadata[kSelectableAttributeIdKey] as int? ?? 0;
-    final secondAttributeId = metadata[kSelectableSecondAttributeIdKey] as int? ?? 0;
+    final secondAttributeId =
+        metadata[kSelectableSecondAttributeIdKey] as int? ?? 0;
 
     // Set the selected attribute
     // Main only have the single level?
     mainAttribute.selectAttributeById(mainAttributeId, 0);
     if (secondMainAttribute != null) {
-      mainAttribute.selectAttributeById(secondAttributeId, 0);
+      secondMainAttribute!.selectAttributeById(secondAttributeId, 0);
     }
     if (extraAffixes != null) this.extraAffixes.addAll(extraAffixes);
 
+    // Golden Nanocore affixes
     if (this.extraAffixes.length < 4) {
       for (var i = this.extraAffixes.length; i < 4; i++) {
         this.extraAffixes.add(null);
       }
+    }
+
+    if (passiveAffixes != null) {
+      this.passiveAffixes.clear();
+      this.passiveAffixes.addAll(passiveAffixes);
+    }
+    if (!this.passiveAffixes.any((e) => e == null)) {
+      this.passiveAffixes.add(null);
     }
 
     final trainableDetails = List<Map<String, dynamic>>.from(

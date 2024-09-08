@@ -53,8 +53,9 @@ class ShowFittingsMenu extends ShipFittingEvent {
 
 class ShowNanocoreAffixMenu extends ShipFittingEvent {
   final int slotIndex;
+  final bool active;
 
-  ShowNanocoreAffixMenu({required this.slotIndex});
+  ShowNanocoreAffixMenu({required this.slotIndex, required this.active});
 
   @override
   List<Object?> get props => [

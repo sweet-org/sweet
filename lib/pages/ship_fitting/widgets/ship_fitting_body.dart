@@ -80,8 +80,11 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
     if (state is OpenNanocoreAffixDrawer) {
       final selectedAffix = await showGoldLibraryDrawer(
           context, state.topClasses, state.initialItems, []);
-
-      await _handleNanocoreAffixSelection(selectedAffix, state.slotIndex);
+      final loadoutRepo = RepositoryProvider.of<ShipFittingLoadoutRepository>(
+        context,
+      );
+      await _handleNanocoreAffixSelection(selectedAffix,
+          state.slotIndex, state.active, loadoutRepo);
     }
 
     if (state is OpenPilotDrawerState) {
@@ -374,12 +377,15 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
   Future<void> _handleNanocoreAffixSelection(
     ItemNanocoreAffix? item,
     int slotIndex,
+    bool active,
+    ShipFittingLoadoutRepository loadoutRepo,
   ) async {
     final itemRepo = RepositoryProvider.of<ItemRepository>(context);
     final fitting = Provider.of<FittingSimulator>(context, listen: false);
     final affix =
         item == null ? null : await itemRepo.nanocoreAffix(affix: item);
-    fitting.fitNanocoreAffix(affix, index: slotIndex);
+    fitting.fitNanocoreAffix(affix, index: slotIndex, active: active);
     fitting.updateLoadout();
+    await loadoutRepo.saveLoadouts();
   }
 }
