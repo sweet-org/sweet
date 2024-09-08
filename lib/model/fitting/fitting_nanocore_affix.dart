@@ -31,6 +31,7 @@ class FittingNanocoreAffix with EquatableMixin {
   FittingNanocoreAffixItem get item => levels[_selectedLevel]!;
 
   int get selectedLevel => _selectedLevel;
+  int get affixGroup => item.affix.attrGroup;
 
   FittingNanocoreAffixItem get selected => levels[_selectedLevel]!;
 

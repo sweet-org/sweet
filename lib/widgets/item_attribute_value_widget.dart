@@ -22,6 +22,7 @@ class ItemAttributeValueWidget extends StatelessWidget {
     this.formulaOverride,
     this.hideIfZero = false,
     this.style,
+    this.truncate = false,
   }) : super(key: key);
 
   final int attributeId;
@@ -35,6 +36,8 @@ class ItemAttributeValueWidget extends StatelessWidget {
   final String? unitOverride;
   final double Function(double)? formulaOverride;
   final TextStyle? style;
+
+  final bool truncate;
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +70,17 @@ class ItemAttributeValueWidget extends StatelessWidget {
                   localisedUnit;
 
               var title = titleOverride ?? localisedName;
+
+              /* ToDo: This is a temporary fix to truncate the title to fit the screen.
+                       The problem is, that the AutoSizeText do not
+                       truncate/wrap the text. Instead the row overflows to the
+                       right causing errors.
+               */
+              if (truncate && title.length > 55) {
+                title = "${title.substring(0, 20)}...${title.substring(
+                    title.length - 25, title.length
+                )}";
+              }
 
               if (showAttributeId && PlatformHelper.isDebug) {
                 title = '$title (${attribute.id})';

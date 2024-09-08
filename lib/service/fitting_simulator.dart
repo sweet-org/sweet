@@ -880,6 +880,11 @@ class FittingSimulator extends ChangeNotifier {
     if (nanocore == null) {
       return false;
     }
+
+    if (affix != null && nanocore.hasAffix(affix.affixGroup)) {
+      return false;
+    }
+
     if (active) {
       nanocore.extraAffixes[index] = affix;
     } else {

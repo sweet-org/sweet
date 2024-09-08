@@ -61,6 +61,7 @@ class FittingNanocoreTileDetails extends StatelessWidget {
                 nanocore: nanocore,
                 fitting: fitting,
                 active: true,
+                title: "Extended Attributes",
               )
             : Container(),
         nanocore.isGolden
@@ -68,6 +69,15 @@ class FittingNanocoreTileDetails extends StatelessWidget {
                 nanocore: nanocore,
                 fitting: fitting,
                 active: false,
+                title: "Passive Nanocore Library",
+                description: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text(
+                    "Warning: Temporary solution, will be removed in the future.",
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.error),
+                  ),
+                ),
               )
             : Container(),
         ...nanocore.trainableAttributes.map(
@@ -244,11 +254,15 @@ class NanocoreAffixListTile extends StatelessWidget {
     required this.nanocore,
     required this.fitting,
     required this.active,
+    this.title = "Nanocore Library",
+    this.description,
   }) : super(key: key);
 
   final FittingNanocore nanocore;
   final FittingSimulator fitting;
   final bool active;
+  final String title;
+  final Widget? description;
 
   @override
   Widget build(BuildContext context) {
@@ -308,7 +322,7 @@ class NanocoreAffixListTile extends StatelessWidget {
       backgroundColor: Theme.of(context).cardColor.darken(2),
       collapsedBackgroundColor: Theme.of(context).cardColor.darken(2),
       childrenPadding: EdgeInsets.only(bottom: 8),
-      title: Text("Nanocore Library"),
+      title: Text(title),
       subtitle: Text(
         "$selCount$maxCount selected",
         style: Theme.of(context).textTheme.bodySmall,
@@ -318,6 +332,7 @@ class NanocoreAffixListTile extends StatelessWidget {
           padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 8.0),
           child: Column(
             children: [
+              description ?? Container(),
               ...nanocore
                   .getAffixes(active)
                   .where((affix) =>
@@ -342,6 +357,7 @@ class NanocoreAffixListTile extends StatelessWidget {
                                 attributeValue: value,
                                 fixedDecimals: 2,
                                 showAttributeId: true,
+                                truncate: true,
                               )
                             : Container(),
                         ItemAttributeValueWidget(
@@ -350,6 +366,7 @@ class NanocoreAffixListTile extends StatelessWidget {
                           attributeValue: passiveMod.attributeValue,
                           fixedDecimals: 2,
                           showAttributeId: true,
+                          truncate: true,
                         ),
                       ]
                     : <Widget>[];

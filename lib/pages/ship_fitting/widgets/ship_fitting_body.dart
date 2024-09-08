@@ -384,7 +384,15 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
     final fitting = Provider.of<FittingSimulator>(context, listen: false);
     final affix =
         item == null ? null : await itemRepo.nanocoreAffix(affix: item);
-    fitting.fitNanocoreAffix(affix, index: slotIndex, active: active);
+    final fitted = fitting.fitNanocoreAffix(affix, index: slotIndex, active: active);
+    if (!fitted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Cannot select this nanocore affix"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
     fitting.updateLoadout();
     await loadoutRepo.saveLoadouts();
   }

@@ -28,6 +28,14 @@ class FittingNanocore extends FittingModule {
   List<FittingNanocoreAffix?> getAffixes(bool active) =>
       active ? extraAffixes : passiveAffixes;
 
+  bool hasAffix(int groupId, {bool includePassive=true}) {
+    if (extraAffixes.whereNotNull().any((e) => e.affixGroup == groupId)) {
+      return true;
+    }
+    if (!includePassive) return false;
+    return passiveAffixes.whereNotNull().any((e) => e.affixGroup == groupId);
+  }
+
   @override
   Map<String, dynamic> get metadata => {
         kSelectableAttributeIdKey: mainAttribute.selectedAttribute?.itemId ?? 0,
