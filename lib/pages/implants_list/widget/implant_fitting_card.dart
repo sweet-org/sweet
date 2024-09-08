@@ -12,13 +12,15 @@ import 'package:sweet/model/implant/implant_fitting_loadout.dart';
 import '../bloc/bloc.dart';
 import '../bloc/events.dart';
 
-typedef ImplantFittingLoadoutCallback = void Function(ImplantFittingLoadout loadout);
+typedef ImplantFittingLoadoutCallback = void Function(
+    ImplantFittingLoadout loadout);
 
 class ImplantFittingCard extends StatelessWidget {
   final ImplantFittingLoadout loadout;
   final ImplantFittingLoadoutCallback onTap;
 
-  const ImplantFittingCard({Key? key, required this.loadout, required this.onTap})
+  const ImplantFittingCard(
+      {Key? key, required this.loadout, required this.onTap})
       : super(key: key);
 
   @override
@@ -66,7 +68,7 @@ class ImplantFittingCard extends StatelessWidget {
                                   .itemName(id: loadout.implantItemId)
                                   .then((value) => value!),
                               builder: (context, snapshot) => AutoSizeText(
-                                snapshot.data ?? 'Unknown Implant',
+                                '${snapshot.data ?? 'Unknown Implant'} (Lvl. ${loadout.level})',
                                 style: Theme.of(context).textTheme.bodyMedium,
                                 maxLines: 1,
                               ),

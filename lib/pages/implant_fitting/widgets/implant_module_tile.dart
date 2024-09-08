@@ -1,14 +1,19 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:expressions/expressions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sweet/mixins/fitting_item_details_mixin.dart';
 import 'package:sweet/model/fitting/fitting_implant_module.dart';
-
+import 'package:sweet/model/ship/eve_echoes_attribute.dart';
 
 import 'package:sweet/pages/ship_fitting/widgets/module_state_toggle.dart';
 import 'package:sweet/repository/item_repository.dart';
 import 'package:sweet/util/localisation_constants.dart';
+import 'package:sweet/widgets/item_attribute_value_widget.dart';
 import 'package:sweet/widgets/localised_text.dart';
+
+import 'package:sweet/model/implant/implant_handler.dart';
 
 typedef FittingModuleTileTapCallback = void Function(int index);
 typedef ModuleCloneCallback = void Function(int index);
@@ -20,6 +25,7 @@ class ImplantModuleTile extends StatelessWidget with FittingItemDetailsMixin {
   final VoidCallback onClearPressed;
   final ModuleCloneCallback onClonePressed;
   final ModuleStateToggleCallback onStateToggle;
+  final ImplantHandler? implant;
 
   const ImplantModuleTile({
     Key? key,
@@ -29,6 +35,7 @@ class ImplantModuleTile extends StatelessWidget with FittingItemDetailsMixin {
     required this.onClearPressed,
     required this.onClonePressed,
     required this.onStateToggle,
+    this.implant,
   }) : super(key: key);
 
   @override
@@ -38,6 +45,8 @@ class ImplantModuleTile extends StatelessWidget with FittingItemDetailsMixin {
       );
 
   Widget _buildContent({required BuildContext context}) {
+    final itemRepo = RepositoryProvider.of<ItemRepository>(context);
+
     if (!module.isValid) {
       return Padding(
         padding: EdgeInsets.all(16),
@@ -72,6 +81,31 @@ class ImplantModuleTile extends StatelessWidget with FittingItemDetailsMixin {
             ),
           ],
         ),
+      ),
+      Column(
+        children: [
+          ...module.modifiers
+              .where((e) =>
+                  e.attributeId !=
+                  EveEchoesAttribute.implantCommonMaxGroupFitted.attributeId)
+              .map((e) {
+            var value = e.attributeValue;
+            if (implant != null &&
+                itemRepo.levelAttributeMap.containsKey(e.attributeId)) {
+              final evaluator = const ExpressionEvaluator();
+              value = evaluator.eval(itemRepo.levelAttributeMap[e.attributeId]!,
+                  {'lv': implant!.trainedLevel});
+            }
+            return ItemAttributeValueWidget(
+              attributeId: e.attributeId,
+              attributeValue: value,
+              fixedDecimals: 2,
+              showAttributeId: true,
+              useSpacer: true,
+              truncate: true,
+            );
+          }),
+        ],
       ),
       Padding(
         padding: const EdgeInsets.only(top: 8.0),

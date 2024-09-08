@@ -18,6 +18,7 @@ class ImplantHandler extends ChangeNotifier {
   final Map<int, List<int>> _restrictions;
 
   int get slotCount => fitting.allModules.length;
+  int get trainedLevel => fitting.trainedLevel;
 
   FittingImplantModule? getModuleByIndex(int index) {
     return fitting.getModuleByIndex(index);

@@ -243,6 +243,7 @@ enum EveEchoesAttribute {
   implantCBBuff,
   implantCBDamageModX,
   implantCBDamageDroneMod,
+  implantCommonMaxGroupFitted,
 
   // SORT!!
   metalevel,
@@ -806,6 +807,8 @@ extension ShipAttributeExtenstion on EveEchoesAttribute {
         return 8683;
       case EveEchoesAttribute.implantCBDamageDroneMod:
         return 8682;
+      case EveEchoesAttribute.implantCommonMaxGroupFitted:
+        return 8711;
     }
   }
 }

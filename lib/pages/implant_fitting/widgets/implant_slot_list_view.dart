@@ -67,6 +67,7 @@ class ImplantSlotListView extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: ImplantModuleTile(
                       module: module,
+                      implant: implant,
                       index: idx,
                       onTap: (index) => onTap(
                           type: module.slot,

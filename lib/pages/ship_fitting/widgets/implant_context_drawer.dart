@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:sweet/repository/implant_fitting_loadout_repository.dart';
 import 'package:sweet/repository/item_repository.dart';
+import 'package:sweet/util/sweet_icons.dart';
 import 'package:sweet/widgets/localised_text.dart';
 
 import '../../../database/entities/item.dart';
@@ -49,7 +50,10 @@ class ImplantContextDrawer extends StatelessWidget {
                       itemName = Container();
                     } else {
                       itemName =
-                          LocalisedText(item: data[implant.implantItemId]!);
+                          LocalisedText(
+                              item: data[implant.implantItemId]!,
+                              style: TextStyle(fontSize: 14),
+                          );
                     }
                 }
 
@@ -69,7 +73,7 @@ class ImplantContextDrawer extends StatelessWidget {
                             child: Row(
                               children: [
                                 Icon(
-                                  Icons.account_tree_rounded,
+                                  SweetIcons.implant,
                                   size: 56.0,
                                 ),
                                 Expanded(
@@ -84,11 +88,24 @@ class ImplantContextDrawer extends StatelessWidget {
                                               fontWeight: FontWeight.bold,
                                               fontSize: 40),
                                         ),
-                                        itemName ??
+                                        Row(
+                                          children: [
+                                            itemName ??
+                                                Text(
+                                                  'Item ID ${implant.implantItemId}',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyLarge!
+                                                        .color!
+                                                        .withAlpha(96),
+                                                  ),
+                                                ),
                                             Text(
-                                              'Item ID ${implant.implantItemId}',
+                                              ' (Level ${implant.level})',
                                               style: TextStyle(
-                                                fontSize: 16,
+                                                fontSize: 14,
                                                 color: Theme.of(context)
                                                     .textTheme
                                                     .bodyLarge!
@@ -96,6 +113,8 @@ class ImplantContextDrawer extends StatelessWidget {
                                                     .withAlpha(96),
                                               ),
                                             ),
+                                          ],
+                                        )
                                       ],
                                     ))
                               ],
