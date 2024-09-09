@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:sweet/extensions/item_modifier_ui_extension.dart';
 import 'package:sweet/model/fitting/fitting_implant.dart';
+import 'package:sweet/model/fitting/fitting_implant_module.dart';
 import 'package:sweet/model/fitting/fitting_nanocore.dart';
 import 'package:sweet/model/fitting/fitting_nanocore_affix.dart';
 import 'package:sweet/model/fitting/fitting_rig_integrator.dart';
@@ -13,6 +14,7 @@ import 'package:sweet/model/items/eve_echoes_categories.dart';
 import 'package:sweet/model/nihilus_space_modifier.dart';
 import 'package:sweet/model/ship/ship_loadout_definition.dart';
 import 'package:sweet/repository/implant_fitting_loadout_repository.dart';
+import 'package:sweet/util/utility.dart';
 
 import '../database/database_exports.dart';
 import '../model/character/character.dart';
@@ -86,6 +88,7 @@ class FittingSimulator extends ChangeNotifier {
   }
 
   ImplantFitting? get implant => _implant?.fitting;
+
   ImplantHandler? get implantHandler => _implant;
 
   void setImplant(ImplantHandler? implant) {
@@ -870,13 +873,10 @@ class FittingSimulator extends ChangeNotifier {
     }
   }
 
-  bool fitNanocoreAffix(FittingNanocoreAffix? affix, {
-    required int index,
-    required bool active,
-    bool notify = true
-  }) {
-    final FittingNanocore? nanocore = modules(
-        slotType: SlotType.nanocore).firstOrNull as FittingNanocore?;
+  bool fitNanocoreAffix(FittingNanocoreAffix? affix,
+      {required int index, required bool active, bool notify = true}) {
+    final FittingNanocore? nanocore =
+        modules(slotType: SlotType.nanocore).firstOrNull as FittingNanocore?;
     if (nanocore == null) {
       return false;
     }
@@ -1020,6 +1020,36 @@ class FittingSimulator extends ChangeNotifier {
           );
           itemName += '\n\t$modifierName';
         }
+        final hasActive = module.extraAffixes.any((e) => e != null);
+        final hasPassive = module.extraAffixes.any((e) => e != null);
+        if (hasActive || hasPassive) {
+          itemName += '\nNanocore Library';
+          if (hasActive) {
+            itemName += '\n\tActive:';
+          }
+          for (final affix in module.extraAffixes) {
+            if (affix == null) continue;
+            final modifierName = await affix.modifiers[0].modifierName(
+              localisation: localisationRepository,
+              itemRepository: itemRepository,
+            );
+            itemName += '\n\t\t$modifierName (Lvl. ${affix.selectedLevel})';
+          }
+          if (hasActive || hasPassive) {
+            itemName += '\n\tPassive:';
+          }
+          for (final affix in [
+            ...module.extraAffixes,
+            ...module.passiveAffixes
+          ]) {
+            if (affix == null) continue;
+            final modifierName = await affix.passiveModifiers[0].modifierName(
+              localisation: localisationRepository,
+              itemRepository: itemRepository,
+            );
+            itemName += '\n\t\t$modifierName (Lvl. ${affix.selectedLevel})';
+          }
+        }
       }
 
       if (module is FittingRigIntegrator) {
@@ -1032,6 +1062,19 @@ class FittingSimulator extends ChangeNotifier {
 
       return '${itemKvp.value.length}x $itemName';
     }));
+    if (implant != null) {
+      var implantName = localisationRepository.getLocalisedNameForItem(
+        implant!.item,
+      );
+      implantName += ' Level ${implant!.trainedLevel}';
+      for (var mod in implant!.allModules.sorted((a, b) => a.level - b.level)) {
+        if (!mod.isValid) continue;
+        var modName = localisationRepository.getLocalisedNameForItem(mod.item);
+        var slotName = '${mod.slot.name} ${mod.level}'.capitalize();
+        implantName += "\n\t$slotName: $modName";
+      }
+      strings.add(implantName);
+    }
 
     final fittingString = strings.join('\n');
 
