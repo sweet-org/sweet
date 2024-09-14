@@ -4,11 +4,17 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:sweet/extensions/item_modifier_ui_extension.dart';
+import 'package:sweet/model/fitting/fitting_implant.dart';
+import 'package:sweet/model/fitting/fitting_implant_module.dart';
 import 'package:sweet/model/fitting/fitting_nanocore.dart';
+import 'package:sweet/model/fitting/fitting_nanocore_affix.dart';
 import 'package:sweet/model/fitting/fitting_rig_integrator.dart';
+import 'package:sweet/model/implant/implant_handler.dart';
 import 'package:sweet/model/items/eve_echoes_categories.dart';
 import 'package:sweet/model/nihilus_space_modifier.dart';
 import 'package:sweet/model/ship/ship_loadout_definition.dart';
+import 'package:sweet/repository/implant_fitting_loadout_repository.dart';
+import 'package:sweet/util/utility.dart';
 
 import '../database/database_exports.dart';
 import '../model/character/character.dart';
@@ -37,6 +43,7 @@ class FittingSimulator extends ChangeNotifier {
   static late FittingPatterns fittingPatterns;
 
   static FittingPattern? _currentDamagePattern;
+
   FittingPattern get currentDamagePattern =>
       _currentDamagePattern ?? FittingPattern.uniform;
 
@@ -51,18 +58,22 @@ class FittingSimulator extends ChangeNotifier {
   final AttributeCalculatorService _attributeCalculatorService;
 
   final Fitting _fitting;
+  ImplantHandler? _implant;
 
   Iterable<FittingModule> modules({required SlotType slotType}) =>
       _fitting[slotType] ?? [];
 
   String get name => loadout.name;
+
   void setName(String newName) {
     loadout.setName(newName);
     notifyListeners();
   }
 
   Character? _pilot;
+
   Character get pilot => _pilot ?? Character.empty;
+
   void setPilot(Character newPilot) {
     _pilot?.removeListener(_pilotListener);
     _pilot = newPilot;
@@ -76,7 +87,28 @@ class FittingSimulator extends ChangeNotifier {
     );
   }
 
+  ImplantFitting? get implant => _implant?.fitting;
+
+  ImplantHandler? get implantHandler => _implant;
+
+  void setImplant(ImplantHandler? implant) {
+    _implant?.removeListener(_implantListener);
+    _implant = implant;
+    _implant?.addListener(_implantListener);
+    if (_implant == null) {
+      loadout.setImplant(null);
+    } else {
+      loadout.setImplant(implant!.fitting.id);
+    }
+    _implantListener();
+  }
+
+  void _implantListener() {
+    _updateFitting();
+  }
+
   final ShipFittingLoadout loadout;
+
   String generateQrCodeData() => loadout.generateQrCodeData();
 
   static void loadDefinitions(
@@ -99,6 +131,7 @@ class FittingSimulator extends ChangeNotifier {
     required this.loadout,
     required Fitting fitting,
     Character? pilot,
+    ImplantHandler? implant,
   })  : _fitting = fitting,
         _itemRepository = itemRepository,
         _attributeCalculatorService = attributeCalculatorService,
@@ -109,15 +142,18 @@ class FittingSimulator extends ChangeNotifier {
     if (pilot != null) {
       setPilot(pilot);
     }
+    if (implant != null) {
+      setImplant(implant);
+    }
   }
 
-  static Future<FittingSimulator> fromShipLoadout({
-    required FittingShip ship,
-    required ShipFittingLoadout loadout,
-    required ItemRepository itemRepository,
-    required AttributeCalculatorService attributeCalculatorService,
-    required Character pilot,
-  }) async =>
+  static Future<FittingSimulator> fromShipLoadout(
+          {required FittingShip ship,
+          required ShipFittingLoadout loadout,
+          required ItemRepository itemRepository,
+          required AttributeCalculatorService attributeCalculatorService,
+          required Character pilot,
+          ImplantHandler? implant}) async =>
       FittingSimulator._create(
         attributeCalculatorService: attributeCalculatorService,
         itemRepository: itemRepository,
@@ -128,6 +164,7 @@ class FittingSimulator extends ChangeNotifier {
           loadout: loadout,
           attributeCalculatorService: attributeCalculatorService,
         ),
+        implant: implant,
       );
 
   static Future<FittingSimulator> fromDrone(
@@ -147,6 +184,11 @@ class FittingSimulator extends ChangeNotifier {
       ),
     );
   }
+
+  Iterable<FittingModule> get _allFittedModules => [
+        _implant?.fitting ?? FittingModule.empty,
+        ..._fitting.allFittedModules,
+      ];
 
   ///
   ///
@@ -766,6 +808,11 @@ class FittingSimulator extends ChangeNotifier {
     bool notify = true,
     ModuleState state = ModuleState.active,
   }) {
+    if (!module.isValid && slot == SlotType.implantSlots) {
+      // Delete implant
+      setImplant(null);
+      return true;
+    }
     var fittedModule = (module).copyWith(
       slot: slot,
       index: index,
@@ -787,11 +834,11 @@ class FittingSimulator extends ChangeNotifier {
   }
 
   bool cloneFittedItem({
-        required SlotType slot,
-        required int index,
-        bool notify = true,
-        ModuleState state = ModuleState.active,
-      }) {
+    required SlotType slot,
+    required int index,
+    bool notify = true,
+    ModuleState state = ModuleState.active,
+  }) {
     int? emptySlot;
     for (int i = 0; i < _fitting[slot]!.length; i++) {
       if (_fitting[slot]![i] == FittingModule.empty) {
@@ -802,7 +849,8 @@ class FittingSimulator extends ChangeNotifier {
     if (emptySlot == null) return false;
     FittingModule module = _fitting[slot]![index];
     if (module == FittingModule.empty) return false;
-    return fitItem(module, slot: slot, index: emptySlot, notify: notify, state: state);
+    return fitItem(module,
+        slot: slot, index: emptySlot, notify: notify, state: state);
   }
 
   void fitItemIntoAll(
@@ -823,6 +871,34 @@ class FittingSimulator extends ChangeNotifier {
     if (notify) {
       _updateFitting();
     }
+  }
+
+  bool fitNanocoreAffix(FittingNanocoreAffix? affix,
+      {required int index, required bool active, bool notify = true}) {
+    final FittingNanocore? nanocore =
+        modules(slotType: SlotType.nanocore).firstOrNull as FittingNanocore?;
+    if (nanocore == null) {
+      return false;
+    }
+
+    if (affix != null && nanocore.hasAffix(affix.affixGroup)) {
+      return false;
+    }
+
+    if (active) {
+      nanocore.extraAffixes[index] = affix;
+    } else {
+      if (affix == null) {
+        nanocore.passiveAffixes.removeAt(index);
+      } else {
+        nanocore.passiveAffixes[index] = affix;
+        if (nanocore.passiveAffixes.last != null) {
+          nanocore.passiveAffixes.add(null);
+        }
+      }
+    }
+    if (notify) _updateFitting();
+    return true;
   }
 
   // FUTURENOTE: This would be better in another spot
@@ -863,6 +939,10 @@ class FittingSimulator extends ChangeNotifier {
       case SlotType.hangarRigSlots:
         numSlotAttr = EveEchoesAttribute.hangarRigSlots;
         break;
+      case SlotType.implantSlots:
+        // Implants behaves like normal modules, but don't get
+        // fitted into normal slots
+        return 0;
     }
 
     return getValueForShip(attribute: numSlotAttr).toInt();
@@ -889,7 +969,7 @@ class FittingSimulator extends ChangeNotifier {
   }
 
   void _updateFitting() => _attributeCalculatorService
-      .updateItems(allFittedModules: _fitting.allFittedModules)
+      .updateItems(allFittedModules: _allFittedModules)
       .then((_) => _updateFittingLoadout())
       .then((_) => notifyListeners());
 
@@ -940,6 +1020,36 @@ class FittingSimulator extends ChangeNotifier {
           );
           itemName += '\n\t$modifierName';
         }
+        final hasActive = module.extraAffixes.any((e) => e != null);
+        final hasPassive = module.extraAffixes.any((e) => e != null);
+        if (hasActive || hasPassive) {
+          itemName += '\nNanocore Library';
+          if (hasActive) {
+            itemName += '\n\tActive:';
+          }
+          for (final affix in module.extraAffixes) {
+            if (affix == null) continue;
+            final modifierName = await affix.modifiers[0].modifierName(
+              localisation: localisationRepository,
+              itemRepository: itemRepository,
+            );
+            itemName += '\n\t\t$modifierName (Lvl. ${affix.selectedLevel})';
+          }
+          if (hasActive || hasPassive) {
+            itemName += '\n\tPassive:';
+          }
+          for (final affix in [
+            ...module.extraAffixes,
+            ...module.passiveAffixes
+          ]) {
+            if (affix == null) continue;
+            final modifierName = await affix.passiveModifiers[0].modifierName(
+              localisation: localisationRepository,
+              itemRepository: itemRepository,
+            );
+            itemName += '\n\t\t$modifierName (Lvl. ${affix.selectedLevel})';
+          }
+        }
       }
 
       if (module is FittingRigIntegrator) {
@@ -952,6 +1062,19 @@ class FittingSimulator extends ChangeNotifier {
 
       return '${itemKvp.value.length}x $itemName';
     }));
+    if (implant != null) {
+      var implantName = localisationRepository.getLocalisedNameForItem(
+        implant!.item,
+      );
+      implantName += ' Level ${implant!.trainedLevel}';
+      for (var mod in implant!.allModules.sorted((a, b) => a.level - b.level)) {
+        if (!mod.isValid) continue;
+        var modName = localisationRepository.getLocalisedNameForItem(mod.item);
+        var slotName = '${mod.slot.name} ${mod.level}'.capitalize();
+        implantName += "\n\t$slotName: $modName";
+      }
+      strings.add(implantName);
+    }
 
     final fittingString = strings.join('\n');
 
@@ -966,6 +1089,15 @@ class FittingSimulator extends ChangeNotifier {
   }) =>
       _attributeCalculatorService.getValueForItem(
         attribute: attribute,
+        item: item,
+      );
+
+  double getValueForItemWithAttributeId({
+    required int attributeId,
+    required FittingItem item,
+  }) =>
+      _attributeCalculatorService.getValueForItemWithAttributeId(
+        attributeId: attributeId,
         item: item,
       );
 
@@ -1023,7 +1155,7 @@ class FittingSimulator extends ChangeNotifier {
     ship.setShipModeEnabled(enabled);
 
     _attributeCalculatorService
-        .updateItems(allFittedModules: _fitting.allFittedModules)
+        .updateItems(allFittedModules: _allFittedModules)
         .then((_) => notifyListeners());
   }
 
@@ -1032,6 +1164,8 @@ class FittingSimulator extends ChangeNotifier {
     required SlotType slot,
     required int index,
   }) {
+    if (slot == SlotType.implantSlots) return;
+
     final module = _fitting[slot]![index];
     if (newState != ModuleState.inactive && !_canActivateModule(module)) {
       // Check it can be overloaded/activated
@@ -1051,8 +1185,23 @@ class FittingSimulator extends ChangeNotifier {
     loadout.fitItem(_fitting[module.slot]![module.index]);
 
     _attributeCalculatorService
-        .updateItems(allFittedModules: _fitting.allFittedModules)
+        .updateItems(allFittedModules: _allFittedModules)
         .then((_) => notifyListeners());
+  }
+
+  void setImplantModuleState(ModuleState newState, {required int slotId}) {
+    if (slotId == 0) {
+      implant!.primarySkillState = newState;
+    } else {
+      // print("Toggle state to $newState");
+      final module = _implant!.fitting[slotId]!;
+      _implant!.fitting[slotId] = module.copyWith(state: newState);
+      _implant!.loadout.fitItem(_implant!.fitting[slotId]!, slotId);
+    }
+    _attributeCalculatorService
+        .updateItems(allFittedModules: _allFittedModules)
+        .then((_) => notifyListeners());
+    // print("Toggled state to ${_implant!.fitting[slotId]!.state}");
   }
 
   bool canFitModule({required FittingModule module, required SlotType? slot}) {

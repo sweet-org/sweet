@@ -8,7 +8,8 @@ enum RootPages {
   ItemBrowser,
   CharacterBrowser,
   FittingTool,
-  PatchNotes
+  PatchNotes,
+  ImplantFittings
 }
 
 @immutable
@@ -54,6 +55,9 @@ class ResetRootState extends NavigationState {
 
       case RootPages.PatchNotes:
         return 'Announcements';
+
+      case RootPages.ImplantFittings:
+        return 'Implant Fittings';
     }
   }
 

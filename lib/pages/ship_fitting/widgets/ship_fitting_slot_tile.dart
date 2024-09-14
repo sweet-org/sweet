@@ -46,6 +46,8 @@ class ShipFittingSlotTile extends StatelessWidget {
         return 'Lightweight Destroyers';
       case SlotType.hangarRigSlots:
         return 'Hangar Modules';
+      case SlotType.implantSlots:
+        return 'Implant';  // Implants may not be fitted normally
     }
   }
 

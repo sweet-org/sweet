@@ -23,6 +23,9 @@ enum MarketGroupFilters {
   structureWeapons,
   structureModules,
   structureServices,
+
+  advancedImplants,
+  generalUnits,
 }
 
 final kMidslotExcludeMarketGroups = [
@@ -88,7 +91,12 @@ extension MarketGroupFilterExtension on MarketGroupFilters {
         return 102003022;
 
       case MarketGroupFilters.hangarRigs:
-        return 105008000;
+        return 1050080;
+
+      case MarketGroupFilters.advancedImplants:
+        return 2000040;
+      case MarketGroupFilters.generalUnits:
+        return 2000050;
 
       default:
         assert(this == MarketGroupFilters.all, 'Unknown filter type: $this');

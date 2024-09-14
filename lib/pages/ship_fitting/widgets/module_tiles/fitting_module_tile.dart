@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sweet/mixins/fitting_item_details_mixin.dart';
 import 'package:sweet/model/fitting/fitting_drone.dart';
+import 'package:sweet/model/fitting/fitting_implant.dart';
+import 'package:sweet/model/fitting/fitting_implant_module.dart';
 
 import 'package:sweet/model/fitting/fitting_module.dart';
 import 'package:sweet/model/fitting/fitting_rig_integrator.dart';
@@ -16,6 +18,7 @@ import 'package:sweet/service/fitting_simulator.dart';
 import 'package:sweet/util/localisation_constants.dart';
 import 'package:sweet/widgets/localised_text.dart';
 
+import 'fitting_implant_tile_details.dart';
 import 'fitting_module_tile_details.dart';
 import 'fitting_nanocore_tile_details.dart';
 
@@ -73,9 +76,16 @@ class FittingModuleTile extends StatelessWidget with FittingItemDetailsMixin {
                   )
                 : Container(),
             Expanded(
-              child: LocalisedText(
-                item: module.item,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              child: Row(
+                children: [
+                  LocalisedText(
+                    item: module.item,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  module is ImplantFitting
+                      ? Text(" (Lvl. ${(module as ImplantFitting).trainedLevel})")
+                      : Container()
+                ],
               ),
             ),
             IconButton(
@@ -139,6 +149,14 @@ class FittingModuleTile extends StatelessWidget with FittingItemDetailsMixin {
       return FittingDroneTileDetails(
         drone: module as FittingDrone,
         fitting: fitting,
+      );
+    } else if (module is ImplantFitting) {
+      return FittingImplantTileDetails(
+        implant: module as ImplantFitting,
+        fitting: fitting,
+        onStateToggle: (slotId, newState) =>
+            Provider.of<FittingSimulator>(context, listen: false)
+                .setImplantModuleState(newState, slotId: slotId),
       );
     } else {
       return FittingModuleTileDetails(

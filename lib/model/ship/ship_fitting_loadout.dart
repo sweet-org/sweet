@@ -33,6 +33,8 @@ List<FittingListElement> loadoutsFromJson(String str) =>
 class ShipFittingLoadout extends ChangeNotifier
     with FittingListElement, EquatableMixin {
   final String _id;
+
+  @JsonKey(name: "type", includeFromJson: false, includeToJson: true)
   final String _type = 'LOADOUT';
 
   static String get defaultName => 'Unnamed Fitting';
@@ -40,9 +42,11 @@ class ShipFittingLoadout extends ChangeNotifier
   String get id => _id;
   final int shipItemId;
   String _name;
+  String? _implantId;
 
   String get name => _name;
   String get type => _type;
+  String? get implantId => _implantId;
 
   @override
   String getId() => _id;
@@ -52,6 +56,11 @@ class ShipFittingLoadout extends ChangeNotifier
 
   void setName(String newName) {
     _name = newName;
+    notifyListeners();
+  }
+
+  void setImplant(String? newImplant) {
+    _implantId = newImplant;
     notifyListeners();
   }
 
@@ -80,9 +89,10 @@ class ShipFittingLoadout extends ChangeNotifier
     required this.lightFrigatesSlots,
     required this.lightDestroyersSlots,
     required this.hangarRigSlots,
-    String? type,  // Only attributes included in the constructor are serialized
+    String? implantId,
   })  : _id = id ?? Uuid().v1(),
-        _name = name;
+        _name = name,
+        _implantId = implantId;
 
   factory ShipFittingLoadout.fromJson(Map<String, dynamic> json) {
     json['lightFrigatesSlots'] =
@@ -180,6 +190,7 @@ class ShipFittingLoadout extends ChangeNotifier
       );
 
   List<ShipFittingSlot> get allSlots => [
+        ShipFittingSlot.empty,
         highSlots,
         midSlots,
         lowSlots,

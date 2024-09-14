@@ -1,10 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
+import 'package:sweet/database/database_exports.dart';
 import 'package:sweet/database/entities/item.dart';
 import 'package:sweet/database/entities/market_group.dart';
 import 'package:sweet/mixins/fitting_item_details_mixin.dart';
 import 'package:sweet/model/fitting/fitting_module.dart';
 import 'package:sweet/model/fitting/fitting_rig_integrator.dart';
+import 'package:sweet/model/implant/implant_fitting_loadout.dart';
+import 'package:sweet/model/implant/implant_handler.dart';
+import 'package:sweet/pages/ship_fitting/widgets/nanocore_affix_context_drawer.dart';
 import 'package:sweet/pages/ship_fitting/widgets/offense_widgets/damage_pattern_row.dart';
 import 'package:sweet/service/fitting_simulator.dart';
 import 'package:sweet/model/ship/slot_type.dart';
@@ -19,6 +23,7 @@ import 'package:sweet/repository/ship_fitting_repository.dart';
 import 'package:sweet/service/attribute_calculator_service.dart';
 import 'package:sweet/util/localisation_constants.dart';
 
+import 'implant_context_drawer.dart';
 import 'ship_fitting_detail_panel.dart';
 import 'ship_fitting_toolbar.dart';
 import 'ship_mode_toggle.dart';
@@ -52,11 +57,7 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
       ShipFittingState state, BuildContext context) async {
     if (state is OpenContextDrawerState) {
       final selectedItem = await showMarketGroupDrawer(
-        context,
-        state.topGroup,
-        state.initialItems,
-        null
-      );
+          context, state.topGroup, state.initialItems, null);
 
       await _handleDrawerSelection(
         selectedItem,
@@ -66,11 +67,7 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
     }
     if (state is OpenRigIntegratorDrawer) {
       final selectedItem = await showMarketGroupDrawer(
-        context,
-        state.topGroup,
-        state.initialItems,
-        state.blacklistItems
-      );
+          context, state.topGroup, state.initialItems, state.blacklistItems);
 
       if (selectedItem != null) {
         await _handleRigIntegratorSelection(
@@ -80,9 +77,22 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
         );
       }
     }
+    if (state is OpenNanocoreAffixDrawer) {
+      final selectedAffix = await showGoldLibraryDrawer(
+          context, state.topClasses, state.initialItems, []);
+      final loadoutRepo = RepositoryProvider.of<ShipFittingLoadoutRepository>(
+        context,
+      );
+      await _handleNanocoreAffixSelection(selectedAffix,
+          state.slotIndex, state.active, loadoutRepo);
+    }
 
     if (state is OpenPilotDrawerState) {
       await showPilotDrawer(context, state);
+    }
+
+    if (state is OpenImplantDrawer) {
+      await showImplantDrawer(context, state);
     }
 
     if (state is OpenFittingStatsDrawerState) {
@@ -174,6 +184,30 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
     }
   }
 
+  Future<void> showImplantDrawer(
+      BuildContext context, OpenImplantDrawer state) async {
+    ImplantFittingLoadout? loadout = await showModalBottomSheet(
+      context: context,
+      elevation: 16,
+      builder: (context) => ImplantContextDrawer(),
+    );
+    if (loadout == null) {
+      state.fitting.setImplant(null);
+      return;
+    }
+    final itemRepo = Provider.of<ItemRepository>(context, listen: false);
+
+    final fitting = await ImplantHandler.fromImplantLoadout(
+      implant: await itemRepo.implantModule(id: loadout.implantItemId),
+      itemRepository: itemRepo,
+      definition:
+          await itemRepo.getImplantLoadoutDefinition(loadout.implantItemId),
+      loadout: loadout,
+    );
+
+    state.fitting.setImplant(fitting);
+  }
+
   Future<void> showDamagePatternDrawer(
       BuildContext context, OpenDamagePatternDrawerState state) async {
     var selection = await showModalBottomSheet(
@@ -222,6 +256,22 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
       elevation: 16,
       builder: (context) => ShipFittingContextDrawer(
         marketGroup: topGroup,
+        initialFilteredItems: initialItems,
+        blacklistItems: blacklistItems,
+      ),
+    );
+  }
+
+  Future<ItemNanocoreAffix?> showGoldLibraryDrawer(
+    BuildContext context,
+    List<GoldNanoAttrClass>? topClasses,
+    List<ItemNanocoreAffix>? initialItems,
+    List<int>? blacklistItems,
+  ) async {
+    return await showModalBottomSheet<ItemNanocoreAffix>(
+      context: context,
+      builder: (context) => NanocoreAffixContextDrawer(
+        topClasses: topClasses,
         initialFilteredItems: initialItems,
         blacklistItems: blacklistItems,
       ),
@@ -322,5 +372,28 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
       await RepositoryProvider.of<ShipFittingLoadoutRepository>(context)
           .saveLoadouts();
     }
+  }
+
+  Future<void> _handleNanocoreAffixSelection(
+    ItemNanocoreAffix? item,
+    int slotIndex,
+    bool active,
+    ShipFittingLoadoutRepository loadoutRepo,
+  ) async {
+    final itemRepo = RepositoryProvider.of<ItemRepository>(context);
+    final fitting = Provider.of<FittingSimulator>(context, listen: false);
+    final affix =
+        item == null ? null : await itemRepo.nanocoreAffix(affix: item);
+    final fitted = fitting.fitNanocoreAffix(affix, index: slotIndex, active: active);
+    if (!fitted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Cannot select this nanocore affix"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+    fitting.updateLoadout();
+    await loadoutRepo.saveLoadouts();
   }
 }

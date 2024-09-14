@@ -4,9 +4,11 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:manup/manup.dart';
 import 'package:sweet/model/character/character.dart';
+import 'package:sweet/model/implant/implant_fitting_loadout.dart';
 import 'package:sweet/model/ship/fitting_list_element.dart';
 import 'package:sweet/model/ship/ship_fitting_folder.dart';
 import 'package:sweet/model/ship/ship_fitting_loadout.dart';
+import 'package:sweet/repository/implant_fitting_loadout_repository.dart';
 
 import 'package:sweet/service/fitting_simulator.dart';
 import 'package:sweet/util/platform_helper.dart';
@@ -25,6 +27,7 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
   final ItemRepository _itemRepository;
   final CharacterRepository _characterRepository;
   final ShipFittingLoadoutRepository _fittingRepository;
+  final ImplantFittingLoadoutRepository _implantRepository;
   final LocalisationRepository _localisationRepository;
   final ManUpService _manUpService;
 
@@ -32,6 +35,7 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
     this._itemRepository,
     this._characterRepository,
     this._fittingRepository,
+    this._implantRepository,
     this._localisationRepository,
     this._manUpService,
   ) : super(InitialRepositoryState()) {
@@ -102,13 +106,18 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
         }
       }
 
-      emit(LoadingRepositoryState('Loading data...'));
+      emit(LoadingRepositoryState('Loading data...\nOpening DB'));
       print('${DateTime.now()}: Opening DB');
       await _itemRepository.openDatabase();
+      emit(LoadingRepositoryState('Loading data...\nProcessing data'));
       print('${DateTime.now()}: Processing market groups');
       await _itemRepository.processMarketGroups();
+      print('${DateTime.now()}: Processing level attributes');
+      await _itemRepository.processLevelAttributes();
       print('${DateTime.now()}: Processing non integratable rigs');
       await _itemRepository.processExcludeFusionRigs();
+      print('${DateTime.now()}: Processing nanocore affix library');
+      await _itemRepository.processGoldNanoAttrClasses();
       print('${DateTime.now()}: Loading language strings');
       await _localisationRepository.loadStringsForLanguage('en');
       print(
@@ -130,6 +139,7 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
       );
       await _characterRepository.loadCharacters();
       await _fittingRepository.loadLoadouts();
+      await _implantRepository.loadImplants();
       FittingSimulator.loadDefinitions(_itemRepository);
 
       emit(RepositoryLoadedState());
@@ -151,6 +161,7 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
     final data = {
       'fittings': _fittingRepository.loadouts.toList(),
       'characters': _characterRepository.characters.toList(),
+      'implants': _implantRepository.implants.toList(),
       CharacterRepository.defaultPilotPrefsKey:
           _characterRepository.defaultPilot.id,
     };
@@ -189,6 +200,11 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
         }
       ),
     );
+    final implants = List<ImplantFittingLoadout>.from(
+      data['implants']?.map(
+          (x) => ImplantFittingLoadout.fromJson(x )
+      ) ?? <ImplantFittingLoadout>[]
+    );
     print("Converted json data");
 
     await _characterRepository.loadCharacters(
@@ -196,6 +212,10 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
       defaultPilot: data[CharacterRepository.defaultPilotPrefsKey],
     );
     await _fittingRepository.loadLoadouts(data: fittings);
+    await _implantRepository.loadImplants(data: implants);
+    await _characterRepository.saveCharacters();
+    await _fittingRepository.saveLoadouts();
+    await _implantRepository.saveImplants();
     print("Loaded data");
 
     emit(RepositoryLoadedState());

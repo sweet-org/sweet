@@ -7,6 +7,8 @@ class ItemNanocore {
   final int itemId;
   final String filmGroup;
   final int filmQuality;
+  final bool isGold;
+  final int otherItemId;
   final List<int> availableShips;
   final List<int> selectableModifierItems;
   final List<List<int>> trainableModifierItems;
@@ -15,6 +17,8 @@ class ItemNanocore {
     required this.itemId,
     required this.filmGroup,
     required this.filmQuality,
+    required this.isGold,
+    required this.otherItemId,
     required this.availableShips,
     required this.selectableModifierItems,
     required this.trainableModifierItems,

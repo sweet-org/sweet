@@ -1,4 +1,5 @@
 import 'package:sweet/database/database.dart';
+import 'package:sweet/database/database_exports.dart';
 import 'package:sweet/database/entities/attribute.dart';
 import 'package:sweet/database/entities/category.dart';
 import 'package:sweet/database/entities/group.dart';
@@ -91,5 +92,10 @@ class LocalisationRepository {
   String getLocalisedStringForMarketGroup(MarketGroup marketGroup) {
     return _getLocalisedStringForIndex(marketGroup.localisationIndex) ??
         marketGroup.sourceName;
+  }
+
+  String getLocalisedStringForGoldAttrClass(GoldNanoAttrClass attrClass) {
+    return _getLocalisedStringForIndex(attrClass.nameKey) ??
+        attrClass.sourceName;
   }
 }

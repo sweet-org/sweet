@@ -2,8 +2,10 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sweet/mixins/fitting_item_details_mixin.dart';
 import 'package:sweet/model/character/character.dart';
+import 'package:sweet/model/implant/implant_handler.dart';
 import 'package:sweet/model/ship/ship_fitting_loadout.dart';
 import 'package:sweet/pages/character_profile/character_profile_page.dart';
+import 'package:sweet/pages/implant_fitting/implant_fitting_page.dart';
 import 'package:sweet/repository/character_repository.dart';
 import 'package:sweet/repository/item_repository.dart';
 import 'package:sweet/repository/ship_fitting_repository.dart';
@@ -14,6 +16,7 @@ import 'package:sweet/pages/ship_fitting/bloc/ship_fitting_bloc/ship_fitting.dar
 import 'package:sweet/pages/ship_fitting/widgets/power_usage_bar.dart';
 import 'package:sweet/repository/localisation_repository.dart';
 import 'package:sweet/util/localisation_constants.dart';
+import 'package:sweet/util/sweet_icons.dart';
 import 'package:sweet/widgets/localised_text.dart';
 import 'package:sweet/widgets/qrcode_dialog.dart';
 
@@ -80,6 +83,16 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
         arguments: pilot,
       );
 
+  showImplantDetails(
+    BuildContext context, {
+    required ImplantHandler implant,
+  }) =>
+      Navigator.pushNamed(
+        context,
+        ImplantFittingPage.routeName,
+        arguments: implant,
+      );
+
   void showRawAttributes() {
     RepositoryProvider.of<ShipFittingBloc>(context).add(
       ShowShipFittingStats(),
@@ -94,9 +107,11 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
           .getLocalisedNameForItem(ship.item);
 
       var pilot = fitting.pilot.name;
+      var implant = fitting.implant != null ? '${fitting.implant?.name} - ' : '';
       final canEditPilot = !editMode &&
           fitting.pilot.id != CharacterRepository.noSkillCharacterId &&
           fitting.pilot.id != CharacterRepository.maxSkillCharacterId;
+      final canEditImplant = !editMode && fitting.implantHandler != null;
 
       return Material(
         elevation: 5,
@@ -184,6 +199,20 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
                                         ),
                                         onPressed: changePilot,
                                       ),
+                                canEditImplant
+                                    ? IconButton(
+                                        padding: EdgeInsets.zero,
+                                        splashRadius: 14,
+                                        icon: Icon(
+                                          SweetIcons.implant,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: () => showImplantDetails(
+                                          context,
+                                          implant: fitting.implantHandler!,
+                                        ),
+                                      )
+                                    : Container(),
                                 IconButton(
                                   icon: Icon(
                                     Icons.info,
@@ -203,7 +232,7 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
                                 ? _buildFittingDetailsForm(fitting)
                                 : _buildFittingDetails(fitting),
                             Text(
-                              '$pilot - $shipName',
+                              '$implant$pilot - $shipName',
                               style: TextStyle(
                                 color: Colors.white.withAlpha(96),
                                 fontSize: 14,

@@ -7,6 +7,7 @@ import 'package:sweet/model/items/eve_echoes_categories.dart';
 import 'package:sweet/model/ship/ship_fitting_folder.dart';
 import 'package:sweet/pages/fittings_list/widgets/fitting_folder_card.dart';
 import 'package:sweet/repository/character_repository.dart';
+import 'package:sweet/repository/implant_fitting_loadout_repository.dart';
 import 'package:sweet/service/fitting_simulator.dart';
 import 'package:sweet/model/ship/ship_fitting_loadout.dart';
 import 'package:sweet/pages/fittings_list/bloc/ship_fitting_browser_bloc/ship_fitting_browser_bloc.dart';
@@ -20,6 +21,8 @@ import 'package:sweet/util/platform_helper.dart';
 import 'package:sweet/widgets/speed_dial_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../model/implant/implant_handler.dart';
 
 class FittingToolList extends StatefulWidget {
   @override
@@ -87,12 +90,20 @@ class _FittingToolListState extends State<FittingToolList>
     final itemRepo = RepositoryProvider.of<ItemRepository>(context);
     final attrCalc = RepositoryProvider.of<AttributeCalculatorService>(context);
     final charRepo = RepositoryProvider.of<CharacterRepository>(context);
+    final implRepo = RepositoryProvider.of<ImplantFittingLoadoutRepository>(context);
+
+    final implant = await ImplantHandler.fromImplantId(
+        implantLoadoutId: loadout.implantId,
+        implantRepository: implRepo,
+        itemRepository: itemRepo);
+
     final fitting = await FittingSimulator.fromShipLoadout(
       attributeCalculatorService: attrCalc,
       itemRepository: itemRepo,
       ship: await itemRepo.ship(id: loadout.shipItemId),
       loadout: loadout,
       pilot: charRepo.defaultPilot,
+      implant: implant,
     );
 
     setState(() {

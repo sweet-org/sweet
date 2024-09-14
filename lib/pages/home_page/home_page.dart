@@ -2,6 +2,7 @@ import 'package:sweet/bloc/item_repository_bloc/item_repository.dart';
 import 'package:sweet/bloc/navigation_bloc/navigation.dart';
 import 'package:sweet/pages/character_browser/character_browser_page.dart';
 import 'package:sweet/pages/fittings_list/fitting_tool_list_page.dart';
+import 'package:sweet/pages/implants_list/implant_list_page.dart';
 import 'package:sweet/pages/items_browser/items_browser.dart';
 import 'package:sweet/pages/market_browser/market_browser.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,9 @@ class _HomePageState extends State<HomePage> {
               break;
             case RootPages.PatchNotes:
               body = PatchNotesPage();
+              break;
+            case RootPages.ImplantFittings:
+              body = ImplantsListPage();
               break;
           }
         }

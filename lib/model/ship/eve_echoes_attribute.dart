@@ -73,6 +73,20 @@ final kIgnoreAttributes = [
   EveEchoesAttribute.maxGroupActive,
 ];
 
+// There are way to many attributes when it comes to implants,
+// this is the easy way...
+final kIgnoreImplantAttributes = [
+  EveEchoesAttribute.volume.attributeId,
+  EveEchoesAttribute.cargoHoldCapacity.attributeId,
+];
+
+final hangarRigAttributes = {
+  EveEchoesAttribute.hangarRigSlotsShip.attributeId,
+  EveEchoesAttribute.hangarRigSlotsShipPer.attributeId,
+  EveEchoesAttribute.hangarSlotsShip.attributeId,
+  EveEchoesAttribute.hangarSlotsShipPer.attributeId,
+};
+
 final kIgnoreAttributeIds = kIgnoreAttributes.map((e) => e.attributeId);
 
 enum EveEchoesAttribute {
@@ -91,6 +105,14 @@ enum EveEchoesAttribute {
   lightBCSlot,
   lightBBSlot,
   implantSlots,
+
+  // Ship Slots
+  hangarRigSlotsShip,
+  defenceRigSlotsShip,
+  hangarSlotsShip,
+  hangarRigSlotsShipPer,
+  defenceRigSlotsShipPer,
+  hangarSlotsShipPer,
 
   // Shield
   shieldCapacity,
@@ -231,6 +253,15 @@ enum EveEchoesAttribute {
   capacitorRechargeTimeMod,
   shieldDamageTaken,
   armorDamageTaken,
+  shieldMod,
+  armorMod,
+  hullMod,
+
+  // Implant Attributes
+  implantCBBuff,
+  implantCBDamageModX,
+  implantCBDamageDroneMod,
+  implantCommonMaxGroupFitted,
 
   // SORT!!
   metalevel,
@@ -297,6 +328,21 @@ enum EveEchoesAttribute {
   armorDamageResonanceDMod,
   armorDamageResonanceMod,
   armorDamageResonanceDModMod,
+
+  // Hangar Modifications
+  massMod,
+  fighterReloadTime,
+  inertiaModifierAdjustmentMod,
+  warpCapacitorNeedMod,
+  fighterDamageTransferRatio,
+  destroyerBayMod,
+  launchTubeMod,
+  flightVelocityMod,
+  damageMod,
+  frigateBayMod,
+  shipMidSlotMod,
+  fighterBayCapacityMod,
+
 
   capacitorRechargeRateMultiplierN,
   isFleetOnly,
@@ -412,6 +458,19 @@ extension ShipAttributeExtenstion on EveEchoesAttribute {
         return 828;
       case EveEchoesAttribute.implantSlots:
         return 750;
+
+      case EveEchoesAttribute.hangarRigSlotsShip:
+        return 3074;
+      case EveEchoesAttribute.defenceRigSlotsShip:
+        return 3076;
+      case EveEchoesAttribute.hangarSlotsShip:
+        return 3078;
+      case EveEchoesAttribute.hangarRigSlotsShipPer:
+        return 3075;
+      case EveEchoesAttribute.defenceRigSlotsShipPer:
+        return 3077;
+      case EveEchoesAttribute.hangarSlotsShipPer:
+        return 3079;
 
       case EveEchoesAttribute.hullHp:
         return 260;
@@ -787,6 +846,47 @@ extension ShipAttributeExtenstion on EveEchoesAttribute {
         return 98010;
       case EveEchoesAttribute.armorDamageTaken:
         return 98020;
+
+      case EveEchoesAttribute.implantCBBuff:
+        return 8681;
+      case EveEchoesAttribute.implantCBDamageModX:
+        return 8683;
+      case EveEchoesAttribute.implantCBDamageDroneMod:
+        return 8682;
+      case EveEchoesAttribute.implantCommonMaxGroupFitted:
+        return 8711;
+
+      case EveEchoesAttribute.armorMod:
+        return 2004;
+      case EveEchoesAttribute.shieldMod:
+        return 2006;
+      case EveEchoesAttribute.hullMod:
+        return 2053;
+
+      case EveEchoesAttribute.massMod:
+        return 108;
+      case EveEchoesAttribute.fighterReloadTime:
+        return 2143;
+      case EveEchoesAttribute.inertiaModifierAdjustmentMod:
+        return 122;
+      case EveEchoesAttribute.warpCapacitorNeedMod:
+        return 4003;
+      case EveEchoesAttribute.fighterDamageTransferRatio:
+        return 4113;
+      case EveEchoesAttribute.destroyerBayMod:
+        return 823;
+      case EveEchoesAttribute.launchTubeMod:
+        return 2142;
+      case EveEchoesAttribute.flightVelocityMod:
+        return 2001;
+      case EveEchoesAttribute.damageMod:
+        return 2002;
+      case EveEchoesAttribute.frigateBayMod:
+        return 821;
+      case EveEchoesAttribute.shipMidSlotMod:
+        return 819;
+      case EveEchoesAttribute.fighterBayCapacityMod:
+        return 96006;
     }
   }
 }
