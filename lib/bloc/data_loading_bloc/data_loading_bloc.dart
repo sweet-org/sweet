@@ -201,9 +201,9 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
       ),
     );
     final implants = List<ImplantFittingLoadout>.from(
-      data['implants'].map(
+      data['implants']?.map(
           (x) => ImplantFittingLoadout.fromJson(x )
-      )
+      ) ?? <ImplantFittingLoadout>[]
     );
     print("Converted json data");
 
@@ -213,6 +213,9 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
     );
     await _fittingRepository.loadLoadouts(data: fittings);
     await _implantRepository.loadImplants(data: implants);
+    await _characterRepository.saveCharacters();
+    await _fittingRepository.saveLoadouts();
+    await _implantRepository.saveImplants();
     print("Loaded data");
 
     emit(RepositoryLoadedState());
