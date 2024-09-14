@@ -57,7 +57,7 @@ jobs:
         mv build/linux/x64/release/bundle/${{ steps.app_build.outputs.name }}-linux.zip ./${{ steps.app_build.outputs.name }}-linux.zip
 
     - name: 'Uploading artifact'
-      uses: actions/upload-artifact@v2.2.3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.app_build.outputs.name }}-linux
         path: ${{ steps.app_build.outputs.name }}-linux.zip
@@ -115,7 +115,7 @@ jobs:
         files: build/windows/x64/runner/Release
 
     - name: 'Uploading artifact'
-      uses: actions/upload-artifact@v2.2.3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.app_build.outputs.name }}-windows
         path: ${{ steps.app_build.outputs.name }}-windows.zip
@@ -183,7 +183,7 @@ jobs:
         mv build/macos/Build/Products/Release/${{ steps.app_build.outputs.name }}-macos.zip ./${{ steps.app_build.outputs.name }}-macos.zip
 
     - name: 'Uploading artifact'
-      uses: actions/upload-artifact@v2.2.3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.app_build.outputs.name }}-macos
         path: ${{ steps.app_build.outputs.name }}-macos.zip
@@ -264,17 +264,17 @@ jobs:
       id: app_build
 
     - name: 'Download Linux artifact'
-      uses: actions/download-artifact@v2.0.9
+      uses: actions/download-artifact@v4
       with:
         name: ${{ steps.app_build.outputs.name }}-linux
 
     - name: 'Download MacOS artifact'
-      uses: actions/download-artifact@v2.0.9
+      uses: actions/download-artifact@v4
       with:
         name: ${{ steps.app_build.outputs.name }}-macos
 
     - name: 'Download Windows artifact'
-      uses: actions/download-artifact@v2.0.9
+      uses: actions/download-artifact@v4
       with:
         name: ${{ steps.app_build.outputs.name }}-windows
 
