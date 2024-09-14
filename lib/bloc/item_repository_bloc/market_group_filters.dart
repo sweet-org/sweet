@@ -91,7 +91,7 @@ extension MarketGroupFilterExtension on MarketGroupFilters {
         return 102003022;
 
       case MarketGroupFilters.hangarRigs:
-        return 105008000;
+        return 1050080;
 
       case MarketGroupFilters.advancedImplants:
         return 2000040;

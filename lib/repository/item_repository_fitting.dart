@@ -496,12 +496,23 @@ extension ItemRepositoryFitting on ItemRepository {
         ))
             ?.toInt() ??
         0;
-    final numHangarRigSlots = (await attributeValue(
+    // ToDo: Refactor hangar rig system
+    var numHangarRigSlots = (await attributeValue(
           id: EveEchoesAttribute.hangarRigSlots.attributeId,
           itemId: shipId,
         ))
             ?.toInt() ??
         0;
+
+    if (numHangarRigSlots == 0) {
+      final shipDef = await this.ship(id: shipId);
+      for (var mod in shipDef.modifiers) {
+        if (mod.changeRange != "/Ship/") continue;
+        if (hangarRigAttributes.contains(mod.attributeId)) {
+          numHangarRigSlots += mod.attributeValue.toInt();
+        }
+      }
+    }
 
     return ShipLoadoutDefinition(
       numHighSlots: numHighSlots,
