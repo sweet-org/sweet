@@ -282,6 +282,9 @@ class ShipFittingLoadout extends ChangeNotifier
       case SlotType.hangarRigSlots:
         hangarRigSlots.modules[module.index] = fittedModule;
         break;
+      case SlotType.implantSlots:
+        print("Error: Can't fit implant directly via fitItem");
+        break;
     }
   }
 

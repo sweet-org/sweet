@@ -2,7 +2,7 @@
 import 'package:sweet/model/ship/ship_fitting_folder.dart';
 import 'package:sweet/model/ship/ship_fitting_loadout.dart';
 
-abstract class FittingListElement {
+abstract mixin class FittingListElement {
   String getId();
   String getName();
   Map<String, dynamic> toJson();

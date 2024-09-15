@@ -5,13 +5,13 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 0.3.4+1
 
 environment:
-  sdk: ">=2.15.0 <3.0.0"
+  sdk: ">=3.5.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  collection: ^1.17.0
+  collection: ^1.18.0
 
   # DB Layer
   sqflite: ^2.0.0+3
@@ -27,7 +27,7 @@ dependencies:
   adaptive_theme: ^3.0.0
   json_annotation: ^4.8.0
   shared_preferences: ^2.0.8
-  package_info_plus: ^4.2.0
+  package_info_plus: ^8.0.2
   uuid: ^4.2.1
   # https://github.com/appsup-dart/expressions/issues/22
   expressions:
@@ -37,19 +37,19 @@ dependencies:
 
   http: ^1.1.2
   archive: ^3.3.8
-  csv: ^5.0.0
+  csv: ^6.0.0
   url_launcher: ^6.0.11
   path_provider: ^2.0.5
-  flutter_local_notifications: ^16.2.0
+  flutter_local_notifications: ^17.2.2
 
   sprintf: ^7.0.0
-  intl: ^0.18.0
+  intl: ^0.19.0
 
   # Scanning QR specific
   scan: ^1.4.3
   qr_flutter: ^4.0.0
   image_picker: ^1.0.4
-  file_picker: ^6.1.1 #for native picking
+  file_picker: ^8.1.2 #for native picking
   permission_handler: ^11.1.0
   recase: ^4.0.0
 
@@ -58,21 +58,21 @@ dependencies:
   flutter_svg: ^2.0.9
   flutter_staggered_grid_view: '<=0.4.1' # locked to version because I don't want to deal with upgrading it as teh widget got removed
   auto_size_text: ^3.0.0
-  grouped_list: ^5.1.1
+  grouped_list: ^6.0.0
   flutter_countdown_timer: ^4.1.0
   tinycolor2: ^3.0.1
 
   #Firebase
-  firebase_core: ^2.4.1
-  firebase_analytics: ^10.1.0
-  firebase_crashlytics: ^3.0.11
+  firebase_core: ^3.4.1
+  firebase_analytics: ^11.3.1
+  firebase_crashlytics: ^4.1.1
 
-  manup: ^6.0.0
+  manup: ^9.0.1
   path: ^1.8.2
   timezone: ^0.9.1
 
 dev_dependencies:
-  lints: ^3.0.0
+  lints: ^4.0.0
   build_runner: ^2.3.3
   json_serializable: ^6.2.0
   flutter_launcher_icons: ^0.13.1

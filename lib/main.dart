@@ -45,7 +45,7 @@ MultiRepositoryProvider buildRepositories({required Widget child}) {
   return MultiRepositoryProvider(
     providers: [
       RepositoryProvider<ManUpService>(
-        create: (_) => ManUpService(
+        create: (_) => HttpManUpService(
           kManUpUrl,
           http: client,
           os: Platform.operatingSystem,
