@@ -4,6 +4,7 @@ part of 'item_repository.dart';
 extension ItemRepositoryImplant on ItemRepository {
   Future<ImplantFitting> implantDataFromLoadout({
     required ImplantFittingLoadout loadout,
+    required bool isPassive,
   }) async {
     final id = loadout.implantItemId;
     final item = await itemWithId(id: id);
@@ -20,6 +21,7 @@ extension ItemRepositoryImplant on ItemRepository {
         name: loadout.name,
         trainedLevel: loadout.level,
         item: item,
+        isPassive: isPassive,
         baseAttributes: baseAttributes.toList(),
         modifiers: modifiers.toList()
     );

@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:sweet/extensions/item_modifier_ui_extension.dart';
 import 'package:sweet/model/fitting/fitting_implant.dart';
-import 'package:sweet/model/fitting/fitting_implant_module.dart';
 import 'package:sweet/model/fitting/fitting_nanocore.dart';
 import 'package:sweet/model/fitting/fitting_nanocore_affix.dart';
 import 'package:sweet/model/fitting/fitting_rig_integrator.dart';
@@ -13,7 +12,6 @@ import 'package:sweet/model/implant/implant_handler.dart';
 import 'package:sweet/model/items/eve_echoes_categories.dart';
 import 'package:sweet/model/nihilus_space_modifier.dart';
 import 'package:sweet/model/ship/ship_loadout_definition.dart';
-import 'package:sweet/repository/implant_fitting_loadout_repository.dart';
 import 'package:sweet/util/utility.dart';
 
 import '../database/database_exports.dart';
@@ -58,7 +56,7 @@ class FittingSimulator extends ChangeNotifier {
   final AttributeCalculatorService _attributeCalculatorService;
 
   final Fitting _fitting;
-  ImplantHandler? _implant;
+  List<ImplantHandler?> _implants;
 
   Iterable<FittingModule> modules({required SlotType slotType}) =>
       _fitting[slotType] ?? [];
@@ -87,24 +85,90 @@ class FittingSimulator extends ChangeNotifier {
     );
   }
 
-  ImplantFitting? get implant => _implant?.fitting;
+  ImplantHandler? get implantHandler =>
+      _implants.whereNotNull().firstWhereOrNull((e) => !e.isPassive);
 
-  ImplantHandler? get implantHandler => _implant;
+  ImplantFitting? get activeImplant => implantHandler?.fitting;
 
-  void setImplant(ImplantHandler? implant) {
-    _implant?.removeListener(_implantListener);
-    _implant = implant;
-    _implant?.addListener(_implantListener);
-    if (_implant == null) {
-      loadout.setImplant(null);
-    } else {
-      loadout.setImplant(implant!.fitting.id);
+  List<ImplantFitting?> get implants => [
+        ..._implants.map((e) => e?.fitting),
+      ];
+
+  int get passiveImplantCount =>
+      _implants.whereNotNull().where((e) => e.isPassive).length;
+
+  bool get hasActiveImplant => implantHandler != null;
+
+  bool setImplant(ImplantHandler? implant, {int slot = 0}) {
+    bool canFit = true;
+    if (implant != null) {
+      final oldIndex =
+          _implants.indexWhere((e) => implant.fitting.id == e?.fitting.id);
+      // Fitting the same implant multiple times is allowed to apply changes
+      // Should however must be in the same slot
+
+      if (!implant.isPassive) {
+        final actIndex = _implants.indexWhere((e) => !(e?.isPassive ?? true));
+        canFit = actIndex == -1 || actIndex == slot;
+      } else {
+        final impIndex = _implants
+            .indexWhere((e) => e?.implant.itemId == implant.implant.itemId);
+        canFit = impIndex == -1 || impIndex == slot;
+      }
+      if (oldIndex != -1) {
+        if (oldIndex != slot) {
+          print(
+              "Can't fit the same implant multiple times (old slot: $oldIndex, new slot: $slot)");
+          canFit = false;
+        } else {
+          canFit = true;
+        }
+      }
     }
+    if (!canFit) return false;
+    if (slot < _implants.length) {
+      _implants[slot]?.removeListener(_implantListener);
+      _implants[slot] = implant;
+    } else {
+      _implants.add(implant);
+      slot = _implants.length - 1;
+    }
+
+    _implants[slot]?.addListener(_implantListener);
+    if (_implants[slot] == null) {
+      loadout.setImplant(null, slot);
+    } else {
+      loadout.setImplant(implant!.fitting.id, slot);
+    }
+    ensureFreeImplantSlots();
     _implantListener();
+    return true;
   }
 
   void _implantListener() {
     _updateFitting();
+  }
+
+  void ensureFreeImplantSlots() {
+    if (!_implants.any((e) => e == null)) {
+      // There should be always an empty slot at the end
+      _implants.add(null);
+    } else {
+      // Remove unused slots at the end (if there are more than 2)
+      while (_implants.length > 1 &&
+          _implants.last == null &&
+          _implants[_implants.length - 2] == null) {
+        _implants.removeLast();
+      }
+    }
+  }
+
+  int getImplantIndex(ImplantFitting fitting) {
+    return _implants.indexWhere((element) => element?.fitting == fitting);
+  }
+
+  ImplantHandler? getImplantHandler(ImplantFitting fitting) {
+    return _implants.firstWhereOrNull((element) => element?.fitting == fitting);
   }
 
   final ShipFittingLoadout loadout;
@@ -131,10 +195,11 @@ class FittingSimulator extends ChangeNotifier {
     required this.loadout,
     required Fitting fitting,
     Character? pilot,
-    ImplantHandler? implant,
+    List<ImplantHandler?>? implants,
   })  : _fitting = fitting,
         _itemRepository = itemRepository,
         _attributeCalculatorService = attributeCalculatorService,
+        _implants = [null, null],
         capacitorSimulator = CapacitorSimulator(
           attributeCalculatorService: attributeCalculatorService,
           ship: ship,
@@ -142,8 +207,11 @@ class FittingSimulator extends ChangeNotifier {
     if (pilot != null) {
       setPilot(pilot);
     }
-    if (implant != null) {
-      setImplant(implant);
+    if (implants != null) {
+      for (var i = 0; i < implants.length; i++) {
+        if (implants[i] == null) continue;
+        setImplant(implants[i], slot: i);
+      }
     }
   }
 
@@ -153,7 +221,7 @@ class FittingSimulator extends ChangeNotifier {
           required ItemRepository itemRepository,
           required AttributeCalculatorService attributeCalculatorService,
           required Character pilot,
-          ImplantHandler? implant}) async =>
+          List<ImplantHandler?>? implants}) async =>
       FittingSimulator._create(
         attributeCalculatorService: attributeCalculatorService,
         itemRepository: itemRepository,
@@ -164,7 +232,7 @@ class FittingSimulator extends ChangeNotifier {
           loadout: loadout,
           attributeCalculatorService: attributeCalculatorService,
         ),
-        implant: implant,
+        implants: implants,
       );
 
   static Future<FittingSimulator> fromDrone(
@@ -185,8 +253,12 @@ class FittingSimulator extends ChangeNotifier {
     );
   }
 
+  Iterable<FittingModule> get _allImplantModules => [
+        ..._implants.map((e) => e?.fitting).whereNotNull(),
+      ];
+
   Iterable<FittingModule> get _allFittedModules => [
-        _implant?.fitting ?? FittingModule.empty,
+        ..._allImplantModules,
         ..._fitting.allFittedModules,
       ];
 
@@ -810,7 +882,7 @@ class FittingSimulator extends ChangeNotifier {
   }) {
     if (!module.isValid && slot == SlotType.implantSlots) {
       // Delete implant
-      setImplant(null);
+      setImplant(null, slot: index);
       return true;
     }
     var fittedModule = (module).copyWith(
@@ -1062,12 +1134,13 @@ class FittingSimulator extends ChangeNotifier {
 
       return '${itemKvp.value.length}x $itemName';
     }));
-    if (implant != null) {
+    if (activeImplant != null) {
       var implantName = localisationRepository.getLocalisedNameForItem(
-        implant!.item,
+        activeImplant!.item,
       );
-      implantName += ' Level ${implant!.trainedLevel}';
-      for (var mod in implant!.allModules.sorted((a, b) => a.level - b.level)) {
+      implantName += ' Level ${activeImplant!.trainedLevel}';
+      for (var mod
+          in activeImplant!.allModules.sorted((a, b) => a.level - b.level)) {
         if (!mod.isValid) continue;
         var modName = localisationRepository.getLocalisedNameForItem(mod.item);
         var slotName = '${mod.slot.name} ${mod.level}'.capitalize();
@@ -1189,14 +1262,16 @@ class FittingSimulator extends ChangeNotifier {
         .then((_) => notifyListeners());
   }
 
-  void setImplantModuleState(ModuleState newState, {required int slotId}) {
-    if (slotId == 0) {
-      implant!.primarySkillState = newState;
+  void setImplantModuleState(ModuleState newState,
+      {required int slotIndex, required int implantSlotId}) {
+    final implant = _implants[slotIndex]!;
+    if (implantSlotId == 0) {
+      implant.fitting.primarySkillState = newState;
     } else {
       // print("Toggle state to $newState");
-      final module = _implant!.fitting[slotId]!;
-      _implant!.fitting[slotId] = module.copyWith(state: newState);
-      _implant!.loadout.fitItem(_implant!.fitting[slotId]!, slotId);
+      final module = implant.fitting[implantSlotId]!;
+      implant.fitting[implantSlotId] = module.copyWith(state: newState);
+      implant.loadout.fitItem(implant.fitting[implantSlotId]!, implantSlotId);
     }
     _attributeCalculatorService
         .updateItems(allFittedModules: _allFittedModules)

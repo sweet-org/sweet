@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sweet/model/fitting/fitting_implant.dart';
 import 'package:sweet/model/fitting/fitting_module.dart';
 import 'package:sweet/model/items/eve_echoes_categories.dart';
 import 'package:sweet/model/ship/eve_echoes_attribute.dart';
@@ -47,7 +48,7 @@ class ShipFittingSlotTile extends StatelessWidget {
       case SlotType.hangarRigSlots:
         return 'Hangar Modules';
       case SlotType.implantSlots:
-        return 'Implant';  // Implants may not be fitted normally
+        return 'Implants'; // Implants may not be fitted normally
     }
   }
 
@@ -76,14 +77,28 @@ class ShipFittingSlotTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final showButtons = fittings.length > 1 && slotType != SlotType.nanocore;
+    final showButtons = fittings.length > 1 &&
+        slotType != SlotType.nanocore &&
+        slotType != SlotType.implantSlots;
+    final String count;
+    if (slotType == SlotType.implantSlots) {
+      final hasActiveImplant = fittings
+          .whereType<ImplantFitting>()
+          .any((e) => !(e).isPassive);
+      final passiveCount = fittings
+          .whereType<ImplantFitting>()
+          .where((e) => (e).isPassive).length;
+      count = '${hasActiveImplant ? 1 : 0} active, $passiveCount passive';
+    } else {
+      count = '${fittings.where((m) => m.isValid).length}/${fittings.length}';
+    }
     return ExpansionTile(
       title: Row(
         children: [
           Text(slotTileTitle),
           Spacer(),
           Text(
-            '${fittings.where((m) => m.isValid).length}/${fittings.length}',
+            count,
           ),
         ],
       ),

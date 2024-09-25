@@ -92,10 +92,13 @@ class _FittingToolListState extends State<FittingToolList>
     final charRepo = RepositoryProvider.of<CharacterRepository>(context);
     final implRepo = RepositoryProvider.of<ImplantFittingLoadoutRepository>(context);
 
-    final implant = await ImplantHandler.fromImplantId(
-        implantLoadoutId: loadout.implantId,
-        implantRepository: implRepo,
-        itemRepository: itemRepo);
+    final implantsFutures = loadout.implantIds.map((id) async =>
+      await ImplantHandler.fromImplantId(
+          implantLoadoutId:id,
+          implantRepository: implRepo,
+          itemRepository: itemRepo)
+    );
+    final implants = await Future.wait(implantsFutures);
 
     final fitting = await FittingSimulator.fromShipLoadout(
       attributeCalculatorService: attrCalc,
@@ -103,7 +106,7 @@ class _FittingToolListState extends State<FittingToolList>
       ship: await itemRepo.ship(id: loadout.shipItemId),
       loadout: loadout,
       pilot: charRepo.defaultPilot,
-      implant: implant,
+      implants: implants,
     );
 
     setState(() {

@@ -7,8 +7,10 @@ part 'implant_loadout_definition.g.dart';
 class ImplantLoadoutDefinition {
   final Map<int, ImplantSlotType> slots;
   final Map<int, List<int>> restrictions;
+  final ImplantSlotType implantType;
 
   ImplantLoadoutDefinition({
+    required this.implantType,
     required this.slots,
     required this.restrictions
   });

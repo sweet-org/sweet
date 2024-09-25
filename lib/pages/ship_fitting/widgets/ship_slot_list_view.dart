@@ -30,7 +30,7 @@ class ShipSlotListView extends StatelessWidget {
 
         final Iterable<FittingModule> fittings;
         if (slotType == SlotType.implantSlots) {
-          fittings = [fitting.implant ?? FittingModule.empty];
+          fittings = [...fitting.implants.map((e) => e ?? FittingModule.empty)];
         } else {
           fittings = fitting.modules(slotType: slotType);
         }

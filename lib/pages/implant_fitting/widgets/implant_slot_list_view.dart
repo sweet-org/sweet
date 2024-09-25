@@ -46,6 +46,11 @@ class ImplantSlotListView extends StatelessWidget {
           case ImplantSlotType.upgrade:
             slotName = "Upgrade";
             break;
+          case ImplantSlotType.disabled:
+            slotName = "Disabled";
+            break;
+          default:
+            slotName = "N/A";
         }
 
         return Padding(

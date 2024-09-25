@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:sweet/model/fitting/fitting_implant_module.dart';
 import 'package:sweet/model/implant/implant_fitting_loadout.dart';
 import 'package:sweet/model/implant/implant_loadout_definition.dart';
+import 'package:sweet/model/implant/slot_type.dart';
 import 'package:sweet/model/ship/module_state.dart';
 import 'package:sweet/model/ship/slot_type.dart';
 
@@ -18,6 +19,7 @@ class ImplantFitting extends FittingModule {
 
   final String id;
   String name;
+  final bool isPassive;
 
   Iterable<FittingImplantModule> get allModules => _implantSlots.values;
 
@@ -25,6 +27,7 @@ class ImplantFitting extends FittingModule {
     required this.id,
     required this.name,
     required this.trainedLevel,
+    required this.isPassive,
     required Item item,
     required List<Attribute> baseAttributes,
     required List<ItemModifier> modifiers,
@@ -51,6 +54,7 @@ class ImplantFitting extends FittingModule {
     _implantSlots.clear();
 
     loadout.slots.forEach((slotIndex, slot) {
+      if (slot == ImplantSlotType.disabled) return;
       _implantSlots[slotIndex] = FittingImplantModule.getEmpty(slot);
     });
   }
@@ -60,6 +64,7 @@ class ImplantFitting extends FittingModule {
     trainedLevel = loadout.level;
 
     loadout.modules.forEach((slotIndex, module) {
+      if (module.type == ImplantSlotType.disabled) return;
       _implantSlots[slotIndex] = FittingImplantModule.getEmpty(module.type);
     });
   }

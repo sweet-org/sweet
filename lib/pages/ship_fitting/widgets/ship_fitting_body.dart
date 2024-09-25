@@ -1,8 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
 import 'package:sweet/database/database_exports.dart';
-import 'package:sweet/database/entities/item.dart';
-import 'package:sweet/database/entities/market_group.dart';
 import 'package:sweet/mixins/fitting_item_details_mixin.dart';
 import 'package:sweet/model/fitting/fitting_module.dart';
 import 'package:sweet/model/fitting/fitting_rig_integrator.dart';
@@ -191,10 +189,8 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
       elevation: 16,
       builder: (context) => ImplantContextDrawer(),
     );
-    if (loadout == null) {
-      state.fitting.setImplant(null);
-      return;
-    }
+    if (loadout == null) return;
+
     final itemRepo = Provider.of<ItemRepository>(context, listen: false);
 
     final fitting = await ImplantHandler.fromImplantLoadout(
@@ -205,7 +201,15 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
       loadout: loadout,
     );
 
-    state.fitting.setImplant(fitting);
+    final fitted = state.fitting.setImplant(fitting, slot: state.slotIndex);
+    if (!fitted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Cannot fit this implant"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   Future<void> showDamagePatternDrawer(

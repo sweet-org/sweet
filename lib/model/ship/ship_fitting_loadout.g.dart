@@ -10,7 +10,7 @@ ShipFittingLoadout _$ShipFittingLoadoutFromJson(Map<String, dynamic> json) =>
     ShipFittingLoadout(
       id: json['id'] as String?,
       name: json['name'] as String,
-      shipItemId: json['shipItemId'] as int,
+      shipItemId: (json['shipItemId'] as num).toInt(),
       highSlots:
           ShipFittingSlot.fromJson(json['highSlots'] as Map<String, dynamic>),
       midSlots:
@@ -31,7 +31,9 @@ ShipFittingLoadout _$ShipFittingLoadoutFromJson(Map<String, dynamic> json) =>
           json['lightDestroyersSlots'] as Map<String, dynamic>),
       hangarRigSlots: ShipFittingSlot.fromJson(
           json['hangarRigSlots'] as Map<String, dynamic>),
-      implantId: json['implantId'] as String?,
+      implantIds: (json['implantIds'] as List<dynamic>?)
+          ?.map((e) => e as String?)
+          .toList(),
     );
 
 Map<String, dynamic> _$ShipFittingLoadoutToJson(ShipFittingLoadout instance) =>
@@ -40,7 +42,7 @@ Map<String, dynamic> _$ShipFittingLoadoutToJson(ShipFittingLoadout instance) =>
       'id': instance.id,
       'shipItemId': instance.shipItemId,
       'name': instance.name,
-      'implantId': instance.implantId,
+      'implantIds': instance.implantIds,
       'highSlots': instance.highSlots,
       'midSlots': instance.midSlots,
       'lowSlots': instance.lowSlots,

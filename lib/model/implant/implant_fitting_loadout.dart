@@ -60,7 +60,9 @@ class ImplantFittingLoadout extends ChangeNotifier with EquatableMixin {
     String? type, // Only attributes included in the constructor are serialized
   })  : _id = id ?? Uuid().v1(),
         _name = name,
-        _level = level ?? 1;
+        _level = level ?? 1 {
+    modules.removeWhere((k, v) => v.type == ImplantSlotType.disabled);
+  }
 
   factory ImplantFittingLoadout.fromJson(Map<String, dynamic> json) {
     return _$ImplantFittingLoadoutFromJson(json);

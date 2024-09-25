@@ -12,7 +12,7 @@ import 'package:sweet/widgets/localised_text.dart';
 
 import '../module_state_toggle.dart';
 
-typedef ImplantModuleToggle = void Function(int slotId, ModuleState state);
+typedef ImplantModuleToggle = void Function(int implantNumber, int slotId, ModuleState state);
 
 class FittingImplantTileDetails extends StatelessWidget {
   const FittingImplantTileDetails({
@@ -35,23 +35,28 @@ class FittingImplantTileDetails extends StatelessWidget {
           .sorted((a, b) => a.level - b.level)
           .map((e) => MapEntry(e, e.baseAttributes))
     ];
+    final index = fitting.getImplantIndex(implant);
+    if (index == -1) {
+      throw Exception("Implant not found in fitting");
+    }
+    final handler = fitting.getImplantHandler(implant)!;
 
     return Column(
       children: [
         Column(
           children: [
-            Text(
+            handler.isPassive ? Container() : Text(
               "Warning: Main effects not supported, "
                   "they won't be included in calculations.",
               style: TextStyle(
                   fontSize: 12,
                   color: Theme.of(context).colorScheme.error),
             ),
-            Row(children: [
+            handler.isPassive ? Container() : Row(children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ModuleStateToggle(
-                  onToggle: (state) => onStateToggle(0, state),
+                  onToggle: (state) => onStateToggle(index, 0, state),
                   state: implant.primarySkillState,
                 ),
               ),
@@ -67,7 +72,7 @@ class FittingImplantTileDetails extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ModuleStateToggle(
-                      onToggle: (state) => onStateToggle(e.level, state),
+                      onToggle: (state) => onStateToggle(index, e.level, state),
                       state: e.state,
                     ),
                   ),

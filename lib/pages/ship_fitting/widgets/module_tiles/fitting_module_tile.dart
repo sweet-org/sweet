@@ -61,6 +61,17 @@ class FittingModuleTile extends StatelessWidget with FittingItemDetailsMixin {
       );
     }
 
+    final handler = module is ImplantFitting
+        ? fitting.getImplantHandler(module as ImplantFitting)
+        : null;
+    var extraText = "";
+    if (handler != null) {
+      extraText = " (Lvl. ${(module as ImplantFitting).trainedLevel})";
+      if (handler.isPassive) {
+        extraText += " (Passive)";
+      }
+    }
+
     return Column(children: [
       Padding(
         padding: const EdgeInsets.only(bottom: 8.0),
@@ -82,9 +93,7 @@ class FittingModuleTile extends StatelessWidget with FittingItemDetailsMixin {
                     item: module.item,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  module is ImplantFitting
-                      ? Text(" (Lvl. ${(module as ImplantFitting).trainedLevel})")
-                      : Container()
+                  extraText != "" ? Text(extraText) : Container()
                 ],
               ),
             ),
@@ -154,9 +163,10 @@ class FittingModuleTile extends StatelessWidget with FittingItemDetailsMixin {
       return FittingImplantTileDetails(
         implant: module as ImplantFitting,
         fitting: fitting,
-        onStateToggle: (slotId, newState) =>
+        onStateToggle: (implantNumber, slotId, newState) =>
             Provider.of<FittingSimulator>(context, listen: false)
-                .setImplantModuleState(newState, slotId: slotId),
+                .setImplantModuleState(newState,
+                    slotIndex: implantNumber, implantSlotId: slotId),
       );
     } else {
       return FittingModuleTileDetails(

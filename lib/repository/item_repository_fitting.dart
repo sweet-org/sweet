@@ -537,9 +537,18 @@ extension ItemRepositoryFitting on ItemRepository {
       throw Exception('Cannot find Implant $implantId');
     }
     // print("item_repo_fitting: ${implant.implantFramework.length}");
-    if (implant.implantType != 0) {
+    final slotType = ImplantSlotType.values
+        .firstWhereOrNull((element) => element.typeId == implant.implantType);
+    if (slotType == null) {
+      throw Exception('Implant $implantId has unknown implantType '
+          '${implant.implantType}');
+    }
+    if (slotType != ImplantSlotType.core && slotType != ImplantSlotType.slave) {
       throw Exception(
-          'Item is not an implant (got type ${implant.implantType})');
+          'Item $implantId is not an implant (got type ${implant.implantType})');
+    }
+    if (implant.implantFramework.isEmpty) {
+      throw Exception('Implant $implantId has no implantFramework');
     }
     /*
      * Type   Item
@@ -547,6 +556,8 @@ extension ItemRepositoryFitting on ItemRepository {
      * 0      Implant
      * 1      Fixed Branch choices (don't know why they have different levels)
      * 2      General Units
+     * 3      Implant Upgrades
+     * 4      Neural Response Implants
      */
     final slots = <int, ImplantSlotType>{};
     final restrictions = <int, List<int>>{};
@@ -564,7 +575,8 @@ extension ItemRepositoryFitting on ItemRepository {
       restrictions[slotNum] = value.sublist(1);
     });
 
-    return ImplantLoadoutDefinition(slots: slots, restrictions: restrictions);
+    return ImplantLoadoutDefinition(
+        implantType: slotType, slots: slots, restrictions: restrictions);
   }
 
   Future<List<NihilusSpaceModifier>> nSpaceModifiers() async {

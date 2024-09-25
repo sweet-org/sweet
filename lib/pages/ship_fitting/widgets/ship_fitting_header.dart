@@ -107,7 +107,7 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
           .getLocalisedNameForItem(ship.item);
 
       var pilot = fitting.pilot.name;
-      var implant = fitting.implant != null ? '${fitting.implant?.name} - ' : '';
+      var implant = fitting.activeImplant != null ? '${fitting.activeImplant?.name} - ' : '';
       final canEditPilot = !editMode &&
           fitting.pilot.id != CharacterRepository.noSkillCharacterId &&
           fitting.pilot.id != CharacterRepository.maxSkillCharacterId;

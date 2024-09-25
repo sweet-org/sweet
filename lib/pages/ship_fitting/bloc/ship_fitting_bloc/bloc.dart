@@ -81,7 +81,7 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
 
     switch (event.slotType) {
       case SlotType.implantSlots:
-        emit(OpenImplantDrawer(fitting));
+        emit(OpenImplantDrawer(fitting: fitting, slotIndex: event.slotIndex!));
         return;
       case SlotType.drone:
         {

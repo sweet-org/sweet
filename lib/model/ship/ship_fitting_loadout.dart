@@ -42,11 +42,11 @@ class ShipFittingLoadout extends ChangeNotifier
   String get id => _id;
   final int shipItemId;
   String _name;
-  String? _implantId;
+  List<String?> _implantIds;
 
   String get name => _name;
   String get type => _type;
-  String? get implantId => _implantId;
+  List<String?> get implantIds => _implantIds;
 
   @override
   String getId() => _id;
@@ -59,8 +59,11 @@ class ShipFittingLoadout extends ChangeNotifier
     notifyListeners();
   }
 
-  void setImplant(String? newImplant) {
-    _implantId = newImplant;
+  void setImplant(String? newImplant, int slotIndex) {
+    for (var i = _implantIds.length; i <= slotIndex; i++) {
+      _implantIds.add(null);
+    }
+    _implantIds[slotIndex] = newImplant;
     notifyListeners();
   }
 
@@ -89,10 +92,10 @@ class ShipFittingLoadout extends ChangeNotifier
     required this.lightFrigatesSlots,
     required this.lightDestroyersSlots,
     required this.hangarRigSlots,
-    String? implantId,
+    List<String?>? implantIds,
   })  : _id = id ?? Uuid().v1(),
         _name = name,
-        _implantId = implantId;
+        _implantIds = implantIds ?? List.filled(2, null);
 
   factory ShipFittingLoadout.fromJson(Map<String, dynamic> json) {
     json['lightFrigatesSlots'] =
@@ -101,6 +104,9 @@ class ShipFittingLoadout extends ChangeNotifier
         json['lightDestroyersSlots'] ?? <String, dynamic>{};
     json['hangarRigSlots'] = json['hangarRigSlots'] ?? <String, dynamic>{};
     json['type'] = json['type'] ?? 'LOADOUT';
+    if (json['implantId'] != null) {
+      json['implantIds'] = [json['implantId']];
+    }
     return _$ShipFittingLoadoutFromJson(json);
   }
 

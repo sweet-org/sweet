@@ -3,7 +3,6 @@ import 'package:sweet/model/implant/slot_type.dart';
 import 'package:sweet/model/ship/module_state.dart';
 
 
-
 class ImplantFittingSlotModule with EquatableMixin {
   final int moduleId;
   final ImplantSlotType type;
@@ -21,6 +20,8 @@ class ImplantFittingSlotModule with EquatableMixin {
       moduleId: 0, type: ImplantSlotType.common, state: ModuleState.inactive);
   static ImplantFittingSlotModule get emptyUpgrade => ImplantFittingSlotModule(
       moduleId: 0, type: ImplantSlotType.upgrade, state: ModuleState.inactive);
+  static ImplantFittingSlotModule get invalid => ImplantFittingSlotModule(
+      moduleId: 0, type: ImplantSlotType.disabled, state: ModuleState.inactive);
 
   static getEmpty(ImplantSlotType type) {
     switch (type) {
@@ -30,6 +31,9 @@ class ImplantFittingSlotModule with EquatableMixin {
         return emptyCommon;
       case ImplantSlotType.upgrade:
         return emptyUpgrade;
+      case ImplantSlotType.disabled:
+      default:
+        return invalid;
     }
   }
 

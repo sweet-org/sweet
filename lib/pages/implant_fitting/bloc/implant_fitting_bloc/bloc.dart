@@ -75,6 +75,10 @@ class ImplantFittingBloc extends Bloc<ImplantFittingEvent, ImplantFittingState> 
         initialItems = await _itemRepository.itemsWithIds(
             ids: event.allowedItemIds!);
         break;
+      case ImplantSlotType.disabled:
+      default:
+        print("Error: Invalid slot type ${event.slotType}");
+        return;
     }
 
     emit(OpenContextDrawerState(

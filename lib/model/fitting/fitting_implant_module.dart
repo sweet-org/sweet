@@ -53,6 +53,7 @@ class FittingImplantModule extends FittingItem with EquatableMixin {
         return emptyCommon;
       case ImplantSlotType.upgrade:
         return emptyUpgrade;
+      case ImplantSlotType.disabled:
       default:
         return null;
     }
