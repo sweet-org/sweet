@@ -11,12 +11,12 @@ ImplantFittingLoadout _$ImplantFittingLoadoutFromJson(
     ImplantFittingLoadout(
       id: json['id'] as String?,
       name: json['name'] as String,
-      implantItemId: json['implantItemId'] as int,
+      implantItemId: (json['implantItemId'] as num).toInt(),
       modules: (json['modules'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(int.parse(k),
             ImplantFittingSlotModule.fromJson(e as Map<String, dynamic>)),
       ),
-      level: json['level'] as int?,
+      level: (json['level'] as num?)?.toInt(),
       type: json['type'] as String?,
     );
 

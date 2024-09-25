@@ -13,6 +13,7 @@ class ItemNanocoreAffix {
   final int attrLevel;
   final int attrCount;
   List<ItemNanocoreAffix>? children;
+  @JsonKey(includeFromJson: false, includeToJson: false)
   Item? item;
 
   ItemNanocoreAffix({

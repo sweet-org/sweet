@@ -7,8 +7,8 @@ part of 'learned_skill.dart';
 // **************************************************************************
 
 LearnedSkill _$LearnedSkillFromJson(Map<String, dynamic> json) => LearnedSkill(
-      skillId: json['skillId'] as int,
-      skillLevel: json['skillLevel'] as int? ?? 0,
+      skillId: (json['skillId'] as num).toInt(),
+      skillLevel: (json['skillLevel'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$LearnedSkillToJson(LearnedSkill instance) =>

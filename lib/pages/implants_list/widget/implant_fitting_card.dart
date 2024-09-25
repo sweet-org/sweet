@@ -20,8 +20,7 @@ class ImplantFittingCard extends StatelessWidget {
   final ImplantFittingLoadoutCallback onTap;
 
   const ImplantFittingCard(
-      {Key? key, required this.loadout, required this.onTap})
-      : super(key: key);
+      {super.key, required this.loadout, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -62,16 +61,33 @@ class ImplantFittingCard extends StatelessWidget {
                               style: Theme.of(context).textTheme.titleLarge,
                               maxLines: 1,
                             ),
-                            FutureBuilder<String>(
+                            FutureBuilder<String?>(
                               initialData: '',
                               future: itemRepo
                                   .itemName(id: loadout.implantItemId)
-                                  .then((value) => value!),
-                              builder: (context, snapshot) => AutoSizeText(
-                                '${snapshot.data ?? 'Unknown Implant'} (Lvl. ${loadout.level})',
-                                style: Theme.of(context).textTheme.bodyMedium,
-                                maxLines: 1,
-                              ),
+                                  .then((value) => value!)
+                                  .catchError((e) => null),
+                              builder: (context, snapshot) {
+                                if (snapshot.data != null) {
+                                  return AutoSizeText(
+                                    '${snapshot.data} (Lvl. ${loadout.level})',
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                    maxLines: 1,
+                                  );
+                                }
+                                return AutoSizeText(
+                                  'ID ${loadout.implantItemId} (Lvl. ${loadout.level})',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .color!
+                                        .withAlpha(96),
+                                  ),
+                                  maxLines: 1,
+                                );
+                              }
                             ),
                           ],
                         );
