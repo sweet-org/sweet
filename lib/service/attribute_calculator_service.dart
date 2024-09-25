@@ -348,10 +348,10 @@ class AttributeCalculatorService {
     if (item is ImplantFitting && itemRepository.levelAttributeMap.containsKey(itemAttribute.id)) {
       final expr = itemRepository.levelAttributeMap[itemAttribute.id]!;
       var context = {
-        "lv": item.trainedLevel
+        "lv": item.trainedLevel.toDouble()
       };
       final evaluator = const ExpressionEvaluator();
-      value = evaluator.eval(expr, context);
+      value = evaluator.eval(expr, context).toDouble();
     }
 
     // NOTE: Scripts seem to run through a map of
