@@ -79,6 +79,18 @@ class RootPage extends StatelessWidget with FileSelector {
     if (state is LoadingRepositoryState) {
       loadingMessage = state.message;
     }
+    if (state is DatabaseDownloadFailedState) {
+      print("State is DatabaseDownloadFailedState");
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(state.message),
+            backgroundColor: Colors.redAccent,
+            duration: Duration(seconds: 10),
+          ),
+        );
+      });
+    }
 
     if (state is AppUnsupportedState) {
       return _buildUnsupportedAppState(

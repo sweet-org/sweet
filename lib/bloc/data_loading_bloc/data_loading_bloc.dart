@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:http/http.dart';
 import 'package:manup/manup.dart';
 import 'package:sweet/model/character/character.dart';
 import 'package:sweet/model/implant/implant_fitting_loadout.dart';
@@ -77,19 +78,28 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
       final useNewDbLocation =
           _manUpService.setting<bool>(key: kUseNewDbLocation, orElse: true);
 
-      final downloadDb = event.forceDbDownload ||
-          await _itemRepository.checkForDatabaseUpdate(
-            latestVersion: version,
-            dbCrc: expectedDbCrc,
-            performCrcCheck: performCrcCheck,
-            checkEtag: useNewDbLocation,
-          );
+      try {
+        final downloadDb = event.forceDbDownload ||
+            await _itemRepository.checkForDatabaseUpdate(
+              latestVersion: version,
+              dbCrc: expectedDbCrc,
+              performCrcCheck: performCrcCheck,
+              checkEtag: useNewDbLocation,
+            );
 
-      if (downloadDb) {
-        await _itemRepository.downloadDatabase(
-          latestVersion: version,
-          emitter: emit,
-        );
+        if (downloadDb) {
+          await _itemRepository.downloadDatabase(
+            latestVersion: version,
+            emitter: emit,
+          );
+        }
+      } on ClientException catch (e, stack) {
+        print("Error: Failed to check/download database: $e");
+        print(stack);
+        emit(DatabaseDownloadFailedState(
+            message: "Failed to check/download database: $e"));
+        await Future.delayed(Duration(seconds: 3));
+        if (event.forceDbDownload) rethrow;
       }
 
       if (performCrcCheck) {

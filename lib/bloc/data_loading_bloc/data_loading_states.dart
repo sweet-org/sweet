@@ -38,6 +38,13 @@ class DownloadingDatabaseState extends LoadingRepositoryState {
       ];
 }
 
+class DatabaseDownloadFailedState extends LoadingRepositoryState {
+  DatabaseDownloadFailedState({required String message}) : super(message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 class AppUpdateAvailable extends DataLoadingBlocState {
   final ManUpStatus manUpStatus;
 
