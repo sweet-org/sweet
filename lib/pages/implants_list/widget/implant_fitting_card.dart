@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sweet/database/entities/item.dart';
 
 import 'package:sweet/repository/item_repository.dart';
 import 'package:sweet/util/localisation_constants.dart';
@@ -61,18 +62,18 @@ class ImplantFittingCard extends StatelessWidget {
                               style: Theme.of(context).textTheme.titleLarge,
                               maxLines: 1,
                             ),
-                            FutureBuilder<String?>(
-                              initialData: '',
+                            FutureBuilder<Item?>(
+                              initialData: null,
                               future: itemRepo
-                                  .itemName(id: loadout.implantItemId)
-                                  .then((value) => value!)
-                                  .catchError((e) => null),
+                                  .itemWithId(id: loadout.implantItemId)
+                                  .then((value) => value!),
                               builder: (context, snapshot) {
                                 if (snapshot.data != null) {
-                                  return AutoSizeText(
-                                    '${snapshot.data} (Lvl. ${loadout.level})',
+                                  return LocalisedText(
+                                    item: snapshot.data,
                                     style: Theme.of(context).textTheme.bodyMedium,
-                                    maxLines: 1,
+                                    autoSize: true,
+                                    suffix: ' (Lvl. ${loadout.level})',
                                   );
                                 }
                                 return AutoSizeText(
