@@ -26,6 +26,7 @@ enum MarketGroupFilters {
 
   advancedImplants,
   generalUnits,
+  advancedUnits,
 }
 
 final kMidslotExcludeMarketGroups = [
@@ -97,6 +98,8 @@ extension MarketGroupFilterExtension on MarketGroupFilters {
         return 2000040;
       case MarketGroupFilters.generalUnits:
         return 2000050;
+      case MarketGroupFilters.advancedUnits:
+        return 2000051;
 
       default:
         assert(this == MarketGroupFilters.all, 'Unknown filter type: $this');

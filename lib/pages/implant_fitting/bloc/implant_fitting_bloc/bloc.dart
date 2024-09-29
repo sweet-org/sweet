@@ -61,7 +61,14 @@ class ImplantFittingBloc extends Bloc<ImplantFittingEvent, ImplantFittingState> 
     switch (event.slotType) {
       case ImplantSlotType.common:
         // General Units
-        group = _itemRepository.marketGroupMap[MarketGroupFilters.generalUnits.marketGroupId]!;
+        group = MarketGroup.clone(
+            _itemRepository.marketGroupMap[MarketGroupFilters.implants.marketGroupId]!,
+          [
+            _itemRepository.marketGroupMap[MarketGroupFilters.generalUnits.marketGroupId]!,
+            _itemRepository.marketGroupMap[MarketGroupFilters.advancedUnits.marketGroupId]!,
+          ],
+          null,
+        );
         break;
       case ImplantSlotType.branch:
         // Normal Branches (Level 15 & 30)

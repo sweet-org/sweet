@@ -16,6 +16,7 @@ enum ModifierChangeType {
   TARGET_MODULE,
   IMPLANT,
   FILM,
+  SUB_IMPLANT,
 }
 
 final changeTypeValues = EnumValues({
@@ -31,4 +32,5 @@ final changeTypeValues = EnumValues({
   'targetModule': ModifierChangeType.TARGET_MODULE,
   'implant': ModifierChangeType.IMPLANT,
   'film': ModifierChangeType.FILM,
+  'subImplant': ModifierChangeType.SUB_IMPLANT,
 });
