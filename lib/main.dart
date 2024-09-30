@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -22,26 +23,64 @@ import 'package:sweet/util/platform_helper.dart';
 import 'repository/item_repository.dart';
 import 'themed_app.dart';
 
-import 'package:flutter/foundation.dart' show kDebugMode;
 
 import 'util/crash_reporting.dart';
-import 'util/http_client.dart';
+import 'util/http_client.dart' as http_client;
+late File? file;
+
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await initializeFirebase();
+  final shouldEnableLogging = await PlatformHelper.shouldEnableLogging();
+  if (enableFileLogging || shouldEnableLogging) {
+    file = await PlatformHelper.logFile();
+    print("Logging output goes to ${file!.path}");
+    file!.writeAsStringSync(
+        "[${DateTime.now()}] Startup\n", mode: FileMode.write);
 
-  runApp(
-    buildRepositories(
-      child: buildBlocProviders(
-        child: ThemedApp(),
+    overridePrint(() async {
+      WidgetsFlutterBinding.ensureInitialized();
+      await initializeFirebase();
+      final shouldEnableSSLFix = await PlatformHelper.shouldEnableSSLFix();
+      http_client.enableSSLFix = shouldEnableSSLFix;
+      runApp(
+        buildRepositories(
+          child: buildBlocProviders(
+            child: ThemedApp(),
+          ),
+        ),
+      );
+    })();
+  } else {
+    WidgetsFlutterBinding.ensureInitialized();
+    await initializeFirebase();
+    final shouldEnableSSLFix = await PlatformHelper.shouldEnableSSLFix();
+    http_client.enableSSLFix = shouldEnableSSLFix;
+    file = null;
+    runApp(
+      buildRepositories(
+        child: buildBlocProviders(
+          child: ThemedApp(),
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
 
+void Function() overridePrint(Future<void> Function() mainFn) => () {
+  var spec = ZoneSpecification(
+      print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
+        if (file != null) {
+          file!.writeAsStringSync(
+              "[${DateTime.now()}] $line\n", mode: FileMode.append);
+        }
+        parent.print(zone, line);
+      }
+  );
+  return Zone.current.fork(specification: spec).run(mainFn);
+};
+
 MultiRepositoryProvider buildRepositories({required Widget child}) {
-  final client = createHttpClient();
+  final client = http_client.createHttpClient();
 
   return MultiRepositoryProvider(
     providers: [

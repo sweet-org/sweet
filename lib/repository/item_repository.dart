@@ -20,6 +20,7 @@ import 'package:sweet/model/implant/implant_loadout_definition.dart';
 import 'package:sweet/model/implant/slot_type.dart';
 import 'package:sweet/model/nihilus_space_modifier.dart';
 import 'package:sweet/model/ship/ship_fitting_slot_module.dart';
+import 'package:sweet/util/http_client.dart';
 
 import '../extensions/item_meta_extension.dart';
 
@@ -110,7 +111,7 @@ class ItemRepository {
 
     if (checkEtag) {
       final dbUrl = Uri.parse(kDBUrl);
-      final response = await http.Client().send(http.Request('HEAD', dbUrl));
+      final response = await createHttpClient().send(http.Request('HEAD', dbUrl));
       final dbEtag = response.headers['etag'];
 
       if (response.statusCode >= 400) {
@@ -166,7 +167,7 @@ class ItemRepository {
     final dbTestUrl = Uri.parse(kDBUrl);
     print('Downloading DB from $dbTestUrl');
 
-    var response = await http.Client().send(http.Request('GET', dbTestUrl));
+    var response = await createHttpClient().send(http.Request('GET', dbTestUrl));
     var totalBytes = response.contentLength;
     var downloadedBytes = 0;
     var bytes = <int>[];

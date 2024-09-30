@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:path/path.dart';
@@ -38,5 +39,42 @@ class PlatformHelper {
   static Future<File> dbFile() async {
     final dir = await _dbDirectory();
     return File(join(dir.path, 'echoes.db'));
+  }
+
+  static Future<File> logFile() async {
+    final dir = await _dbDirectory();
+    return File(join(dir.path, 'log.txt'));
+  }
+
+  static Future<bool> shouldEnableLogging() async {
+    final dir = await _dbDirectory();
+    final file = File(join(dir.path, 'enableLog'));
+    if (await file.exists()) {
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool> shouldEnableSSLFix() async {
+    final dir = await _dbDirectory();
+    final file = File(join(dir.path, 'enableSSLFix'));
+    if (await file.exists()) {
+      print("SSL fix should be enabled, file in support dir found");
+      return true;
+    } else {
+      print("SSL fix: file not found in support dir");
+    }
+    try {
+      final data = await rootBundle.loadString('assets/enableSSLFix');
+      if (data.toLowerCase().startsWith("true")) {
+        print("SSL fix should be enabled because of assets/enableSSLFix");
+        return true;
+      }
+      print("SSL fix: assets/enableSSLFix found but not set to true");
+    } catch (e) {
+      print("SSL fix: assets/enableSSLFix not found: $e");
+    }
+    print("SSL fix should not be enabled");
+    return false;
   }
 }
