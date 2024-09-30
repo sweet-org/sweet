@@ -19,19 +19,19 @@ class FittingModuleTileDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final moduleAttributes = module.baseAttributes
         .where((attr) => (attr.nameLocalisationKey ?? 0) > 0)
-        .map(
-          (e) => EveEchoesAttribute.values.firstWhereOrNull(
-            (attr) => attr.attributeId == e.id,
-          ),
-        )
+        .map((attr) => attr.id)
         .where(
-          (attr) => attr != null && !kIgnoreAttributes.contains(attr),
-        )
-        .map((e) => e as EveEchoesAttribute);
+          (attrId) {
+            final attr = EveEchoesAttribute.values.firstWhereOrNull(
+                  (e) => e.attributeId == attrId,
+            );
+            return attr == null || !kIgnoreAttributes.contains(attr);
+          },
+        );
 
     final uiAttributes = module.uiAttributes.where(
-      (a) => !moduleAttributes.contains(a),
-    );
+      (a) => !moduleAttributes.contains(a.attributeId),
+    ).map((a) => a.attributeId);
 
     final attributes = [
       ...uiAttributes,
@@ -40,13 +40,13 @@ class FittingModuleTileDetails extends StatelessWidget {
 
     return Column(
       children: attributes.map((e) {
-        var value = fitting.getValueForItem(
-          attribute: e,
+        var value = fitting.getValueForItemWithAttributeId(
+          attributeId: e,
           item: module,
         );
         return value != 0
             ? ItemAttributeValueWidget(
-                attributeId: e.attributeId,
+                attributeId: e,
                 attributeValue: value,
                 fixedDecimals: 2,
                 showAttributeId: false,

@@ -961,7 +961,11 @@ class FittingSimulator extends ChangeNotifier {
       nanocore.extraAffixes[index] = affix;
     } else {
       if (affix == null) {
-        nanocore.passiveAffixes.removeAt(index);
+        if (nanocore.passiveAffixes.length == 1) {
+          nanocore.passiveAffixes[0] = null;
+        } else {
+          nanocore.passiveAffixes.removeAt(index);
+        }
       } else {
         nanocore.passiveAffixes[index] = affix;
         if (nanocore.passiveAffixes.last != null) {
