@@ -36,5 +36,11 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_macos_build_settings(target)
+    # I don't know why this is necessary, but it is. The build fails otherwise and issues
+    # warnings that the deployment target version is not matching something else.
+    # https://stackoverflow.com/a/73210503
+    target.build_configurations.each do |config|
+      config.build_settings['MACOSX_DEPLOYMENT_TARGET'] = '10.15'
+    end
   end
 end
