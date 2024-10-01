@@ -30,6 +30,7 @@ late File? file;
 
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   final shouldEnableLogging = await PlatformHelper.shouldEnableLogging();
   if (enableFileLogging || shouldEnableLogging) {
     file = await PlatformHelper.logFile();
@@ -38,7 +39,7 @@ Future<void> main() async {
         "[${DateTime.now()}] Startup\n", mode: FileMode.write);
 
     overridePrint(() async {
-      WidgetsFlutterBinding.ensureInitialized();
+      // Everything inside this is being logged to a file
       await initializeFirebase();
       final shouldEnableSSLFix = await PlatformHelper.shouldEnableSSLFix();
       http_client.enableSSLFix = shouldEnableSSLFix;
@@ -51,7 +52,6 @@ Future<void> main() async {
       );
     })();
   } else {
-    WidgetsFlutterBinding.ensureInitialized();
     await initializeFirebase();
     final shouldEnableSSLFix = await PlatformHelper.shouldEnableSSLFix();
     http_client.enableSSLFix = shouldEnableSSLFix;
