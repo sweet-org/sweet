@@ -50,3 +50,13 @@ class DeleteImplantFitting extends ImplantFittingBrowserEvent {
   List<Object> get props => [implantFittingId];
 }
 
+class ReorderImplantFitting extends ImplantFittingBrowserEvent {
+  final ImplantFittingLoadout element;
+  final int newIndex;
+
+  ReorderImplantFitting({required this.element, required this.newIndex});
+
+  @override
+  List<Object> get props => [element, newIndex];
+}
+

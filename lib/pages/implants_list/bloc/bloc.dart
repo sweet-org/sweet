@@ -47,5 +47,14 @@ class ImplantFittingBrowserBloc
       await fittingRepository.loadImplants();
       emit(ImplantFittingBrowserLoaded(fittingRepository.implants));
     }
+
+    if (event is ReorderImplantFitting) {
+      emit(ImplantFittingBrowserLoading());
+      await fittingRepository.moveImplant(
+          element: event.element,
+          newIndex: event.newIndex,
+      );
+      emit(ImplantFittingBrowserLoaded(fittingRepository.implants));
+    }
   }
 }

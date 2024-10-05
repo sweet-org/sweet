@@ -125,11 +125,10 @@ class _ImplantListState extends State<ImplantList> with ScanQrCode, RouteAware {
                       // https://api.flutter.dev/flutter/widgets/ReorderCallback.html
                       newIndex -= 1;
                     }
-                    // ToDo: Implement reordering
-                    // context.read<ShipFittingBrowserBloc>().add(
-                    //       ReorderShipFitting(
-                    //           element: fitting, newIndex: newIndex),
-                    //     );
+                    context.read<ImplantFittingBrowserBloc>().add(
+                          ReorderImplantFitting(
+                              element: fitting, newIndex: newIndex),
+                        );
                   },
                   itemBuilder: (context, index) {
                     var loadout = list[index];

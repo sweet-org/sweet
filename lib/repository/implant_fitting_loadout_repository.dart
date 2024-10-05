@@ -44,6 +44,17 @@ class ImplantFittingLoadoutRepository {
     _implants.removeWhere((loadout) => loadout.getId() == loadoutId);
   }
 
+  Future<bool> moveImplant({required ImplantFittingLoadout element, required int newIndex}) async {
+    var oldIndex = _implants.indexOf(element);
+    if (oldIndex == -1) {
+      return false;
+    }
+
+    _implants.removeAt(oldIndex);
+    _implants.insert(newIndex, element);
+    return saveImplants();
+  }
+
   ImplantFittingLoadout? getLoadout(String id) {
     //Check if the loadout is in the root list (= not inside any folder)
     ImplantFittingLoadout? target = _implants.firstWhereOrNull((c) => c.getId() == id);
