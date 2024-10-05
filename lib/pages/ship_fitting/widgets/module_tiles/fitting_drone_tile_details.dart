@@ -7,6 +7,7 @@ import 'package:sweet/model/ship/eve_echoes_attribute.dart';
 import 'package:sweet/model/ship/slot_type.dart';
 import 'package:sweet/service/fitting_simulator.dart';
 import 'package:sweet/widgets/item_attribute_value_widget.dart';
+import 'package:sweet/widgets/item_damage_pattern.dart';
 
 class FittingDroneTileDetails extends StatelessWidget {
   const FittingDroneTileDetails({
@@ -47,27 +48,34 @@ class FittingDroneTileDetails extends StatelessWidget {
     final weapon = drone.fitting.modules(slotType: SlotType.high).first;
 
     return Column(
-      children: droneAttributes.map((e) {
-        final droneValue = fitting.getValueForItem(
-          attribute: e,
-          item: drone,
-        );
-        final weaponValue = fitting.getValueForItem(
-          attribute: e,
+      children: [
+        ItemDamagePattern(
+          fitting: fitting,
           item: weapon,
-        );
+          drone: drone,
+        ),
+        ...droneAttributes.map((e) {
+          final droneValue = fitting.getValueForItem(
+            attribute: e,
+            item: drone,
+          );
+          final weaponValue = fitting.getValueForItem(
+            attribute: e,
+            item: weapon,
+          );
 
-        final value = max(weaponValue, droneValue);
+          final value = max(weaponValue, droneValue);
 
-        return value != 0
-            ? ItemAttributeValueWidget(
-                attributeId: e.attributeId,
-                attributeValue: value,
-                fixedDecimals: 2,
-                showAttributeId: false,
-              )
-            : Container();
-      }).toList(),
+          return value != 0
+              ? ItemAttributeValueWidget(
+                  attributeId: e.attributeId,
+                  attributeValue: value,
+                  fixedDecimals: 2,
+                  showAttributeId: false,
+                )
+              : Container();
+        })
+      ],
     );
   }
 }
