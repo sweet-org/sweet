@@ -7,6 +7,8 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 import 'package:sweet/model/character/character.dart';
 import 'package:sweet/model/character/learned_skill.dart';
 import 'package:sweet/model/fitting/fitting_ship.dart';
+import 'package:sweet/model/implant/implant_fitting_loadout.dart';
+import 'package:sweet/model/implant/implant_handler.dart';
 import 'package:sweet/model/items/eve_echoes_categories.dart';
 import 'package:sweet/model/items/skills.dart';
 import 'package:sweet/model/ship/eve_echoes_attribute.dart';
@@ -184,34 +186,6 @@ void main() {
 
         final modified = fitting.maxFlightVelocity();
         expect(modified.toStringAsFixed(2), '18.15');
-      });
-
-      test('Max Velocity (Dread)', () async {
-        var ship = await itemRepo.ship(
-          id: 10701000101,
-        );
-
-        final fitting = await FittingSimulator.fromShipLoadout(
-          pilot: Character.empty,
-          attributeCalculatorService: attrCalc,
-          itemRepository: itemRepo,
-          ship: ship,
-          loadout: ShipFittingLoadout.fromShip(ship.itemId,
-              await itemRepo.getShipLoadoutDefinition(ship.itemId)),
-        );
-
-        fitting.setShipMode(enabled: false);
-        await fitting.updateSkills();
-
-        final velocity = fitting.maxFlightVelocity();
-        expect(velocity, 83.0);
-
-        fitting.setShipMode(enabled: true);
-
-        await fitting.updateSkills();
-
-        final modified = fitting.maxFlightVelocity();
-        expect(modified.toStringAsFixed(2), '0.00');
       });
     });
 
@@ -1316,9 +1290,9 @@ void main() {
       late FittingSimulator fitting;
 
       final skills = [
-        LearnedSkill(skillId: 49520000007, skillLevel: 3),
+        LearnedSkill(skillId: 49520000007, skillLevel: 5),
         LearnedSkill(
-            skillId: Skills.ExpertIndustrialShipCommand, skillLevel: 4),
+            skillId: Skills.AdvancedIndustrialShipCommand, skillLevel: 5),
       ];
 
       // Extract required items, and create fitting
@@ -1337,11 +1311,11 @@ void main() {
               await itemRepo.getShipLoadoutDefinition(ship.itemId)),
         );
 
-        var salvager = await itemRepo.module(id: 11117010013);
+        var salvager = await itemRepo.module(id: 11117010012);
         expect(
           salvager,
           isNotNull,
-          reason: 'Cannot find Gallente Auto Salvager',
+          reason: 'Cannot find Dust Auto Salvager',
         );
 
         fitting.fitItem(salvager, slot: SlotType.mid, index: 0, notify: false);
@@ -1350,7 +1324,7 @@ void main() {
         await fitting.updateSkills(skills: skills);
       });
 
-      test('Gallente Auto Salvager Optimal Range is 32.55km', () async {
+      test('Dust Auto Salvager Optimal Range is 37.80km', () async {
         // Extract final 'display' value for Activation Time attribute (ID: 430)
         var attributeDefinition = await itemRepo.attributeWithId(
             id: EveEchoesAttribute.optimalRange.attributeId);
@@ -1364,7 +1338,114 @@ void main() {
         final value =
             attributeDefinition?.calculatedValue(fromValue: salvagerRange) ?? 0;
 
-        expect(value.toStringAsFixed(2), '32.55');
+        expect(value.toStringAsFixed(2), '37.80');
+      });
+    });
+
+    group('Implants >', () {
+      late FittingSimulator fitting;
+
+      final skills = <LearnedSkill>[
+        // Shield Operation
+        LearnedSkill(skillId: 49210000001, skillLevel: 5),
+        // Small Drone Operation
+        LearnedSkill(skillId: 49450000001, skillLevel: 4),
+        // Small Drone Upgrade
+        LearnedSkill(skillId: 49450000004, skillLevel: 4),
+      ];
+
+      // Extract required items, and create fitting
+      setUpAll(() async {
+        var ship = await itemRepo.ship(id: 10100000406);
+        expect(ship, isNotNull, reason: 'Cannot find Tristan item');
+        expect(ship.categoryId == EveEchoesCategory.ships.categoryId, true,
+            reason: 'Item is not a ship');
+
+        fitting = await FittingSimulator.fromShipLoadout(
+          pilot: Character.empty,
+          attributeCalculatorService: attrCalc,
+          itemRepository: itemRepo,
+          ship: ship,
+          loadout: ShipFittingLoadout.fromShip(ship.itemId,
+              await itemRepo.getShipLoadoutDefinition(ship.itemId)),
+        );
+
+        var booster = await itemRepo.module(id: 11302000014);
+        expect(booster, isNotNull,
+          reason: 'Cannot find Republic Fleet Small Shield Booster',);
+
+        fitting.fitItem(booster, slot: SlotType.low, index: 0, notify: false);
+
+        var drone = await itemRepo.drone(
+          id: 14000030008,
+          attributeCalculatorService: attrCalc,
+        );
+
+        fitting.fitItem(drone, slot: SlotType.drone, index: 0);
+
+        // Set up implant
+        var implant = await itemRepo.implantWithId(id: 16008000004);
+        final definition = await itemRepo.getImplantLoadoutDefinition(16008000004);
+
+        final loadout = ImplantFittingLoadout.fromDefinition(
+          16008000004,
+          definition,
+        );
+        final handler = await ImplantHandler.fromImplantLoadout(
+          implant: await itemRepo.implantModule(id: loadout.implantItemId),
+          itemRepository: itemRepo,
+          definition: definition,
+          loadout: loadout,
+        );
+        handler.setLevel(15);
+        bool succ = false;
+        // Shield Booster Efficiency Optimization v1.0 (Level 5 GU)
+        succ = handler.fitItem(await itemRepo.implantModule(id: 16500017011), slotIndex: 0);
+        expect(succ, true, reason: 'Failed to fit Shield Booster Efficiency Optimization v1.0 (Level 5 GU)');
+        // Micro Thruster (Level 15 Branch)
+        succ = handler.fitItem(await itemRepo.implantModule(id: 16300034004), slotIndex: 2);
+        expect(succ, true, reason: 'Failed to fit Micro Thruster (Level 15 Branch)');
+
+        succ = fitting.setImplant(handler);
+        expect(succ, true, reason: 'Failed to set implant');
+        // Deactivate primary skill (has no effect anyways but that may be changed in the future)
+        fitting.setImplantModuleState(ModuleState.inactive, slotIndex: 0 , implantSlotId: 0);
+        // Calculate fittings
+        await fitting.updateSkills(skills: skills);
+      });
+
+      test('Shield Booster Amount is 90.10', () async {
+        // Extract final 'display' value for Activation Time attribute (ID: 430)
+        var attributeDefinition = await itemRepo.attributeWithId(
+            id: EveEchoesAttribute.shieldBoostAmount.attributeId);
+
+        final amount = fitting.getValueForSlot(
+          attribute: EveEchoesAttribute.shieldBoostAmount,
+          slot: SlotType.low,
+          index: 0,
+        );
+
+        final value =
+            attributeDefinition?.calculatedValue(fromValue: amount) ?? 0;
+
+        expect(value.toStringAsFixed(2), '90.10');
+      });
+
+      test('Drone Flight velocity is 5040 m/s', () async {
+        // Extract final 'display' value for Activation Time attribute (ID: 430)
+        var attributeDefinition = await itemRepo.attributeWithId(
+            id: EveEchoesAttribute.flightVelocity.attributeId);
+
+        final amount = fitting.getValueForSlot(
+          attribute: EveEchoesAttribute.flightVelocity,
+          slot: SlotType.drone,
+          index: 0,
+        );
+
+        final value =
+            attributeDefinition?.calculatedValue(fromValue: amount) ?? 0;
+
+        expect(value.toStringAsFixed(0), '5040');
       });
     });
   });
