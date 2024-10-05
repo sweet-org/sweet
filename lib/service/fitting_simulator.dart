@@ -51,6 +51,7 @@ class FittingSimulator extends ChangeNotifier {
   }
 
   final FittingShip ship;
+  final bool isDrone;
   final CapacitorSimulator capacitorSimulator;
   final ItemRepository _itemRepository;
   final AttributeCalculatorService _attributeCalculatorService;
@@ -193,6 +194,7 @@ class FittingSimulator extends ChangeNotifier {
     required AttributeCalculatorService attributeCalculatorService,
     required this.ship,
     required this.loadout,
+    this.isDrone = false,
     required Fitting fitting,
     Character? pilot,
     List<ImplantHandler?>? implants,
@@ -246,6 +248,7 @@ class FittingSimulator extends ChangeNotifier {
       attributeCalculatorService: attributeCalculatorService,
       itemRepository: itemRepository,
       loadout: loadout,
+      isDrone: true,
       fitting: await itemRepository.fittingDataFromLoadout(
         loadout: loadout,
         attributeCalculatorService: attributeCalculatorService,
@@ -1167,6 +1170,7 @@ class FittingSimulator extends ChangeNotifier {
       _attributeCalculatorService.getValueForItem(
         attribute: attribute,
         item: item,
+        isDrone: isDrone,
       );
 
   double getValueForItemWithAttributeId({
@@ -1176,6 +1180,7 @@ class FittingSimulator extends ChangeNotifier {
       _attributeCalculatorService.getValueForItemWithAttributeId(
         attributeId: attributeId,
         item: item,
+        isDrone: isDrone,
       );
 
   Future<void> updateAttributes({

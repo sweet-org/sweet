@@ -22,16 +22,6 @@ import 'package:sweet/model/ship/module_state.dart';
 import 'package:sweet/repository/item_repository.dart';
 import 'package:sweet/util/constants.dart';
 
-// ToDo: This is not optimal, but I don't know a better way to filter out the duplicated attributes
-// This is a list of blacklisted attributes which exists twice in the game
-// The duplicate version has often /LightShipLaun/ as (one) of its changeRange
-// codes, while the normal version only has /Laun/.
-// See https://github.com/sweet-org/sweet/issues/11
-final Set<int> blacklistedAttrIds = {
-  40010, 40020, 40110, 40120, 40130, 40140, 40150, 40160, 40210, 40320, 40330,
-  40340, 40350, 40380
-};
-
 class AttributeCalculatorService {
   final ItemRepository itemRepository;
 
@@ -139,7 +129,8 @@ class AttributeCalculatorService {
       final modifiers = [...moduleSlot.mainCalCode];
       final activeModifiers = moduleSlot.activeCalCode;
 
-      if (moduleSlot.state != ModuleState.inactive || moduleSlot is ImplantFitting) {
+      if (moduleSlot.state != ModuleState.inactive ||
+          moduleSlot is ImplantFitting) {
         // Implants handle their state on their own
         for (final activeModifier in activeModifiers) {
           if (!moduleSlot.mainCalCode.contains(activeModifier)) {
@@ -261,11 +252,13 @@ class AttributeCalculatorService {
   double getValueForItem({
     required EveEchoesAttribute attribute,
     required FittingItem item,
+    bool isDrone = false,
   }) {
     return attribute.attributeId > 0
         ? _getValueForItemWithAttributeId(
             attributeId: attribute.attributeId,
             item: item,
+            isDrone: isDrone,
             depth: 0,
           )
         : calculateValueForAttribute(attribute: attribute, item: item);
@@ -274,18 +267,22 @@ class AttributeCalculatorService {
   double getValueForItemWithAttributeId({
     required int attributeId,
     required FittingItem item,
+    bool isDrone = false,
   }) =>
       _getValueForItemWithAttributeId(
         attributeId: attributeId,
         item: item,
+        isDrone: isDrone,
         depth: 0,
       );
 
   int _logDepth = 0;
+
   double _getValueForItemWithAttributeId({
     required int attributeId,
     required FittingItem item,
     required int depth,
+    isDrone = false,
     double? baseValue,
   }) {
     _logDepth = depth;
@@ -298,14 +295,8 @@ class AttributeCalculatorService {
       return 0.0;
     }
 
-    if (blacklistedAttrIds.contains(attributeId)) {
-      _log(
-        message: "Skipping blacklisted attribute $attributeId with value 0.0"
-      );
-      return 0.0;
-    }
     final itemAttribute = item.baseAttributes
-        .firstWhereOrNull((attr) => attr.id == attributeId) ??
+            .firstWhereOrNull((attr) => attr.id == attributeId) ??
         _attributeDefinitions[attributeId];
 
     if (itemAttribute == null) {
@@ -333,7 +324,11 @@ class AttributeCalculatorService {
               (item.groupId == 11117 && !isDroneModifier);
         }
 
-        return true;
+        /* ToDo: This might should be isDrone == isDroneModifier, but it was
+            just a return true before and did not cause any problems for normal
+            items. So a check for drones might be sufficient.
+        */
+        return !isDrone || isDroneModifier;
       },
     );
 
@@ -343,13 +338,10 @@ class AttributeCalculatorService {
     ];
 
     var value = baseValue ?? itemAttribute.baseValue;
-
-    // ToDo: Offload levelFunctions into database, also the implant level can also effect other items
-    if (item is ImplantFitting && itemRepository.levelAttributeMap.containsKey(itemAttribute.id)) {
+    if (item is ImplantFitting &&
+        itemRepository.levelAttributeMap.containsKey(itemAttribute.id)) {
       final expr = itemRepository.levelAttributeMap[itemAttribute.id]!;
-      var context = {
-        "lv": item.trainedLevel.toDouble()
-      };
+      var context = {"lv": item.trainedLevel.toDouble()};
       final evaluator = const ExpressionEvaluator();
       value = evaluator.eval(expr, context).toDouble();
     }
@@ -379,6 +371,14 @@ class AttributeCalculatorService {
 
     // Now we need to apply them all
     var modifiersToApply = modifiersByOperation.entries.toList();
+    if (logModifiers) {
+      var modNames = "";
+      for (var mod in modifiers) {
+        modNames +=
+            "<${mod.changeRange}, ${mod.changeScope.name}, ${mod.item.itemId}, ${mod.attributeId}>, ";
+      }
+      _log(message: 'Found ${modifiers.length} modifiers to apply: $modNames');
+    }
     _log(message: 'Found ${modifiersToApply.length} modifiers to apply');
     modifiersToApply.sort((a, b) {
       var aIdx = DogmaOperators.values.indexOf(a.key);
