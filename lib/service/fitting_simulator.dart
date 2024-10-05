@@ -1190,7 +1190,7 @@ class FittingSimulator extends ChangeNotifier {
         .setup(
           skills: skills,
           ship: ship,
-          allFittedModules: _fitting.allFittedModules,
+          allFittedModules: _allFittedModules,
         )
         .then((value) => notifyListeners());
   }
