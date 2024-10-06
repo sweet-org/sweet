@@ -296,7 +296,7 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         FILE: './${{ steps.app_build.outputs.name }}-windows.zip'
-        S3_KEY: '/releases/${{ steps.app_build.outputs.name }}-windows.zip'
+        S3_KEY: 'releases/${{ steps.app_build.outputs.name }}-windows.zip'
     - name: Upload MacOS releases to S3
       uses: a-sync/s3-uploader@2.0.1
       env:
@@ -305,7 +305,7 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         FILE: './${{ steps.app_build.outputs.name }}-macos.zip'
-        S3_KEY: '/releases/${{ steps.app_build.outputs.name }}-macos.zip'
+        S3_KEY: 'releases/${{ steps.app_build.outputs.name }}-macos.zip'
     - name: Upload Linux releases to S3
       uses: a-sync/s3-uploader@2.0.1
       env:
@@ -314,5 +314,5 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         FILE: './${{ steps.app_build.outputs.name }}-linux.zip'
-        S3_KEY: '/releases/${{ steps.app_build.outputs.name }}-linux.zip'
+        S3_KEY: 'releases/${{ steps.app_build.outputs.name }}-linux.zip'
 
