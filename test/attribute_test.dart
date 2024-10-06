@@ -51,7 +51,10 @@ void main() {
       print('Loading files');
       PathProviderPlatform.instance = MockPathProviderPlatform();
       SharedPreferences.setMockInitialValues({}); //set values here
-      return itemRepo.openDatabase();
+      await itemRepo.openDatabase();
+      print('Loading initial data');
+      await itemRepo.processLevelAttributes();
+      await itemRepo.processGoldNanoAttrClasses();
     });
 
     group('Individual Items', () {
@@ -1446,6 +1449,102 @@ void main() {
             attributeDefinition?.calculatedValue(fromValue: amount) ?? 0;
 
         expect(value.toStringAsFixed(0), '5040');
+      });
+    });
+
+    group('AI Nanocore >', () {
+      late FittingSimulator fitting;
+
+      final skills = <LearnedSkill>[
+        // Large Railgun Operation 555
+        LearnedSkill(skillId: 49420000013, skillLevel: 5),
+        LearnedSkill(skillId: 49420000014, skillLevel: 5),
+        LearnedSkill(skillId: 49420000015, skillLevel: 5),
+        // Large Railgun Upgrade 555
+        LearnedSkill(skillId: 49420000016, skillLevel: 5),
+        LearnedSkill(skillId: 49420000017, skillLevel: 5),
+        LearnedSkill(skillId: 49420000018, skillLevel: 5),
+        // Gunnery 400
+        LearnedSkill(skillId: 49470000207, skillLevel: 4),
+      ];
+
+      // Extract required items, and create fitting
+      setUpAll(() async {
+        var ship = await itemRepo.ship(id: 10500000408);
+        expect(ship, isNotNull,
+            reason: 'Cannot find Megathron Navy Issue item');
+        expect(ship.categoryId == EveEchoesCategory.ships.categoryId, true,
+            reason: 'Item is not a ship');
+
+        fitting = await FittingSimulator.fromShipLoadout(
+          pilot: Character.empty,
+          attributeCalculatorService: attrCalc,
+          itemRepository: itemRepo,
+          ship: ship,
+          loadout: ShipFittingLoadout.fromShip(ship.itemId,
+              await itemRepo.getShipLoadoutDefinition(ship.itemId)),
+        );
+        // Highslots
+        var rail = await itemRepo.module(id: 11000220024);
+        expect(
+          rail,
+          isNotNull,
+          reason: 'Cannot find Core C-Type Large Rifled Railgun',
+        );
+        for (int i = 0; i < 7; i++) {
+          fitting.fitItem(rail, slot: SlotType.high, index: i, notify: false);
+        }
+        // Lowslots: Corelum C-Type Magnetic Field Stabilizer
+        var magStab = await itemRepo.module(id: 11510000024);
+        for (int i = 0; i < 4; i++) {
+          fitting.fitItem(magStab,
+              slot: SlotType.low,
+              index: i,
+              state: ModuleState.inactive,
+              notify: false);
+        }
+        //Rigs
+        var burstAerator = await itemRepo.rig(id: 11700030008);
+
+        fitting.fitItem(burstAerator,
+            slot: SlotType.combatRig, index: 0, notify: false);
+        fitting.fitItem(burstAerator,
+            slot: SlotType.combatRig, index: 1, notify: false);
+        fitting.fitItem(burstAerator,
+            slot: SlotType.combatRig, index: 2, notify: false);
+
+        // Create AI Nanocore, Thermomagnetic Storm II
+        var aiCore = await itemRepo.nanocore(id: 81300400226);
+        // +22.5% Large Railgun and Thermal Damage
+        aiCore.mainAttribute.selectAttributeById(82000063005, 0);
+        aiCore.secondMainAttribute!.selectAttributeById(82000063105, 0);
+        // +8.66% Turrets Damage
+        aiCore.trainableAttributes[0].selectAttributeById(82000061805, 9);
+        // +10.08% Turrets Thermal Damage
+        aiCore.trainableAttributes[2].selectAttributeById(82000062005, 8);
+        fitting.fitItem(aiCore,
+            slot: SlotType.nanocore, index: 0, notify: false);
+        // Nanocore library
+        // Large Railguns Damage Lvl. 4
+        var gunDamageAffix =
+            await itemRepo.nanocoreAffixWithId(itemId: 82100000604);
+        // Large Railguns Activation Time Lvl. 4
+        var gunTimeAffix =
+            await itemRepo.nanocoreAffixWithId(itemId: 82100004204);
+        fitting.fitNanocoreAffix(gunDamageAffix,
+            index: 0, active: true, notify: false);
+        fitting.fitNanocoreAffix(gunTimeAffix,
+            index: 1, active: true, notify: false);
+        // Calculate fittings
+        await fitting.updateSkills(skills: skills);
+      });
+
+      test('Calc DPS is 4767.90', () async {
+        var dps = fitting.calculateTotalDps();
+        expect(
+          dps.toStringAsFixed(2),
+          '4767.90',
+        );
       });
     });
   });
