@@ -1087,6 +1087,14 @@ class FittingSimulator extends ChangeNotifier {
           );
           itemName += '\n\t$modifier';
         }
+        if (module.secondMainAttribute?.selectedModifier != null) {
+          final modifier =
+              await module.secondMainAttribute!.selectedModifier!.modifierName(
+            localisation: localisationRepository,
+            itemRepository: itemRepository,
+          );
+          itemName += '\n\t$modifier';
+        }
 
         final modifiers = module.trainableAttributes
             .where((e) => e.selectedModifier != null)
@@ -1141,13 +1149,13 @@ class FittingSimulator extends ChangeNotifier {
 
       return '${itemKvp.value.length}x $itemName';
     }));
-    if (activeImplant != null) {
+    for (var implant in implants) {
+      if (implant == null) continue;
       var implantName = localisationRepository.getLocalisedNameForItem(
-        activeImplant!.item,
+        implant.item,
       );
-      implantName += ' Level ${activeImplant!.trainedLevel}';
-      for (var mod
-          in activeImplant!.allModules.sorted((a, b) => a.level - b.level)) {
+      implantName += ' Level ${implant.trainedLevel}';
+      for (var mod in implant.allModules.sorted((a, b) => a.level - b.level)) {
         if (!mod.isValid) continue;
         var modName = localisationRepository.getLocalisedNameForItem(mod.item);
         var slotName = '${mod.slot.name} ${mod.level}'.capitalize();
