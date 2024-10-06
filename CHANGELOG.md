@@ -4,6 +4,70 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.3.6]
+#### Added
+- Weapons will now display their raw damage
+
+#### Fixed
+- Fixed reordering of implants in the list page
+- Fixed fitting to text export
+- Fixed lightweight ship calculations
+- Fixed issue where implants would not be applied after opening a fitting
+- Fixed and added tests for implants/ai nanocores
+
+### [0.3.5 (Beta)]
+#### Added
+- Added support for passive implants
+- Added advanced units to implants
+- Added option to fix SSL certificate issue, see discord
+- Added option to enable file logging
+
+#### Changed
+- The app can now be launched without downloading the DB
+- Changed the way attributes are displayed, now all attributes for all items should be displayed
+
+#### Fixed
+- Fixed UI crash for some implants
+- Fixed localisation issue for some implants inside the list
+
+### [0.3.4 (Beta)]
+
+#### Added
+- Added Implants
+- Added Nanocore Library. However, the passive effects will probably be removed in the future and moved to a separate page.
+
+#### Changed
+- Updated to Android 34 as compile version
+- Updated to Dart 3.5 and latest flutter. Additionally, most packages got updated to the latest version.
+- Switched to declarative gradle plugins blocks
+
+#### Fixed
+- Fixed hangar rigs and added attributes to the UI Build Changes
+- Fixed Golden Nanocores attributes
+
+### [v0.3.3]
+
+#### Added
+- Added attributes for super weapons to the UI
+- Added "clone fitted item"-button
+
+#### Changed
+- Updated market group ids to fix drones/fighter issues
+
+#### Fixed
+- Fixed DPS calculation issue for Doomsday Weapons
+- Fixed capital integrated rigs (fitting was not updating correctly)
+
+### [0.3.2]
+
+#### Added
+- Added player outposts and corresponding modules
+- Added default skill level selector when creating new characters (all skills will be set to this level, for example "5/5/4")
+- Added folders to fitting list
+
+#### Fixed
+- Fixed errors where higs anchor rigs could be used for integrated rigs
+
 ### [0.2.16 (Unreleased)]
 
 #### Added
