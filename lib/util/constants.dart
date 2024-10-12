@@ -51,6 +51,7 @@ const kManUpUrl = 'https://sweet.silkypants.dev/manup.json';
 const kDBUrl = 'https://sweet.silkypants.dev/game_data/echoes_db.tbz';
 
 const kNihilusCapAdjustmentModifierTypeCode = '/Nihilus/ChargeDe/';
+const kImplantShieldArmorModifierTypeCode = '/implant/global/shieldarmor';
 
 // Override to enable logging no matter if the enableLog file exists
 const bool enableFileLogging = false;

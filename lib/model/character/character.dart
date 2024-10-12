@@ -21,17 +21,21 @@ class Character extends ChangeNotifier {
   String get id => _id;
   late String _name;
   String get name => _name;
+  int _totalImplantLevels = 0;
+  int get totalImplantLevels => _totalImplantLevels;
   String? csvLink;
   late List<LearnedSkill> learntSkills;
 
   Character({
     String? id,
     required String name,
+    int? totalImplantLevels,
     List<LearnedSkill>? learntSkills,
     this.csvLink,
   }) {
     _id = id ?? Uuid().v1();
     _name = name;
+    _totalImplantLevels = totalImplantLevels ?? 0;
     this.learntSkills = learntSkills ?? [];
   }
 
@@ -40,9 +44,15 @@ class Character extends ChangeNotifier {
       name: 'No Skills',
       learntSkills: []);
 
-  void setName(String newName) {
+  void setName(String newName, {bool notify = true}) {
     _name = newName;
+    if (notify) notifyListeners();
+  }
+
+  void setTotalImplantLevels(int totalImplantLevels, {bool notify = true}) {
+    _totalImplantLevels = totalImplantLevels;
     notifyListeners();
+    if (notify) notifyListeners();
   }
 
   factory Character.fromJson(Map<String, dynamic> json) =>

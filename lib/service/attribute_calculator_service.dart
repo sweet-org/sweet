@@ -36,6 +36,9 @@ class AttributeCalculatorService {
   FittingShip _ship = FittingShip.empty;
   Iterable<FittingModule> _allFittedModules = [];
   List<NihilusSpaceModifier> _nSpaceModifiers = [];
+  final List<ItemModifier> _implantShieldArmorModifiers = [];
+  List<ItemModifier> get implantShieldArmorModifiers =>
+      _implantShieldArmorModifiers;
 
   bool logCalculations = false;
   bool logModifiers = false;
@@ -74,6 +77,30 @@ class AttributeCalculatorService {
     _nSpaceModifiers = modifiers.toList();
 
     return _updateModifiers();
+  }
+
+  Future<void> updateImplantLevels({required int totalLevels}) async {
+    _implantShieldArmorModifiers.clear();
+    for (var implantMod in itemRepository.implantShieldArmorMods) {
+      if (isLevelFunction(implantMod.attributeId)) {
+        implantMod = implantMod.copyWith(
+                attributeValue: getValueForLevelFunction(
+                    implantMod.attributeId, totalLevels));
+      }
+      _implantShieldArmorModifiers.add(implantMod);
+    }
+    return _updateModifiers();
+  }
+
+  double getValueForLevelFunction(int attributeId, int lvl) {
+    final expr = itemRepository.levelAttributeMap[attributeId]!;
+    var context = {"lv": lvl.toDouble()};
+    final evaluator = const ExpressionEvaluator();
+    return evaluator.eval(expr, context).toDouble();
+  }
+
+  bool isLevelFunction(int attributeId) {
+    return itemRepository.levelAttributeMap.containsKey(attributeId);
   }
 
   Future<void> _updateModifiers() async {
@@ -158,6 +185,13 @@ class AttributeCalculatorService {
     for (var nSpaceMod in _nSpaceModifiers) {
       processModifier(
         itemModifier: nSpaceMod,
+        sourceItem: FittingItem.empty,
+      );
+    }
+
+    for (var implantMod in _implantShieldArmorModifiers) {
+      processModifier(
+        itemModifier: implantMod,
         sourceItem: FittingItem.empty,
       );
     }
@@ -338,12 +372,8 @@ class AttributeCalculatorService {
     ];
 
     var value = baseValue ?? itemAttribute.baseValue;
-    if (item is ImplantFitting &&
-        itemRepository.levelAttributeMap.containsKey(itemAttribute.id)) {
-      final expr = itemRepository.levelAttributeMap[itemAttribute.id]!;
-      var context = {"lv": item.trainedLevel.toDouble()};
-      final evaluator = const ExpressionEvaluator();
-      value = evaluator.eval(expr, context).toDouble();
+    if (item is ImplantFitting && isLevelFunction(itemAttribute.id)) {
+      value = getValueForLevelFunction(itemAttribute.id, item.trainedLevel);
     }
 
     // NOTE: Scripts seem to run through a map of

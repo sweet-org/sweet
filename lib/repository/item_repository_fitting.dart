@@ -602,4 +602,23 @@ extension ItemRepositoryFitting on ItemRepository {
         )
         .toList();
   }
+
+  Future<List<ItemModifier>> implantShieldArmorModifiers() async {
+    final modifiers = await db.itemModifierDao.select(
+        whereClause: 'WHERE typeCode = "$kImplantShieldArmorModifierTypeCode"');
+
+    return modifiers
+        .map(
+          (e) => ItemModifier(
+              code: e.code,
+              typeCode: e.typeCode,
+              changeType: e.changeType,
+              attributeOnly: e.attributeOnly,
+              changeRange: e.changeRange,
+              changeRangeModuleNameId: e.changeRangeModuleNameId,
+              attributeId: e.attributeId,
+              attributeValue: e.attributeValue),
+        )
+        .toList();
+  }
 }

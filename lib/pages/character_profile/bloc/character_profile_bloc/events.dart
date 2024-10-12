@@ -12,11 +12,12 @@ class LoadCharacter extends CharacterProfileEvent {
 class UpdateCharacterDetails extends CharacterProfileEvent {
   final String characterName;
   final String characterId;
+  final int totalImplantLevels;
 
-  UpdateCharacterDetails(this.characterName, this.characterId);
+  UpdateCharacterDetails(this.characterName, this.characterId, this.totalImplantLevels);
 
   @override
-  List<Object> get props => [characterName, characterId];
+  List<Object> get props => [characterName, characterId, totalImplantLevels];
 }
 
 class UpdateCharacterSkill extends CharacterProfileEvent {

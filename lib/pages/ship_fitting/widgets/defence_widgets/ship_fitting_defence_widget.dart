@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sweet/pages/ship_fitting/widgets/defence_widgets/shield_selector.dart';
 import 'package:sweet/pages/ship_fitting/widgets/defence_widgets/recharge_rates.dart';
 
 import '../../../../service/fitting_simulator.dart';
@@ -7,6 +8,7 @@ import '../../bloc/ship_fitting_bloc/ship_fitting.dart';
 
 import '../offense_widgets/damage_pattern_widget.dart';
 import 'defence_resistances.dart';
+import 'implant_defense_bonus.dart';
 
 class ShipFittingDefenceWidget extends StatefulWidget {
   final bool condensed;
@@ -36,6 +38,14 @@ class _ShipFittingDefenceWidgetState extends State<ShipFittingDefenceWidget> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: ShieldSelectSlider(),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: ImplantDefenseBonusWidget(),
+        ),
         DefenceResistances(
           rowHeight: widget.rowHeight,
           damagePattern: damagePattern,

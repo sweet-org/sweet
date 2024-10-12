@@ -262,6 +262,8 @@ enum EveEchoesAttribute {
   implantCBDamageModX,
   implantCBDamageDroneMod,
   implantCommonMaxGroupFitted,
+  implantGlobalShield,
+  implantGlobalArmor,
 
   // SORT!!
   metalevel,
@@ -855,6 +857,10 @@ extension ShipAttributeExtenstion on EveEchoesAttribute {
         return 8682;
       case EveEchoesAttribute.implantCommonMaxGroupFitted:
         return 8711;
+      case EveEchoesAttribute.implantGlobalShield:
+        return 8705;
+      case EveEchoesAttribute.implantGlobalArmor:
+        return 8706;
 
       case EveEchoesAttribute.armorMod:
         return 2004;

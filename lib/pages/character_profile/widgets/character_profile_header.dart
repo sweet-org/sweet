@@ -21,6 +21,7 @@ class _CharacterProfileHeaderState extends State<CharacterProfileHeader>
 
   String _name = '';
   String _id = '';
+  int _totalImplantLevels = 0;
 
   final _formKey = GlobalKey<FormState>();
   void toggleEdit() {
@@ -34,7 +35,7 @@ class _CharacterProfileHeaderState extends State<CharacterProfileHeader>
 
         context
             .read<CharacterProfileBloc>()
-            .add(UpdateCharacterDetails(_name, _id));
+            .add(UpdateCharacterDetails(_name, _id, _totalImplantLevels));
       }
 
       editMode = !editMode;
@@ -242,6 +243,35 @@ class _CharacterProfileHeaderState extends State<CharacterProfileHeader>
               });
             },
           ),
+          TextFormField(
+            initialValue: "0",
+            cursorColor: Colors.black,
+            style: TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+                labelText: 'Enter total implant levels',
+                hintText: 'The sum of all implant levels'),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Please enter a number';
+              }
+              if (int.tryParse(value.trim()) == null) {
+                return 'Please enter a valid number';
+              }
+              final val = int.parse(value.trim());
+              if (val <= 0) {
+                return 'Please enter a positive number';
+              }
+              return null;
+            },
+            onSaved: (value) {
+              setState(() {
+                if (value != null) {
+                  _totalImplantLevels = int.tryParse(value.trim())
+                      ?? _totalImplantLevels;
+                }
+              });
+            },
+          ),
         ],
       ),
     );
@@ -275,6 +305,11 @@ class CharacterProfileHeaderDetails extends StatelessWidget {
                 color: Colors.white.withAlpha(96),
               ),
         ),
+        Text("${character.totalImplantLevels} Implant Levels",
+            style: TextStyle(
+              color: Colors.white.withAlpha(96),
+              fontSize: 14,
+            )),
         Text(
           character.id,
           style: TextStyle(

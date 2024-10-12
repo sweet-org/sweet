@@ -55,6 +55,13 @@ class FittingSimulator extends ChangeNotifier {
   final CapacitorSimulator capacitorSimulator;
   final ItemRepository _itemRepository;
   final AttributeCalculatorService _attributeCalculatorService;
+  double _shieldPercentage = 0.25;
+
+  double get currentShieldPercentage => _shieldPercentage;
+  int? _totalImplantLevels;
+
+  int get totalImplantLevels =>
+      _totalImplantLevels ?? _pilot?.totalImplantLevels ?? 0;
 
   final Fitting _fitting;
   List<ImplantHandler?> _implants;
@@ -81,6 +88,7 @@ class FittingSimulator extends ChangeNotifier {
   }
 
   void _pilotListener() {
+    updateImplantLevels(notify: false);
     updateSkills(skills: pilot.learntSkills).then(
       (_) => notifyListeners(),
     );
@@ -412,6 +420,22 @@ class FittingSimulator extends ChangeNotifier {
         item: ship,
       );
 
+  double getGlobalImplantShieldBonus() {
+    final mod = _attributeCalculatorService.implantShieldArmorModifiers
+        .where((m) =>
+            m.attributeId == EveEchoesAttribute.implantGlobalShield.attributeId)
+        .firstOrNull;
+    return mod?.attributeValue ?? 0;
+  }
+
+  double getGlobalImplantArmorBonus() {
+    final mod = _attributeCalculatorService.implantShieldArmorModifiers
+        .where((m) =>
+    m.attributeId == EveEchoesAttribute.implantGlobalArmor.attributeId)
+        .firstOrNull;
+    return mod?.attributeValue ?? 0;
+  }
+
   double calculatePassiveShieldRate() {
     final shieldHp = rawHPForAttribute(
       hpAttribute: EveEchoesAttribute.shieldCapacity,
@@ -420,7 +444,8 @@ class FittingSimulator extends ChangeNotifier {
     final shieldRechargeRate = rawHPForAttribute(
       hpAttribute: EveEchoesAttribute.shieldRechargeRate,
     );
-    return (shieldHp / (shieldRechargeRate / kSec)) * 2.5;
+    return (10 * shieldHp / (shieldRechargeRate / kSec)) *
+        (sqrt(_shieldPercentage) - _shieldPercentage);
   }
 
   double calculateEhpPassiveShieldRate({
@@ -434,7 +459,8 @@ class FittingSimulator extends ChangeNotifier {
     final shieldRechargeRate = rawHPForAttribute(
       hpAttribute: EveEchoesAttribute.shieldRechargeRate,
     );
-    return (shieldHp / (shieldRechargeRate / kSec)) * 2.5;
+    return (10 * shieldHp / (shieldRechargeRate / kSec)) *
+        (sqrt(_shieldPercentage) - _shieldPercentage);
   }
 
   double calculateRawShieldBoosterRate() => _fitting.allFittedModules
@@ -1207,6 +1233,23 @@ class FittingSimulator extends ChangeNotifier {
     _attributeCalculatorService
         .updateNihilusModifiers(modifiers: modifiers)
         .then((value) => notifyListeners());
+  }
+
+  void updateImplantLevels({bool notify = true}) {
+    if (notify) {
+      _attributeCalculatorService
+          .updateImplantLevels(totalLevels: totalImplantLevels)
+          .then((value) => notifyListeners());
+    } else {
+      _attributeCalculatorService.updateImplantLevels(
+        totalLevels: totalImplantLevels,
+      );
+    }
+  }
+
+  void updateShieldPercentage(double shieldPercentage) {
+    _shieldPercentage = shieldPercentage;
+    notifyListeners();
   }
 
   Future<CapacitorSimulationResults> capacitorSimulation() =>

@@ -216,6 +216,8 @@ class ItemRepository {
     };
 
     unawaited(nSpaceModifiers().then((value) => nSpaceMods = value));
+    unawaited(implantShieldArmorModifiers().then(
+            (value) => implantShieldArmorMods = value));
 
     final prefs = await SharedPreferences.getInstance();
     final dbVersion = await _echoesDatabase.getVersion();
@@ -226,6 +228,7 @@ class ItemRepository {
   }
 
   var nSpaceMods = <NihilusSpaceModifier>[];
+  var implantShieldArmorMods = <ItemModifier>[];
 
   bool setCurrentLanguage(String langCode) {
     _currentLanguageCode = langCode;

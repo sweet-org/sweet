@@ -9,6 +9,7 @@ part of 'character.dart';
 Character _$CharacterFromJson(Map<String, dynamic> json) => Character(
       id: json['id'] as String?,
       name: json['name'] as String,
+      totalImplantLevels: (json['totalImplantLevels'] as num?)?.toInt(),
       learntSkills: (json['learntSkills'] as List<dynamic>?)
           ?.map((e) => LearnedSkill.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -18,6 +19,7 @@ Character _$CharacterFromJson(Map<String, dynamic> json) => Character(
 Map<String, dynamic> _$CharacterToJson(Character instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+      'totalImplantLevels': instance.totalImplantLevels,
       'csvLink': instance.csvLink,
       'learntSkills': instance.learntSkills,
     };

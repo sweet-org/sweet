@@ -91,7 +91,8 @@ class CharacterProfileBloc
 
     if (event is UpdateCharacterDetails) {
       var character = characterRepository.getCharacter(characterId)!;
-      character.setName(event.characterName);
+      character.setName(event.characterName, notify: false);
+      character.setTotalImplantLevels(event.totalImplantLevels);
 
       await characterRepository.saveCharacters();
       emit(CharacterProfileUpdated(
