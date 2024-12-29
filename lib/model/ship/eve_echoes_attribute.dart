@@ -89,6 +89,10 @@ final hangarRigAttributes = {
 
 final kIgnoreAttributeIds = kIgnoreAttributes.map((e) => e.attributeId);
 
+final kAttributesById = {
+  for (var attr in EveEchoesAttribute.values) attr.attributeId: attr,
+};
+
 enum EveEchoesAttribute {
   // Module Slots
   highSlotCount,
@@ -152,18 +156,15 @@ enum EveEchoesAttribute {
   mass,
   speedBoost,
   speedBoostFactor,
-
   cargoHoldCapacity,
   mineralHoldCapacity,
   oreHoldCapacity,
   shipHoldCapacity,
   structureHoldCapacity,
   deliveryHoldCapacity,
-
   droneControlRange,
   droneBandwidth,
   droneCapacity,
-
   sourceRadius,
   scanRadius,
   minScanRadius,
@@ -179,7 +180,6 @@ enum EveEchoesAttribute {
   accuracyFalloff,
   trackingSpeed,
   reloadTime,
-
   flightTime,
   explosionRadius,
   explosionVelocity,
@@ -207,7 +207,6 @@ enum EveEchoesAttribute {
   // Rig Bonuses
   damageBonus,
   activationTimeAdjustment,
-
   integrationEfficiency,
   integrationSlotNumber,
   integrationMaterialMultiplier,
@@ -304,7 +303,6 @@ enum EveEchoesAttribute {
   decipherRate,
   decipherRateMod1,
   decipherRateMod2,
-
   shieldEmDamageResonanceMultiplier,
   shieldThermalDamageResonanceMultiplier,
   shieldKineticDamageResonanceMultiplier,
@@ -344,13 +342,36 @@ enum EveEchoesAttribute {
   frigateBayMod,
   shipMidSlotMod,
   fighterBayCapacityMod,
-
-
   capacitorRechargeRateMultiplierN,
   isFleetOnly,
-
   fighterControlDistance,
   fighterNumberLimit,
+}
+
+class EveEchoesAttributeOrId {
+  late EveEchoesAttribute? attribute;
+  late int? attributeId;
+
+  EveEchoesAttributeOrId({EveEchoesAttribute? attribute, int? orId}) {
+    if (attribute != null) {
+      this.attribute = attribute;
+      attributeId = attribute.attributeId;
+    } else {
+      this.attribute = kAttributesById[orId];
+      attributeId = orId;
+    }
+  }
+
+  int get id => attribute?.attributeId ?? attributeId!;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is EveEchoesAttributeOrId &&
+      id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
 extension ShipAttributeExtenstion on EveEchoesAttribute {
@@ -838,7 +859,6 @@ extension ShipAttributeExtenstion on EveEchoesAttribute {
 
       case EveEchoesAttribute.signatureRadiusAdjustment:
         return 364;
-
 
       case EveEchoesAttribute.capacitorCapacityMultiplierMod:
         return 306;

@@ -1233,6 +1233,23 @@ class FittingSimulator extends ChangeNotifier {
         isDrone: isDrone,
       );
 
+  double getValueForItemWithAttrOrId({
+    required EveEchoesAttributeOrId attrOrId,
+    required FittingItem item,
+  }) {
+    if (attrOrId.attribute != null) {
+      return getValueForItem(
+        attribute: attrOrId.attribute!,
+        item: item,
+      );
+    } else {
+      return getValueForItemWithAttributeId(
+        attributeId: attrOrId.id,
+        item: item,
+      );
+    }
+  }
+
   Future<void> updateAttributes({
     List<FittingSkill> skills = const [],
   }) async {

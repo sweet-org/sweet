@@ -21,20 +21,20 @@ class FittingModuleTileDetails extends StatelessWidget {
     final moduleAttributes = module.baseAttributes
         .where((attr) => (attr.nameLocalisationKey ?? 0) > 0)
         .map((attr) => attr.id)
-        .where(
-      (attrId) {
-        final attr = EveEchoesAttribute.values.firstWhereOrNull(
-          (e) => e.attributeId == attrId,
-        );
-        return attr == null || !kIgnoreAttributes.contains(attr);
-      },
-    );
+        .map((attrId) {
+      final attr = EveEchoesAttributeOrId(orId: attrId);
+      if (attr.attribute != null &&
+          kIgnoreAttributes.contains(attr.attribute!)) {
+        return null;
+      }
+      return attr;
+    }).whereNotNull();
 
     final uiAttributes = module.uiAttributes
+        .map((a) => EveEchoesAttributeOrId(attribute: a))
         .where(
-          (a) => !moduleAttributes.contains(a.attributeId),
-        )
-        .map((a) => a.attributeId);
+          (a) => !moduleAttributes.contains(a),
+        );
 
     final attributes = [
       ...uiAttributes,
@@ -48,13 +48,13 @@ class FittingModuleTileDetails extends StatelessWidget {
           item: module,
         ),
         ...attributes.map((e) {
-          var value = fitting.getValueForItemWithAttributeId(
-            attributeId: e,
+          var value = fitting.getValueForItemWithAttrOrId(
+            attrOrId: e,
             item: module,
           );
           return value != 0
               ? ItemAttributeValueWidget(
-                  attributeId: e,
+                  attributeId: e.id,
                   attributeValue: value,
                   fixedDecimals: 2,
                   showAttributeId: false,
