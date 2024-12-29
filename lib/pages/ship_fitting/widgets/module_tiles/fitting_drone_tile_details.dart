@@ -46,20 +46,22 @@ class FittingDroneTileDetails extends StatelessWidget {
     ];
 
     final weapon = drone.fitting.modules(slotType: SlotType.high).first;
+    final count = fitting.getValueForItem(
+        attribute: EveEchoesAttribute.fighterNumberLimit, item: drone);
 
     return Column(
       children: [
         ItemDamagePattern(
           fitting: fitting,
-          item: weapon,
           drone: drone,
+          droneCount: count.toInt(),
         ),
         ...droneAttributes.map((e) {
           final droneValue = fitting.getValueForItem(
             attribute: e,
             item: drone,
           );
-          final weaponValue = fitting.getValueForItem(
+          final weaponValue = drone.fitting.getValueForItem(
             attribute: e,
             item: weapon,
           );

@@ -316,13 +316,13 @@ class AttributeCalculatorService {
     required int attributeId,
     required FittingItem item,
     required int depth,
-    isDrone = false,
+    bool isDrone = false,
     double? baseValue,
   }) {
     _logDepth = depth;
     _log(
       message:
-          'Getting value for $attributeId on item ${item.itemId} with baseValue $baseValue',
+          'Getting value for $attributeId on item ${item.itemId} with baseValue $baseValue, isDrone: $isDrone',
       divider: true,
     );
     if (attributeId == 0) {
@@ -362,7 +362,9 @@ class AttributeCalculatorService {
             just a return true before and did not cause any problems for normal
             items. So a check for drones might be sufficient.
         */
-        return !isDrone || isDroneModifier;
+        final onlyDroneModule = modifier.changeScope == ModifierChangeType.DRONEMODULE;
+        final onlyDrone = modifier.changeScope == ModifierChangeType.DRONE;
+        return isDrone == (onlyDrone || onlyDroneModule) || (!isDrone && !onlyDrone);
       },
     );
 
@@ -372,6 +374,7 @@ class AttributeCalculatorService {
     ];
 
     var value = baseValue ?? itemAttribute.baseValue;
+    _log(message: 'Base value for $attributeId is $value');
     if (item is ImplantFitting && isLevelFunction(itemAttribute.id)) {
       value = getValueForLevelFunction(itemAttribute.id, item.trainedLevel);
     }
@@ -407,7 +410,7 @@ class AttributeCalculatorService {
         modNames +=
             "<${mod.changeRange}, ${mod.changeScope.name}, ${mod.item.itemId}, ${mod.attributeId}>, ";
       }
-      _log(message: 'Found ${modifiers.length} modifiers to apply: $modNames');
+      _log(message: 'Found ${modifiers.length} modifiers: $modNames');
     }
     _log(message: 'Found ${modifiersToApply.length} modifiers to apply');
     modifiersToApply.sort((a, b) {
@@ -422,16 +425,18 @@ class AttributeCalculatorService {
         modsByAttrId: opKvp.value,
         op: op,
         itemAttribute: itemAttribute,
+        isDrone: isDrone,
       );
 
       if (opModValue != null) {
-        _log(message: 'Performing $op on $value with $opModValue');
+        _log(message: 'Performing $op on $value with $opModValue ($attributeId for ${item.itemId})');
         value = op.performOperation(
           ret: value,
           value: opModValue,
         );
       }
     }
+    _log(message: 'Value after modifiers is $value');
 
     // if Damage attribute, we want to check for Damage Modifiers too
     // Need to check self for any (which there should be)
@@ -440,6 +445,7 @@ class AttributeCalculatorService {
       var damageMod = getValueForItem(
         attribute: EveEchoesAttribute.damageMultiplier,
         item: item,
+        isDrone: isDrone,
       );
 
       value *= damageMod;
@@ -456,6 +462,7 @@ class AttributeCalculatorService {
     required Map<int, List<Modifier>> modsByAttrId,
     required DogmaOperators op,
     required Attribute itemAttribute,
+    bool isDrone = false,
   }) {
     double? opModValue;
     _log(
@@ -463,6 +470,7 @@ class AttributeCalculatorService {
             'Applying ${modsByAttrId.length} mods with $op to ${itemAttribute.id}');
 
     for (var modKvp in modsByAttrId.entries) {
+      _log(message: 'Applying ${modKvp.value.length} modifiers for ${modKvp.key}');
       var attrDefinition = _attributeDefinitions[modKvp.key]!;
       var modifierList = modKvp.value.map((e) {
         // Calculate with Self modifiers applied
@@ -471,6 +479,7 @@ class AttributeCalculatorService {
           item: e.item,
           depth: ++_logDepth,
           baseValue: e.modifierValue,
+          isDrone: isDrone,
         );
 
         return Modifier(
@@ -508,11 +517,11 @@ class AttributeCalculatorService {
 
         if (modValue == null) {
           modValue = modifierValue;
-          _log(message: 'Setting modValue to $modifierValue');
+          _log(message: 'Setting modValue to $modifierValue for attrId ${modKvp.key}');
         } else {
           _log(
               message:
-                  'Performing $op aggregation on $modValue with $modifierValue');
+                  'Performing $op aggregation on $modValue with $modifierValue from <${modifier.item.itemId}, ${modifier.changeScope.name}, ${modifier.changeRange}>');
           modValue = op.performAggregation(
             highIsGood: attrDefinition.highIsGood,
             a: modValue!,

@@ -659,8 +659,9 @@ class FittingSimulator extends ChangeNotifier {
   double calculateTotalDps() {
     var highSlotDps = calculateTotalDpsForModules();
     var droneDps = calculateTotalDpsForDrones();
-
-    return highSlotDps + droneDps;
+    final dps = highSlotDps + droneDps;
+    //print("DPS: $dps (ship id ${ship.itemId})");
+    return dps;
   }
 
   double calculateTotalDpsForModules({WeaponType weaponType = WeaponType.all}) {
@@ -713,17 +714,17 @@ class FittingSimulator extends ChangeNotifier {
   /// Alpha Strike
   ///
 
-  double calculateTotalAlphaStrike() {
-    var highSlotDps = calculateTotalAlphaStrikeForModules();
-    var droneDps = calculateTotalAlphaStrikeForDrones();
+  double calculateTotalAlphaStrike({EveEchoesAttribute? damageType}) {
+    var highSlotDps = calculateTotalAlphaStrikeForModules(damageType: damageType);
+    var droneDps = calculateTotalAlphaStrikeForDrones(damageType: damageType);
 
     return highSlotDps + droneDps;
   }
 
   double calculateTotalAlphaStrikeForModules(
-      {WeaponType weaponType = WeaponType.all}) {
+      {WeaponType weaponType = WeaponType.all, EveEchoesAttribute? damageType}) {
     if (weaponType == WeaponType.drone) {
-      return calculateTotalAlphaStrikeForDrones();
+      return calculateTotalAlphaStrikeForDrones(damageType: damageType);
     }
 
     var modules = _fitting.fittedModulesForSlot(SlotType.high).where((module) {
@@ -739,6 +740,7 @@ class FittingSimulator extends ChangeNotifier {
         .map(
           (item) => calculateAlphaStrikeForItem(
             item: item,
+            damageType: damageType,
           ),
         )
         .fold<double>(
@@ -749,31 +751,45 @@ class FittingSimulator extends ChangeNotifier {
 
   double calculateAlphaStrikeForItem({
     required FittingModule item,
+    EveEchoesAttribute? damageType,
   }) {
     if (item.state == ModuleState.inactive) return 0;
+    double emDamage = 0;
+    double thermDamage = 0;
+    double kinDamage = 0;
+    double expDamage = 0;
+
     // EM damage
-    var emDamage = getValueForItem(
-      attribute: EveEchoesAttribute.emDamage,
-      item: item,
-    );
+    if (damageType == null || damageType == EveEchoesAttribute.emDamage) {
+      emDamage = getValueForItem(
+        attribute: EveEchoesAttribute.emDamage,
+        item: item,
+      );
+    }
 
     // Thermal damage
-    var thermDamage = getValueForItem(
-      attribute: EveEchoesAttribute.thermalDamage,
-      item: item,
-    );
+    if (damageType == null || damageType == EveEchoesAttribute.thermalDamage) {
+      thermDamage = getValueForItem(
+        attribute: EveEchoesAttribute.thermalDamage,
+        item: item,
+      );
+    }
 
     // Kinetic damage
-    var kinDamage = getValueForItem(
-      attribute: EveEchoesAttribute.kineticDamage,
-      item: item,
-    );
+    if (damageType == null || damageType == EveEchoesAttribute.kineticDamage) {
+      kinDamage = getValueForItem(
+        attribute: EveEchoesAttribute.kineticDamage,
+        item: item,
+      );
+    }
 
     // Explosive damage
-    var expDamage = getValueForItem(
-      attribute: EveEchoesAttribute.explosiveDamage,
-      item: item,
-    );
+    if (damageType == null || damageType == EveEchoesAttribute.explosiveDamage) {
+      expDamage = getValueForItem(
+        attribute: EveEchoesAttribute.explosiveDamage,
+        item: item,
+      );
+    }
 
     return (emDamage + thermDamage + kinDamage + expDamage);
   }
@@ -800,7 +816,7 @@ class FittingSimulator extends ChangeNotifier {
         .fold<double>(0.0, (previousValue, itemDps) => previousValue + itemDps);
   }
 
-  double calculateTotalAlphaStrikeForDrones() {
+  double calculateTotalAlphaStrikeForDrones({EveEchoesAttribute? damageType}) {
     final moduleSlots = [
       SlotType.drone,
       SlotType.lightDDSlot,

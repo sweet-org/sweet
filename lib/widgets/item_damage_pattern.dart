@@ -1,5 +1,5 @@
-
 import 'package:flutter/widgets.dart';
+import 'package:sweet/model/fitting/fitting_drone.dart';
 
 import 'package:sweet/model/ship/eve_echoes_attribute.dart';
 import 'package:sweet/service/fitting_simulator.dart';
@@ -25,20 +25,24 @@ class ItemDamagePattern extends StatelessWidget {
     this.fitting,
     FittingItem? item,
     FittingItem? drone,
-  }){
+    int droneCount = 1,
+  }) {
     if (damagePattern != null) {
       this.damagePattern = damagePattern;
     } else {
       this.damagePattern = Map.fromEntries(damageAttributes.map((e) {
-        final itemValue = item != null ? fitting?.getValueForItem(
-          attribute: e,
-          item: item,
-        ) : null;
-        final droneValue = drone != null ? fitting?.getValueForItem(
-          attribute: e,
-          item: drone,
-        ) : null;
-        return MapEntry(e, (itemValue ?? 0.0) + (droneValue ?? 0.0));
+        final itemValue = item != null
+            ? fitting?.getValueForItem(
+                attribute: e,
+                item: item,
+              )
+            : null;
+        final droneValue = drone != null
+            ? (drone as FittingDrone)
+                .fitting
+                .calculateTotalAlphaStrike(damageType: e)
+            : null;
+        return MapEntry(e, (itemValue ?? 0.0) + (droneValue ?? 0.0) * droneCount);
       }));
     }
   }
@@ -75,5 +79,4 @@ class ItemDamagePattern extends StatelessWidget {
       ),
     );
   }
-
 }
