@@ -21,31 +21,31 @@ class FittingDroneTileDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final moduleAttributes = drone.baseAttributes
+    final weapon = drone.fitting.modules(slotType: SlotType.high).first;
+
+    final moduleAttributes = [...drone.baseAttributes, ...weapon.baseAttributes]
         .where((attr) => (attr.nameLocalisationKey ?? 0) > 0)
-        .map(
-          (e) => EveEchoesAttribute.values.firstWhereOrNull(
-            (attr) => attr.attributeId == e.id,
-          ),
-        )
+        .map((attr) => attr.id)
+        .map((attrId) {
+      final attr = EveEchoesAttributeOrId(orId: attrId);
+      if (attr.attribute != null &&
+          kIgnoreAttributes.contains(attr.attribute!)) {
+        return null;
+      }
+      return attr;
+    }).whereNotNull();
+
+    final uiAttributes = drone.uiAttributes
+        .map((a) => EveEchoesAttributeOrId(attribute: a))
         .where(
-          (attr) => attr != null && !kIgnoreAttributes.contains(attr),
-        )
-        .map((e) => e as EveEchoesAttribute)
-        .toList();
-
-    final uiAttributes = drone.uiAttributes;
-
-    moduleAttributes.removeWhere(
-      (a) => uiAttributes.contains(a),
-    );
+          (a) => !moduleAttributes.contains(a),
+        );
 
     final droneAttributes = [
       ...uiAttributes,
       ...moduleAttributes,
     ];
 
-    final weapon = drone.fitting.modules(slotType: SlotType.high).first;
     final count = fitting.getValueForItem(
         attribute: EveEchoesAttribute.fighterNumberLimit, item: drone);
 
@@ -57,12 +57,12 @@ class FittingDroneTileDetails extends StatelessWidget {
           droneCount: count.toInt(),
         ),
         ...droneAttributes.map((e) {
-          final droneValue = fitting.getValueForItem(
-            attribute: e,
+          final droneValue = fitting.getValueForItemWithAttrOrId(
+            attrOrId: e,
             item: drone,
           );
-          final weaponValue = drone.fitting.getValueForItem(
-            attribute: e,
+          final weaponValue = drone.fitting.getValueForItemWithAttrOrId(
+            attrOrId: e,
             item: weapon,
           );
 
@@ -70,7 +70,7 @@ class FittingDroneTileDetails extends StatelessWidget {
 
           return value != 0
               ? ItemAttributeValueWidget(
-                  attributeId: e.attributeId,
+                  attributeId: e.id,
                   attributeValue: value,
                   fixedDecimals: 2,
                   showAttributeId: false,
