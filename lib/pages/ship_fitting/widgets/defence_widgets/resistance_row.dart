@@ -16,6 +16,7 @@ class ResistanceRow extends StatelessWidget {
     required this.rowAttribute,
     required this.resistanceAttributes,
     required this.damagePattern,
+    this.margin = 2,
   }) : super(key: key);
 
   final EveEchoesAttribute rowAttribute;
@@ -23,11 +24,12 @@ class ResistanceRow extends StatelessWidget {
   final bool showEHP;
   final double rowHeight;
   final FittingPattern damagePattern;
+  final double margin;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 2),
+      margin: EdgeInsets.symmetric(vertical: margin),
       child: Consumer<FittingSimulator>(builder: (context, fitting, widget) {
         var resistanceValues = resistanceAttributes
             .map((e) => fitting.getValueForShip(attribute: e))

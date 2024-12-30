@@ -11,12 +11,14 @@ class DefenceResistances extends StatefulWidget {
   final double rowHeight;
   final FittingPattern damagePattern;
   final EhpToggleCallback onEhpToggle;
+  final double rowMargin;
 
   const DefenceResistances({
     Key? key,
     required this.rowHeight,
     required this.damagePattern,
     required this.onEhpToggle,
+    this.rowMargin = 2,
   }) : super(key: key);
 
   @override
@@ -48,6 +50,7 @@ class _DefenceResistancesState extends State<DefenceResistances> {
             rowAttribute: kvp.key,
             resistanceAttributes: kvp.value,
             damagePattern: widget.damagePattern,
+            margin: widget.rowMargin,
           ),
       ],
     );
