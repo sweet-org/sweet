@@ -31,7 +31,8 @@ extension ItemRepositoryImplant on ItemRepository {
       var slotId = entry.key;
       var slotModule = entry.value;
       final module = await _getImplantModulesForSlot(slotModule);
-      fitting[slotId] = module.copyWith(slot: slotModule.type, level: slotId);
+      fitting[slotId] = module.copyWith(
+          slot: slotModule.type, level: slotId, state: ModuleState.inactive);
     });
     return fitting;
   }

@@ -15,7 +15,7 @@ import 'fitting_module.dart';
 class ImplantFitting extends FittingModule {
   final Map<int, FittingImplantModule> _implantSlots = {};
   int trainedLevel = 15;
-  ModuleState primarySkillState = ModuleState.active;
+  ModuleState primarySkillState = ModuleState.inactive;
 
   final String id;
   String name;

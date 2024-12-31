@@ -6,12 +6,12 @@ import 'package:sweet/model/ship/module_state.dart';
 class ImplantFittingSlotModule with EquatableMixin {
   final int moduleId;
   final ImplantSlotType type;
-  var state = ModuleState.active;
+  var state = ModuleState.inactive;
 
   ImplantFittingSlotModule({
     required this.moduleId,
     required this.type,
-    this.state = ModuleState.active,
+    this.state = ModuleState.inactive,
   });
 
   static ImplantFittingSlotModule get emptyBranch => ImplantFittingSlotModule(

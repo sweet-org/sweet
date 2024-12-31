@@ -96,7 +96,7 @@ class ImplantHandler extends ChangeNotifier {
     FittingImplantModule module, {
     required int slotIndex,
     bool notify = true,
-    ModuleState state = ModuleState.active,
+    ModuleState state = ModuleState.inactive,
   }) {
     var slotId = fitting.getSlotIdByIndex(slotIndex);
     var currentModule = fitting[slotId]!;
