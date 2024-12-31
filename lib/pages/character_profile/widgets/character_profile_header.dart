@@ -258,7 +258,7 @@ class _CharacterProfileHeaderState extends State<CharacterProfileHeader>
                 return 'Please enter a valid number';
               }
               final val = int.parse(value.trim());
-              if (val <= 0) {
+              if (val < 0) {
                 return 'Please enter a positive number';
               }
               return null;
