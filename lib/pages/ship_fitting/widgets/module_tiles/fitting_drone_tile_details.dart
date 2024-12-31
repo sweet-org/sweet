@@ -97,16 +97,21 @@ class FittingDroneTileDetails extends StatelessWidget {
         ),
         Divider(),
         ...droneAttributes.map((e) {
+          // I don't know whats the best way is to detect where the value comes from
           final droneValue = fitting.getValueForItemWithAttrOrId(
             attrOrId: e,
             item: drone,
+          );
+          final shipValue = drone.fitting.getValueForItemWithAttrOrId(
+            attrOrId: e,
+            item: drone.fitting.ship,
           );
           final weaponValue = drone.fitting.getValueForItemWithAttrOrId(
             attrOrId: e,
             item: weapon,
           );
-
-          final value = max(weaponValue, droneValue);
+          double value = max(weaponValue, droneValue);
+          value = max(value, shipValue);
 
           return value != 0
               ? ItemAttributeValueWidget(

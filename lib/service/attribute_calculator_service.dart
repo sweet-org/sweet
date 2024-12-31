@@ -84,8 +84,8 @@ class AttributeCalculatorService {
     for (var implantMod in itemRepository.implantShieldArmorMods) {
       if (isLevelFunction(implantMod.attributeId)) {
         implantMod = implantMod.copyWith(
-                attributeValue: getValueForLevelFunction(
-                    implantMod.attributeId, totalLevels));
+            attributeValue:
+                getValueForLevelFunction(implantMod.attributeId, totalLevels));
       }
       _implantShieldArmorModifiers.add(implantMod);
     }
@@ -362,9 +362,12 @@ class AttributeCalculatorService {
             just a return true before and did not cause any problems for normal
             items. So a check for drones might be sufficient.
         */
-        final onlyDroneModule = modifier.changeScope == ModifierChangeType.DRONEMODULE;
-        final onlyDrone = modifier.changeScope == ModifierChangeType.DRONE;
-        return isDrone == (onlyDrone || onlyDroneModule) || (!isDrone && !onlyDrone);
+        final onlyDroneModule =
+            modifier.changeScope == ModifierChangeType.DRONEMODULE;
+        bool onlyDrone = modifier.changeScope == ModifierChangeType.DRONE;
+        onlyDrone |= modifier.changeScope == ModifierChangeType.SELF;
+        return isDrone == (onlyDrone || onlyDroneModule) ||
+            (!isDrone && !onlyDrone);
       },
     );
 
@@ -429,7 +432,9 @@ class AttributeCalculatorService {
       );
 
       if (opModValue != null) {
-        _log(message: 'Performing $op on $value with $opModValue ($attributeId for ${item.itemId})');
+        _log(
+            message:
+                'Performing $op on $value with $opModValue ($attributeId for ${item.itemId})');
         value = op.performOperation(
           ret: value,
           value: opModValue,
@@ -470,7 +475,9 @@ class AttributeCalculatorService {
             'Applying ${modsByAttrId.length} mods with $op to ${itemAttribute.id}');
 
     for (var modKvp in modsByAttrId.entries) {
-      _log(message: 'Applying ${modKvp.value.length} modifiers for ${modKvp.key}');
+      _log(
+          message:
+              'Applying ${modKvp.value.length} modifiers for ${modKvp.key}');
       var attrDefinition = _attributeDefinitions[modKvp.key]!;
       var modifierList = modKvp.value.map((e) {
         // Calculate with Self modifiers applied
@@ -514,10 +521,14 @@ class AttributeCalculatorService {
                   'Applying stacking penalty of ${kNurfDenominators[index]}');
           modifierValue *= kNurfDenominators[index];
         }
-
+        _log(
+            message:
+                'Processing modifier for attrId ${modKvp.key} with value $modifierValue: <${modifier.changeRange}, ${modifier.changeScope.name}, ${modifier.item.itemId}>');
         if (modValue == null) {
           modValue = modifierValue;
-          _log(message: 'Setting modValue to $modifierValue for attrId ${modKvp.key}');
+          _log(
+              message:
+                  'Setting modValue to $modifierValue for attrId ${modKvp.key}');
         } else {
           _log(
               message:

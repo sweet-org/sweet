@@ -431,7 +431,7 @@ class FittingSimulator extends ChangeNotifier {
   double getGlobalImplantArmorBonus() {
     final mod = _attributeCalculatorService.implantShieldArmorModifiers
         .where((m) =>
-    m.attributeId == EveEchoesAttribute.implantGlobalArmor.attributeId)
+            m.attributeId == EveEchoesAttribute.implantGlobalArmor.attributeId)
         .firstOrNull;
     return mod?.attributeValue ?? 0;
   }
@@ -715,14 +715,16 @@ class FittingSimulator extends ChangeNotifier {
   ///
 
   double calculateTotalAlphaStrike({EveEchoesAttribute? damageType}) {
-    var highSlotDps = calculateTotalAlphaStrikeForModules(damageType: damageType);
+    var highSlotDps =
+        calculateTotalAlphaStrikeForModules(damageType: damageType);
     var droneDps = calculateTotalAlphaStrikeForDrones(damageType: damageType);
 
     return highSlotDps + droneDps;
   }
 
   double calculateTotalAlphaStrikeForModules(
-      {WeaponType weaponType = WeaponType.all, EveEchoesAttribute? damageType}) {
+      {WeaponType weaponType = WeaponType.all,
+      EveEchoesAttribute? damageType}) {
     if (weaponType == WeaponType.drone) {
       return calculateTotalAlphaStrikeForDrones(damageType: damageType);
     }
@@ -784,7 +786,8 @@ class FittingSimulator extends ChangeNotifier {
     }
 
     // Explosive damage
-    if (damageType == null || damageType == EveEchoesAttribute.explosiveDamage) {
+    if (damageType == null ||
+        damageType == EveEchoesAttribute.explosiveDamage) {
       expDamage = getValueForItem(
         attribute: EveEchoesAttribute.explosiveDamage,
         item: item,
@@ -829,6 +832,7 @@ class FittingSimulator extends ChangeNotifier {
         .map(
           (drone) => calculateAlphaStrikeForDrone(
             drone: drone as FittingDrone,
+            damageType: damageType,
           ),
         )
         .fold<double>(0.0, (previousValue, itemDps) => previousValue + itemDps);
@@ -844,10 +848,12 @@ class FittingSimulator extends ChangeNotifier {
 
   double calculateAlphaStrikeForDrone({
     required FittingDrone drone,
+    EveEchoesAttribute? damageType,
   }) {
     final multiplier = getValueForItem(
         attribute: EveEchoesAttribute.fighterNumberLimit, item: drone);
-    return drone.fitting.calculateTotalAlphaStrike() * max(multiplier, 1);
+    return drone.fitting.calculateTotalAlphaStrike(damageType: damageType) *
+        max(multiplier, 1);
   }
 
   double calculateMiningYeildForDrone({
@@ -1216,12 +1222,35 @@ class FittingSimulator extends ChangeNotifier {
   double getValueForItem({
     required EveEchoesAttribute attribute,
     required FittingItem item,
-  }) =>
-      _attributeCalculatorService.getValueForItem(
+  }) {
+    // I don't know if there is any reason to get a value of a drone from the perspective of the ship
+    if (item is FittingDrone) {
+      return item.fitting.getValueForItem(
         attribute: attribute,
-        item: item,
-        isDrone: isDrone,
+        item: item.fitting.ship,
       );
+    }
+    return _attributeCalculatorService.getValueForItem(
+      attribute: attribute,
+      item: item,
+      isDrone: isDrone,
+    );
+  }
+
+  /// Only for testing at the moment
+  Future<double> getCalculatedValueForItem({
+    required EveEchoesAttribute attribute,
+    required FittingItem item,
+  }) async {
+    final value = getValueForItem(
+      attribute: attribute,
+      item: item,
+    );
+    final attributeDefinition =
+        await _itemRepository.attributeWithId(id: attribute.attributeId);
+    if (attributeDefinition == null) return value;
+    return attributeDefinition.calculatedValue(fromValue: value);
+  }
 
   double getValueForItemWithAttributeId({
     required int attributeId,
@@ -1295,8 +1324,33 @@ class FittingSimulator extends ChangeNotifier {
     required EveEchoesAttribute attribute,
     required SlotType slot,
     required int index,
+    SlotType? droneSlot,
+    int droneSlotIndex = 0,
   }) {
+    if (droneSlot != null) {
+      final drone = _fitting[slot]![index] as FittingDrone;
+      return drone.fitting.getValueForSlot(
+          attribute: attribute, slot: droneSlot, index: droneSlotIndex);
+    }
     return getValueForItem(
+      item: _fitting[slot]![index],
+      attribute: attribute,
+    );
+  }
+
+  Future<double> calculateValueForSlot({
+    required EveEchoesAttribute attribute,
+    required SlotType slot,
+    required int index,
+    SlotType? droneSlot,
+    int droneSlotIndex = 0,
+  }) async {
+    if (droneSlot != null) {
+      final drone = _fitting[slot]![index] as FittingDrone;
+      return drone.fitting.calculateValueForSlot(
+          attribute: attribute, slot: droneSlot, index: droneSlotIndex);
+    }
+    return getCalculatedValueForItem(
       item: _fitting[slot]![index],
       attribute: attribute,
     );

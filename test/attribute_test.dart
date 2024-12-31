@@ -1374,8 +1374,11 @@ void main() {
         );
 
         var booster = await itemRepo.module(id: 11302000014);
-        expect(booster, isNotNull,
-          reason: 'Cannot find Republic Fleet Small Shield Booster',);
+        expect(
+          booster,
+          isNotNull,
+          reason: 'Cannot find Republic Fleet Small Shield Booster',
+        );
 
         fitting.fitItem(booster, slot: SlotType.low, index: 0, notify: false);
 
@@ -1387,8 +1390,9 @@ void main() {
         fitting.fitItem(drone, slot: SlotType.drone, index: 0);
 
         // Set up implant
-        var implant = await itemRepo.implantWithId(id: 16008000004);
-        final definition = await itemRepo.getImplantLoadoutDefinition(16008000004);
+        //var implant = await itemRepo.implantWithId(id: 16008000004);
+        final definition =
+            await itemRepo.getImplantLoadoutDefinition(16008000004);
 
         final loadout = ImplantFittingLoadout.fromDefinition(
           16008000004,
@@ -1403,22 +1407,27 @@ void main() {
         handler.setLevel(15);
         bool succ = false;
         // Shield Booster Efficiency Optimization v1.0 (Level 5 GU)
-        succ = handler.fitItem(await itemRepo.implantModule(id: 16500017011), slotIndex: 0);
-        expect(succ, true, reason: 'Failed to fit Shield Booster Efficiency Optimization v1.0 (Level 5 GU)');
+        succ = handler.fitItem(await itemRepo.implantModule(id: 16500017011),
+            slotIndex: 0);
+        expect(succ, true,
+            reason:
+                'Failed to fit Shield Booster Efficiency Optimization v1.0 (Level 5 GU)');
         // Micro Thruster (Level 15 Branch)
-        succ = handler.fitItem(await itemRepo.implantModule(id: 16300034004), slotIndex: 2);
-        expect(succ, true, reason: 'Failed to fit Micro Thruster (Level 15 Branch)');
+        succ = handler.fitItem(await itemRepo.implantModule(id: 16300034004),
+            slotIndex: 2);
+        expect(succ, true,
+            reason: 'Failed to fit Micro Thruster (Level 15 Branch)');
 
         succ = fitting.setImplant(handler);
         expect(succ, true, reason: 'Failed to set implant');
         // Deactivate primary skill (has no effect anyways but that may be changed in the future)
-        fitting.setImplantModuleState(ModuleState.inactive, slotIndex: 0 , implantSlotId: 0);
+        fitting.setImplantModuleState(ModuleState.inactive,
+            slotIndex: 0, implantSlotId: 0);
         // Calculate fittings
         await fitting.updateSkills(skills: skills);
       });
 
       test('Shield Booster Amount is 90.10', () async {
-        // Extract final 'display' value for Activation Time attribute (ID: 430)
         var attributeDefinition = await itemRepo.attributeWithId(
             id: EveEchoesAttribute.shieldBoostAmount.attributeId);
 
@@ -1435,7 +1444,6 @@ void main() {
       });
 
       test('Drone Flight velocity is 5040 m/s', () async {
-        // Extract final 'display' value for Activation Time attribute (ID: 430)
         var attributeDefinition = await itemRepo.attributeWithId(
             id: EveEchoesAttribute.flightVelocity.attributeId);
 
@@ -1545,6 +1553,175 @@ void main() {
           dps.toStringAsFixed(2),
           '4767.90',
         );
+      });
+    });
+
+    group('Astarte fitting >', () {
+      late FittingSimulator fitting;
+
+      final character = """
+QlpoOTFBWSZTWThdSq4AGFrfgHAAUAZ/8CAkDQovL98KUAT+gOcQUUAcIIp4ZMqpoIMj0I00ANNCJ5lV
+UYAAAAAAEmkSjRFNNAGQBkA0MNDIaZNAMQ000aGjAqVJqfomp6j0mJkDI09I9EPUtCI3YX7OHHpiIhWE
+RUI0Y01f1SoiOI4ieIiOI4jkfZyv3c+3ursg/Axzyt547INvLwrZi83atRMWCZqkNswdygyZFRqDEiGU
+FhthFE43lyxhm8pBHLFC3orNgs0ASnGPLt2EEdJOuVK3VVJFNtttuM1q28oDA22wlSlJa6MZWZpF2sxm
+8wMa70sjKvLbMukDu4ks3VG3abmTOUTZWTeB2a1AUteTr1QVAmwNvQ5QOy7Mzd7VEczN8/KSQIc6+DAI
+Q9vaHdOmKqitvhPPXcAIQ7c5vrm7bu5qbm4XKZlKjmZMJkzSybFYAjJMawBMZGOVMSsAVawBSEQVVRWx
+GVBioxiDGIKQQG5SASyy26kssstjKIhq1dy3fXnBF3lcc5znB1rxa5zmnBV28vOc5ylV5cvOc5y2tnHn
+N13lLaWmcw0dtW7uZttLd3NSe9APYekgEDcX3VT0tVEy1a3LXwl1N8JZz3TjFBYw7OdszMuXK2222S22
+1pJJJJJNTQUAAAgAFAygAFpsigo9SE8YEsBDEFVEBVBQUUFUiwF7ev+7h4VW0t6zy5raVSrRnlmdET1Z
+x74ZmY5lUhb23d3d1UA3lVVFJQoW3rzWs2NZNZu61qazMpOzMgGSwLCSlCGIL7Os8xtbavhwcEUtaNKi
+3g+FVVUiqwnLbbaVVHxbbXfBCLAWNoSemSeA8eDWnbPBmiqjlNylq40pZ26DsqqqIoKiKqCqIqqqqqoX
+qSCgQDoAhDWSHfruVbXbRVHq1Gaz2/DyEh4J9WeYBnY7sHqrFQtU9qVXyulxrlojU9Cnknb4+3ruKdFp
+3yqVozrHTongDkx29rcxVUVKd/w7iEaahtwiERj5QIjdny0crNvrv7ttvW/Vh29OYRHXZbv2QRGWUERf
+wpfzgRFMPoERlpCIvgiLqgiP27PXAiLKWa7KV5+m7x7NK0ERd84amdNFdIIj26oP+YSSB+Mk94/sKfGm
+JCRQuFIGJYlQFhBYBKFoBUKyYwKrJFFFh8KUk1bqXCFYjCHy/8XckU4UJA4XUquA"""
+          .replaceAll("\n", "");
+
+      setUpAll(() async {
+        final Character pilot = Character.fromQrCodeData(character);
+        var ship = await itemRepo.ship(id: 10706000301);
+        expect(ship, isNotNull, reason: 'Cannot find Astarte item');
+        expect(ship.categoryId == EveEchoesCategory.ships.categoryId, true,
+            reason: 'Item is not a ship');
+
+        fitting = await FittingSimulator.fromShipLoadout(
+          pilot: pilot,
+          attributeCalculatorService: attrCalc,
+          itemRepository: itemRepo,
+          ship: ship,
+          loadout: ShipFittingLoadout.fromShip(ship.itemId,
+              await itemRepo.getShipLoadoutDefinition(ship.itemId)),
+        );
+        // Lowslots
+        var fireControl = await itemRepo.module(id: 11519200010);
+        expect(
+          fireControl,
+          isNotNull,
+          reason: 'Cannot find Prototype General Fire-control System',
+        );
+        fitting.fitItem(fireControl,
+            slot: SlotType.low,
+            index: 0,
+            notify: false,
+            state: ModuleState.inactive);
+        // Combat rigs
+        var burstAerator = await itemRepo.rig(id: 11719150006);
+        expect(
+          burstAerator,
+          isNotNull,
+          reason: 'Cannot find LWS Burst Aerator I',
+        );
+        fitting.fitItem(burstAerator,
+            slot: SlotType.combatRig, index: 0, notify: false);
+        fitting.fitItem(burstAerator,
+            slot: SlotType.combatRig, index: 1, notify: false);
+        fitting.fitItem(burstAerator,
+            slot: SlotType.combatRig, index: 2, notify: false);
+        // Hangar modules
+        var monoLWSMod = await itemRepo.rig(id: 11727010011);
+        expect(
+          monoLWSMod,
+          isNotNull,
+          reason: 'Cannot find Mono LWS Hangar Modification I',
+        );
+        fitting.fitItem(monoLWSMod,
+            slot: SlotType.hangarRigSlots, index: 0, notify: false);
+        // Lightweight Frigates
+        var frigate = await itemRepo.drone(
+            id: 14700010410, attributeCalculatorService: attrCalc);
+        expect(
+          frigate,
+          isNotNull,
+          reason: 'Cannot find Lightweight Atron',
+        );
+        fitting.fitItem(frigate,
+            slot: SlotType.lightFFSlot, index: 0, notify: false);
+        // Lightweight Destroyers
+        var destroyer = await itemRepo.drone(
+            id: 14710010410, attributeCalculatorService: attrCalc);
+        expect(
+          destroyer,
+          isNotNull,
+          reason: 'Cannot find Lightweight Catalyst',
+        );
+        fitting.fitItem(destroyer,
+            slot: SlotType.lightDDSlot, index: 0, notify: true);
+      });
+
+      test('Total DPS is 4073.72', () async {
+        var dps = fitting.calculateTotalDps();
+        expect(dps, closeTo(4073.72, 0.02));
+      });
+
+      test('Lightweight Catalyst', () async {
+        var value = await fitting.calculateValueForSlot(
+          attribute: EveEchoesAttribute.activationTime,
+          slot: SlotType.lightDDSlot,
+          index: 0,
+          droneSlot: SlotType.high,
+        );
+        expect(value, closeTo(2.90, 0.01),
+            reason: 'Activation Time: Expected 2.90, got $value');
+
+        value = await fitting.calculateValueForSlot(
+          attribute: EveEchoesAttribute.optimalRange,
+          slot: SlotType.lightDDSlot,
+          index: 0,
+          droneSlot: SlotType.high,
+        );
+        expect(value, closeTo(17.16, 0.01),
+            reason: 'Optimal Range: Expected 17.16, got $value');
+
+        value = await fitting.calculateValueForSlot(
+          attribute: EveEchoesAttribute.accuracyFalloff,
+          slot: SlotType.lightDDSlot,
+          index: 0,
+          droneSlot: SlotType.high,
+        );
+        expect(value, closeTo(10.56, 0.01),
+            reason: 'Accuracy Falloff: Expected 10.56, got $value');
+
+        value = await fitting.calculateValueForSlot(
+          attribute: EveEchoesAttribute.trackingSpeed,
+          slot: SlotType.lightDDSlot,
+          index: 0,
+          droneSlot: SlotType.high,
+        );
+        expect(value, closeTo(1220, 0.6),
+            reason: 'Tracking Speed: Expected 1220, got $value');
+
+        value = await fitting.calculateValueForSlot(
+          attribute: EveEchoesAttribute.thermalDamage,
+          slot: SlotType.lightDDSlot,
+          index: 0,
+          droneSlot: SlotType.high,
+        );
+        expect(value, closeTo(1304, 0.6),
+            reason: 'Thermal Damage: Expected 1304, got $value');
+        value = fitting.calculateTotalAlphaStrike(
+            damageType: EveEchoesAttribute.thermalDamage);
+        expect(value, closeTo(4720.84, 0.1),
+            reason: 'Thermal Alpha Strike: Expected 4720.84, got $value');
+
+        value = await fitting.calculateValueForSlot(
+          attribute: EveEchoesAttribute.kineticDamage,
+          slot: SlotType.lightDDSlot,
+          index: 0,
+          droneSlot: SlotType.high,
+        );
+        expect(value, closeTo(1956, 0.6),
+            reason: 'Kinetic Damage: Expected 1956, got $value');
+        value = fitting.calculateTotalAlphaStrike(
+            damageType: EveEchoesAttribute.kineticDamage);
+        expect(value, closeTo(7081.26, 0.1),
+            reason: 'Kinetic Alpha Strike: Expected 7081.26, got $value');
+      });
+
+      test('Flight Velocity', () async {
+        var value = await fitting.getCalculatedValueForItem(
+            attribute: EveEchoesAttribute.flightVelocity, item: fitting.ship);
+        expect(value, closeTo(123.76, 0.01),
+            reason: "Incorrect flight velocity for the ship");
       });
     });
   });
