@@ -31,10 +31,16 @@ class _ShieldSelectSliderState extends State<ShieldSelectSlider> {
   double currentShieldPercentage = 0.25;
 
   @override
+  void initState() {
+    super.initState();
+    final fitting = RepositoryProvider.of<FittingSimulator>(context, listen: false);
+    currentShieldPercentage = fitting.currentShieldPercentage;
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     final fitting = RepositoryProvider.of<FittingSimulator>(context);
-    currentShieldPercentage = fitting.currentShieldPercentage;
 
     final shieldStr = (currentShieldPercentage * 100).toStringAsFixed(1);
 
@@ -54,6 +60,11 @@ class _ShieldSelectSliderState extends State<ShieldSelectSlider> {
             child: Slider(
               value: currentShieldPercentage,
               onChanged: (value) {
+                setState(() {
+                  currentShieldPercentage = value;
+                });
+              },
+              onChangeEnd: (value) {
                 setState(() {
                   currentShieldPercentage = value;
                   fitting.updateShieldPercentage(value);
