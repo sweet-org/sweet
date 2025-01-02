@@ -19,6 +19,7 @@ enum MarketGroupFilters {
   lightweightShips,
   all,
   structures,
+  structures2,
   pos,
   structureWeapons,
   structureModules,
@@ -52,6 +53,8 @@ extension MarketGroupFilterExtension on MarketGroupFilters {
         return 1000;
       case MarketGroupFilters.structures:
         return 1100;
+      case MarketGroupFilters.structures2:
+        return 1100000;
       case MarketGroupFilters.pos:
         return 110000010;
       case MarketGroupFilters.structureWeapons:

@@ -37,7 +37,7 @@ class _FittingToolListState extends State<FittingToolList>
     var shipsMarketGroup = RepositoryProvider.of<ItemRepository>(context)
         .marketGroupMap[MarketGroupFilters.ship.marketGroupId];
     var posMarketGroup = RepositoryProvider.of<ItemRepository>(context)
-        .marketGroupMap[MarketGroupFilters.pos.marketGroupId];
+        .marketGroupMap[MarketGroupFilters.structures2.marketGroupId];
     var pseudoGroup = MarketGroup(
         id: -1, iconIndex: -1, localisationIndex: -1, sourceName: "No Name");
     if (shipsMarketGroup == null && posMarketGroup == null) return;
@@ -54,7 +54,7 @@ class _FittingToolListState extends State<FittingToolList>
 
     if (ship == null ||
         ship.categoryId != EveEchoesCategory.ships.categoryId &&
-            ship.marketGroupId != MarketGroupFilters.pos.marketGroupId) {
+            ship.categoryId != EveEchoesCategory.structure.categoryId) {
       if (ship != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

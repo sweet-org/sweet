@@ -23,6 +23,8 @@ import 'package:sweet/repository/item_repository.dart';
 import 'package:sweet/util/constants.dart';
 
 class AttributeCalculatorService {
+  static final kRegFort = RegExp(r'/Fort/');
+
   final ItemRepository itemRepository;
 
   // TASK: Separate to different groupings
@@ -37,6 +39,7 @@ class AttributeCalculatorService {
   Iterable<FittingModule> _allFittedModules = [];
   List<NihilusSpaceModifier> _nSpaceModifiers = [];
   final List<ItemModifier> _implantShieldArmorModifiers = [];
+
   List<ItemModifier> get implantShieldArmorModifiers =>
       _implantShieldArmorModifiers;
 
@@ -341,7 +344,15 @@ class AttributeCalculatorService {
     final filteredModifiers = _modifiers.entries
         .where(
           (entry) => item.mainCalCode.any(
-            (e) => e.contains(RegExp(entry.key)),
+            /* I don't know why modifiers for structures are also for the /Ship/
+             * CalCode. At the time of writing, there seems to be no modifier
+             * targeting structures, that has a more specific calcode
+             * starting with /Ship/. There are some more structure-only
+             * calcodes for the corp tech, but those start with /Fort/.
+             */
+            (e) =>
+                e.contains(RegExp(entry.key)) ||
+                (entry.key == '/Ship/' && e.contains(kRegFort)),
           ),
         )
         .map((e) => e.value)
