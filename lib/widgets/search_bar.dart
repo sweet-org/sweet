@@ -69,6 +69,7 @@ class _SearchBarState extends State<SweetSearchBar> {
                 ),
                 floatingLabelBehavior: FloatingLabelBehavior.never,
                 border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(vertical: 14),
               ),
               maxLines: 1,
             ),

@@ -53,9 +53,9 @@ class ItemRepositoryBloc
                 .where((element) => element.parentId == null)));
       } else {
         // Get all the items fitting the filter
-        var filteredItems = await _itemRepository.itemsFilteredOnName(
+        var filteredItems = List.of(await _itemRepository.itemsFilteredOnName(
           filter: event.filterString.toLowerCase(),
-        );
+        ));
 
         // map into their market groups
         var thirdGroup = filteredItems
