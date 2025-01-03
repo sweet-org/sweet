@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:manup/manup.dart';
+
+import 'package:sweet/service/manup/manup_service.dart';
 
 @immutable
 abstract class DataLoadingBlocState extends Equatable {

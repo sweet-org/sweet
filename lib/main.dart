@@ -2,11 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:manup/manup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
-import 'package:http/io_client.dart';
 
 import 'package:sweet/bloc/data_loading_bloc/data_loading.dart';
 import 'package:sweet/bloc/item_repository_bloc/item_repository_bloc.dart';
@@ -17,6 +14,7 @@ import 'package:sweet/repository/localisation_repository.dart';
 import 'package:sweet/repository/ship_fitting_repository.dart';
 import 'package:sweet/service/attribute_calculator_service.dart';
 import 'package:sweet/service/local_notifications_service.dart';
+import 'package:sweet/service/manup/manup_service.dart';
 import 'package:sweet/util/constants.dart';
 import 'package:sweet/util/platform_helper.dart';
 
@@ -85,8 +83,8 @@ MultiRepositoryProvider buildRepositories({required Widget child}) {
   return MultiRepositoryProvider(
     providers: [
       RepositoryProvider<ManUpService>(
-        create: (_) => HttpManUpService(
-          kManUpUrl,
+        create: (_) => ManUpService(
+          url: kManUpUrl,
           http: client,
           os: Platform.operatingSystem,
         ),

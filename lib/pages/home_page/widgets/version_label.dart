@@ -3,9 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:manup/manup.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sweet/util/constants.dart';
+
+import 'package:sweet/service/manup/manup_service.dart';
 
 class VersionLabel extends StatefulWidget {
   final Color? color;
@@ -14,6 +15,7 @@ class VersionLabel extends StatefulWidget {
     Key? key,
     this.color,
   }) : super(key: key);
+
   @override
   State<VersionLabel> createState() => _VersionLabelState();
 }

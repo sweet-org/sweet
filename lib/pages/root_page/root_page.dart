@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-import 'package:manup/manup.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as utils;
 
@@ -12,6 +11,8 @@ import 'package:sweet/pages/home_page/widgets/social_button.dart';
 import 'package:sweet/pages/home_page/widgets/version_label.dart';
 import 'package:sweet/util/localisation_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../service/manup/manup_service.dart';
 
 class RootPage extends StatelessWidget with FileSelector {
   @override
@@ -148,7 +149,7 @@ class RootPage extends StatelessWidget with FileSelector {
             ),
           ),
           Text(
-            manup.getMessage(forStatus: state.manUpStatus),
+            ManUpService.getMessage(status: state.manUpStatus),
             textAlign: TextAlign.center,
           ),
           TextButton(

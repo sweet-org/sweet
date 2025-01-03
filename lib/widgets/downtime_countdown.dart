@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_countdown_timer/index.dart';
-import 'package:manup/manup.dart';
 import 'package:sweet/util/constants.dart';
+
+import 'package:sweet/service/manup/manup_service.dart';
 
 class DowntimeCountdown extends StatelessWidget {
   DateTime _calculateNextDownTime({

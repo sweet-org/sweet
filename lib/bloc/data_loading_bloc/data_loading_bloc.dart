@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:http/http.dart';
-import 'package:manup/manup.dart';
 import 'package:sweet/model/character/character.dart';
 import 'package:sweet/model/implant/implant_fitting_loadout.dart';
 import 'package:sweet/model/ship/fitting_list_element.dart';
@@ -12,6 +11,7 @@ import 'package:sweet/model/ship/ship_fitting_loadout.dart';
 import 'package:sweet/repository/implant_fitting_loadout_repository.dart';
 
 import 'package:sweet/service/fitting_simulator.dart';
+import 'package:sweet/service/manup/manup_service.dart';
 import 'package:sweet/util/platform_helper.dart';
 
 import '../../repository/character_repository.dart';
@@ -63,7 +63,8 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
           manUpStatus: status,
         ));
         return;
-      } else if (status != ManUpStatus.latest) {
+      } else if (status != ManUpStatus.latest &&
+          status != ManUpStatus.unknown) {
         emit(AppUpdateAvailable(
           manUpStatus: status,
         ));

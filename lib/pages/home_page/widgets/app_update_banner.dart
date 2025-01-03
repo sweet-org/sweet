@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:manup/manup.dart';
 import 'package:sweet/util/localisation_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../service/manup/manup_service.dart';
 
 class AppUpdateBanner extends StatelessWidget {
   const AppUpdateBanner({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class AppUpdateBanner extends StatelessWidget {
         builder: (context, snapshot) {
           final status = snapshot.data;
 
-          if (status == null || status == ManUpStatus.latest) {
+          if (status == null || status == ManUpStatus.latest || status == ManUpStatus.unknown) {
             return Container();
           }
 
