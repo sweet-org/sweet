@@ -74,9 +74,11 @@ class FittingDroneTileDetails extends StatelessWidget {
       ...uiAttributes,
       ...moduleAttributes,
     ];
-
-    final count = fitting.getValueForItem(
+    double count = fitting.getValueForItem(
         attribute: EveEchoesAttribute.fighterNumberLimit, item: drone);
+    if (count == 0) {
+      count = 1;
+    }
 
     return Column(
       children: [
