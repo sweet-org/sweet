@@ -30,7 +30,13 @@ class FittingDrone extends FittingModule {
     SlotType? slot,
     int? index,
     ModuleState? state,
+    bool? isDroneModule = false,
   }) {
+    if (isDroneModule != null && isDroneModule) {
+      throw UnimplementedError(
+        'Drone modules are not supported yet for drones',
+      );
+    }
     return FittingDrone(
       item: item,
       slot: slot ?? this.slot,

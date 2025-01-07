@@ -391,6 +391,7 @@ class AttributeCalculatorService {
     _log(message: 'Base value for $attributeId is $value');
     if (item is ImplantFitting && isLevelFunction(itemAttribute.id)) {
       value = getValueForLevelFunction(itemAttribute.id, item.trainedLevel);
+      _log(message: 'Attribute has level function, setting base value to $value (implant level ${item.trainedLevel})');
     }
 
     // NOTE: Scripts seem to run through a map of
@@ -491,13 +492,17 @@ class AttributeCalculatorService {
               'Applying ${modKvp.value.length} modifiers for ${modKvp.key}');
       var attrDefinition = _attributeDefinitions[modKvp.key]!;
       var modifierList = modKvp.value.map((e) {
+        bool isDroneModule = false;
+        if (e.item is FittingModule) {
+          isDroneModule = (e.item as FittingModule).isDroneModule;
+        }
         // Calculate with Self modifiers applied
         final val = _getValueForItemWithAttributeId(
           attributeId: e.attributeId,
           item: e.item,
           depth: ++_logDepth,
           baseValue: e.modifierValue,
-          isDrone: isDrone,
+          isDrone: isDroneModule,
         );
 
         return Modifier(

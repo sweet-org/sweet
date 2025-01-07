@@ -340,6 +340,7 @@ extension ItemRepositoryFitting on ItemRepository {
   Future<Fitting> fittingDataFromLoadout({
     required ShipFittingLoadout loadout,
     required AttributeCalculatorService attributeCalculatorService,
+    bool isDrone = false,
   }) async {
     final fitting = Fitting(id: loadout.id, name: loadout.name);
     fitting.setFromLoadout(loadout);
@@ -363,6 +364,7 @@ extension ItemRepositoryFitting on ItemRepository {
         fitting[slot]![moduleIndex] = module.copyWith(
           slot: slot,
           index: moduleIndex,
+          isDroneModule: isDrone,
         );
       });
     }

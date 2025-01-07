@@ -110,7 +110,13 @@ class FittingNanocore extends FittingModule {
     SlotType? slot,
     int? index,
     ModuleState? state,
+    bool? isDroneModule = false,
   }) {
+    if (isDroneModule != null && isDroneModule) {
+      throw UnimplementedError(
+        'Drone modules are not supported yet for nanocores',
+      );
+    }
     return FittingNanocore(
       baseItem: item,
       isGolden: isGolden,

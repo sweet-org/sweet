@@ -149,7 +149,13 @@ class FittingRigIntegrator extends FittingModule {
     SlotType? slot,
     int? index,
     ModuleState? state,
+    bool? isDroneModule = false,
   }) {
+    if (isDroneModule != null && isDroneModule) {
+      throw UnimplementedError(
+        'Drone modules are not supported yet for integrated rigs',
+      );
+    }
     return FittingRigIntegrator(
       baseItem: super.item,
       baseAttributes: super.baseAttributes,

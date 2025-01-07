@@ -260,6 +260,7 @@ class FittingSimulator extends ChangeNotifier {
       fitting: await itemRepository.fittingDataFromLoadout(
         loadout: loadout,
         attributeCalculatorService: attributeCalculatorService,
+        isDrone: true,
       ),
     );
   }

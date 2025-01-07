@@ -11,6 +11,7 @@ class FittingModule extends FittingItem with EquatableMixin {
   final SlotType slot;
   final int index;
   final ModuleState state;
+  final bool isDroneModule;
 
   Map<String, dynamic> get metadata => {};
 
@@ -40,6 +41,7 @@ class FittingModule extends FittingItem with EquatableMixin {
     required List<Attribute> baseAttributes,
     required List<ItemModifier> modifiers,
     this.state = ModuleState.inactive,
+    this.isDroneModule = false,
   }) : super(
           item: item,
           baseAttributes: baseAttributes,
@@ -50,6 +52,7 @@ class FittingModule extends FittingItem with EquatableMixin {
     SlotType? slot,
     int? index,
     ModuleState? state,
+    bool? isDroneModule,
   }) {
     return FittingModule(
       item: item,
@@ -58,6 +61,7 @@ class FittingModule extends FittingItem with EquatableMixin {
       state: state ?? this.state,
       baseAttributes: baseAttributes,
       modifiers: modifiers,
+      isDroneModule: isDroneModule ?? this.isDroneModule,
     );
   }
 
