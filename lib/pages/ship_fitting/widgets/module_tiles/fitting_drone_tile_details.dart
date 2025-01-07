@@ -50,7 +50,11 @@ class FittingDroneTileDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final weapon = drone.fitting.modules(slotType: SlotType.high).first;
 
-    final moduleAttributes = [...drone.baseAttributes, ...weapon.baseAttributes]
+    final moduleAttributes = [
+      ...drone.baseAttributes,
+      ...weapon.baseAttributes.whereNot(
+          (a) => drone.baseAttributes.where((e) => a.id == e.id).isNotEmpty)
+    ]
         .where((attr) => (attr.nameLocalisationKey ?? 0) > 0)
         .map((attr) => attr.id)
         .map((attrId) {
