@@ -17,8 +17,8 @@ dependencies:
   sqflite: ^2.0.0+3
   sqflite_common_ffi: ^2.0.0+1
 
-  bloc: ^8.1.0
-  flutter_bloc: ^8.1.1
+  bloc: ^9.0.0
+  flutter_bloc: ^9.1.0
   equatable: ^2.0.3
   provider: ^6.0.0
 
@@ -30,33 +30,30 @@ dependencies:
   package_info_plus: ^8.0.2
   uuid: ^4.2.1
   # https://github.com/appsup-dart/expressions/issues/22
-  expressions:
-    git:
-      url: https://github.com/alexmarkley/expressions.git
-      ref: petitparser5
+  expressions: ^0.2.5+2
 
   http: ^1.1.2
-  archive: ^3.3.8
+  archive: ^4.0.5
   csv: ^6.0.0
   url_launcher: ^6.0.11
   path_provider: ^2.0.5
-  flutter_local_notifications: ^17.2.2
+  flutter_local_notifications: ^17.2.2  # ToDo: Upgrade notifications to 19.0.0
 
   sprintf: ^7.0.0
-  intl: ^0.19.0
+  intl: ^0.20.2
 
   # Scanning QR specific
   scan: ^1.4.3
   qr_flutter: ^4.0.0
   image_picker: ^1.0.4
-  file_picker: ^8.1.2 #for native picking
+  file_picker: ^9.2.3 #for native picking
   permission_handler: ^11.1.0
   recase: ^4.0.0
 
   # UI
   step_progress_indicator: ^1.0.1
   flutter_svg: ^2.0.9
-  flutter_staggered_grid_view: '<=0.4.1' # locked to version because I don't want to deal with upgrading it as teh widget got removed
+  flutter_staggered_grid_view: '<=0.4.1' # ToDo: locked to version because I don't want to deal with upgrading it as teh widget got removed
   auto_size_text: ^3.0.0
   grouped_list: ^6.0.0
   flutter_countdown_timer: ^4.1.0
@@ -67,15 +64,15 @@ dependencies:
   firebase_analytics: ^11.3.1
   firebase_crashlytics: ^4.1.1
 
-  manup: ^9.0.1
+  manup: ^9.2.2
   path: ^1.8.2
   timezone: ^0.9.1
 
 dev_dependencies:
-  lints: ^4.0.0
+  lints: ^5.1.1
   build_runner: ^2.3.3
   json_serializable: ^6.2.0
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.3
   mockito: ^5.0.12
 
   flutter_test:
