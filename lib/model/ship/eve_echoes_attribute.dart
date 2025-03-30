@@ -34,7 +34,6 @@ var kDefenceAttributes = {
 /// Attributes that should always be cached for fitting
 final kFittingAttributes = [
   EveEchoesAttribute.warpScrambleStatus,
-  EveEchoesAttribute.moduleCanFitPolar,
   EveEchoesAttribute.moduleCanFitDefField,
   EveEchoesAttribute.moduleCanFitDefLink,
   EveEchoesAttribute.moduleCanFitCovert,
@@ -232,7 +231,6 @@ enum EveEchoesAttribute {
 
   // Fitting constraints
   moduleCanFitAttributeID,
-  moduleCanFitPolar,
   moduleCanFitDefField,
   moduleCanFitDefLink,
   moduleCanFitCovert,
@@ -310,9 +308,7 @@ enum EveEchoesAttribute {
   shieldDamageResonanceDMod,
   shieldDamageResonanceMod,
   shieldDamageResonanceDModMod,
-  shieldDamageResonanceDModShipMode,
   shieldRechargeRate,
-  shieldRechargeRateMultiplier,
   armorHPMultiplier,
   armorHpBonus,
   armorDamage,
@@ -642,8 +638,6 @@ extension ShipAttributeExtenstion on EveEchoesAttribute {
 
       case EveEchoesAttribute.moduleCanFitAttributeID:
         return 3000;
-      case EveEchoesAttribute.moduleCanFitPolar:
-        return 3001;
       case EveEchoesAttribute.moduleCanFitDefField:
         return 3005;
       case EveEchoesAttribute.moduleCanFitDefLink:
@@ -759,12 +753,8 @@ extension ShipAttributeExtenstion on EveEchoesAttribute {
         return 224;
       case EveEchoesAttribute.shieldDamageResonanceDModMod:
         return 226;
-      case EveEchoesAttribute.shieldDamageResonanceDModShipMode:
-        return 227;
       case EveEchoesAttribute.shieldRechargeRate:
         return 228;
-      case EveEchoesAttribute.shieldRechargeRateMultiplier:
-        return 229;
       case EveEchoesAttribute.armorHp:
         return 230;
       case EveEchoesAttribute.armorHPMultiplier:
