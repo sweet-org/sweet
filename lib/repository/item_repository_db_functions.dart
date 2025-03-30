@@ -34,6 +34,22 @@ extension ItemRepositoryDb on ItemRepository {
     return ids.map((id) => _attributeCache[id]!);
   }
 
+  Future<Iterable<Attribute?>> attributesWithIdsNullable(
+      {required List<int> ids}) async {
+    var missingAttributes =
+    ids.where((id) => _attributeCache.containsKey(id) == false);
+
+    if (missingAttributes.isNotEmpty) {
+      var attributes =
+      await _echoesDatabase.attributeDao.selectWithIds(ids: ids);
+      for (var attr in attributes) {
+        _attributeCache[attr.id] = attr;
+      }
+    }
+
+    return ids.map((id) => _attributeCache[id]);
+  }
+
   Future<Effect?> effectWithId({required int? id}) async =>
       await _echoesDatabase.effectDao.selectWithId(id: id);
 
