@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sweet/model/character/character.dart';
 import 'package:sweet/database/entities/item.dart';
 import 'package:sweet/pages/implant_fitting/implant_fitting_page.dart';
+import 'package:sweet/pages/settings/settings_page.dart';
 import 'package:sweet/repository/character_repository.dart';
 import 'package:sweet/service/fitting_simulator.dart';
 import 'package:sweet/pages/character_profile/character_profile_page.dart';
@@ -41,6 +42,15 @@ class App extends StatelessWidget {
           if (settings.name == '/') {
             return PageRouteBuilder(
               pageBuilder: (_, __, ___) => RootPage(),
+              transitionsBuilder: (_, anim, __, child) {
+                return buildSlideTransitionForChild(anim, child);
+              },
+            );
+          }
+
+          if (settings.name == SettingsPage.routeName) {
+            return PageRouteBuilder(
+              pageBuilder: (_, __, ___) => SettingsPage(),
               transitionsBuilder: (_, anim, __, child) {
                 return buildSlideTransitionForChild(anim, child);
               },

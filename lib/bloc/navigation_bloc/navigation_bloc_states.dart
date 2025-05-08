@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
 enum RootPages {
+  Settings,
   MarketBrowser,
   ItemBrowser,
   CharacterBrowser,
@@ -41,6 +42,9 @@ class ResetRootState extends NavigationState {
   @override
   String get title {
     switch (defaultPage) {
+      case RootPages.Settings:
+        return 'Settings';
+
       case RootPages.ItemBrowser:
         return 'Item Browser';
 

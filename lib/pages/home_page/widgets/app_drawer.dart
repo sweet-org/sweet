@@ -111,6 +111,12 @@ class _AppDrawerState extends State<AppDrawer> with FileSelector {
                         icon: Icons.announcement,
                         event: ShowPatchNotesPage(),
                       ),
+                      buildDrawerListTile(
+                        context,
+                        title: 'Settings',
+                        icon: Icons.settings,
+                        event: ShowSettingsPage(),
+                      ),
                       ListTile(
                         leading: Icon(
                           Icons.nightlight_round,

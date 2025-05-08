@@ -5,9 +5,10 @@ import 'package:sweet/pages/fittings_list/fitting_tool_list_page.dart';
 import 'package:sweet/pages/implants_list/implant_list_page.dart';
 import 'package:sweet/pages/items_browser/items_browser.dart';
 import 'package:sweet/pages/market_browser/market_browser.dart';
+import 'package:sweet/pages/settings/settings_page.dart';
+import 'package:sweet/pages/patch_notes/patch_notes_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sweet/pages/patch_notes/patch_notes_page.dart';
 
 import 'widgets/app_drawer.dart';
 
@@ -28,6 +29,9 @@ class _HomePageState extends State<HomePage> {
         Widget? body;
         if (state is ResetRootState) {
           switch (state.defaultPage) {
+            case RootPages.Settings:
+              body = SettingsPage();
+              break;
             case RootPages.MarketBrowser:
               body = MarketBrowser();
               BlocProvider.of<ItemRepositoryBloc>(context)

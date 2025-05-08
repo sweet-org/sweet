@@ -16,6 +16,9 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     if (event is RequestNavigationRoute) {
       emit(PushNavigationRoute(event.route));
     }
+    if (event is ShowSettingsPage) {
+      emit(ResetRootState(RootPages.Settings));
+    }
     if (event is ShowMarketBrowserPage) {
       emit(ResetRootState(RootPages.MarketBrowser));
     }

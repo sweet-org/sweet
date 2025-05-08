@@ -27,3 +27,5 @@ class ShowFittingToolPage extends NavigationEvent {}
 class ShowImplantToolPage extends NavigationEvent {}
 
 class ShowPatchNotesPage extends NavigationEvent {}
+
+class ShowSettingsPage extends NavigationEvent {}
