@@ -167,6 +167,10 @@ enum EveEchoesAttribute {
   sourceRadius,
   scanRadius,
   minScanRadius,
+  // Jump Drive
+  jumpDriveCapCost,
+  jumpDriveFuelCost,
+  jumpDriveRange,
 
   // Module
   activationTime,
@@ -546,6 +550,13 @@ extension ShipAttributeExtenstion on EveEchoesAttribute {
         return 10044;
       case EveEchoesAttribute.deliveryHoldCapacity:
         return 10103;
+
+      case EveEchoesAttribute.jumpDriveCapCost:
+        return 110;
+      case EveEchoesAttribute.jumpDriveFuelCost:
+        return 112;
+      case EveEchoesAttribute.jumpDriveRange:
+        return 116;
 
       case EveEchoesAttribute.droneControlRange:
         return 483;

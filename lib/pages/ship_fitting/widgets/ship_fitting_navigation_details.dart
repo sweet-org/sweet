@@ -46,6 +46,20 @@ class ShipFittingNavigationDetails extends StatelessWidget {
                   ShipAttributeValue(
                     attribute: EveEchoesAttribute.maxLockedTargets,
                   ),
+                  SizedBox(height: 16),
+                  // ToDo: I dont know how to detect ships with jump drives
+                  ShipAttributeValue(
+                    attribute: EveEchoesAttribute.jumpDriveRange,
+                    titleOverride: "Jump Range",
+                  ),
+                  ShipAttributeValue(
+                    attribute: EveEchoesAttribute.jumpDriveCapCost,
+                    titleOverride: "Capacitor Need",
+                  ),
+                  ShipAttributeValue(
+                    attribute: EveEchoesAttribute.jumpDriveFuelCost,
+                    titleOverride: "Fuel Cost",
+                  ),
                 ],
               ),
             ),
@@ -96,6 +110,7 @@ class ShipFittingNavigationDetails extends StatelessWidget {
                   AlignTimeWidget(),
                   ShipAttributeValue(
                     attribute: EveEchoesAttribute.shieldRechargeRate,
+                    titleOverride: "Shield Recharge Rate",
                   ),
                 ],
               ),
