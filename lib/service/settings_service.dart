@@ -14,6 +14,9 @@ class SettingsService {
   static const String kKeyChangedFallbackServer = "fallback_server_changed";
   static const String kKeyChangedFallbackEnabled = "fallback_enabled_changed";
 
+  // Cached values
+  final Map<String, dynamic> _cachedValues = {};
+
   // Singleton pattern
   static final SettingsService _instance = SettingsService._internal();
 
@@ -22,21 +25,37 @@ class SettingsService {
   SettingsService._internal();
 
   // Generic method to get a setting with a default value
-  Future<T> getSetting<T>(
-      String key, T defaultValue, String customizedKey) async {
-    final prefs = await SharedPreferences.getInstance();
-    final isCustomized = prefs.getBool(customizedKey) ?? false;
+  Future<T> getSetting<T>(String key, T defaultValue, String customizedKey,
+      {SharedPreferences? prefs}) async {
+    // Check if the value is already cached
+    if (_cachedValues.containsKey(key)) {
+      return _cachedValues[key] as T;
+    }
+    final T value =
+        await _getSetting(key, defaultValue, customizedKey, prefs: prefs);
+    _cachedValues[key] = value;
+    return value;
+  }
+
+  Future<T> _getSetting<T>(
+    String key,
+    T defaultValue,
+    String customizedKey, {
+    SharedPreferences? prefs,
+  }) async {
+    final pref = prefs ?? await SharedPreferences.getInstance();
+    final isCustomized = pref.getBool(customizedKey) ?? false;
     if (!isCustomized) {
       return defaultValue;
     }
     if (T == String) {
-      return (prefs.getString(key) ?? defaultValue) as T;
+      return (pref.getString(key) ?? defaultValue) as T;
     } else if (T == bool) {
-      return (prefs.getBool(key) ?? defaultValue) as T;
+      return (pref.getBool(key) ?? defaultValue) as T;
     } else if (T == int) {
-      return (prefs.getInt(key) ?? defaultValue) as T;
+      return (pref.getInt(key) ?? defaultValue) as T;
     } else if (T == double) {
-      return (prefs.getDouble(key) ?? defaultValue) as T;
+      return (pref.getDouble(key) ?? defaultValue) as T;
     }
     return defaultValue;
   }
@@ -56,6 +75,7 @@ class SettingsService {
     } else if (T == double) {
       await prefs.setDouble(key, value as double);
     }
+    _cachedValues[key] = value;
 
     // Mark as customized if different from default
     final isCustomized = value != defaultValue;
@@ -68,10 +88,28 @@ class SettingsService {
     return prefs.getBool(key) ?? false;
   }
 
+  Future<void> loadCache() async {
+    final prefs = await SharedPreferences.getInstance();
+    getSetting(
+        kKeyPrimaryServer, kDefaultPrimaryServer, kKeyChangedPrimaryServer,
+        prefs: prefs);
+    getSetting(
+        kKeyFallbackServer, kDefaultFallbackServer, kKeyChangedFallbackServer,
+        prefs: prefs);
+    getSetting(kKeyFallbackEnabled, kDefaultFallbackEnabled,
+        kKeyChangedFallbackEnabled,
+        prefs: prefs);
+  }
+
   // Settings-specific methods for convenience
   Future<String> getPrimaryServer() async {
     return getSetting(
         kKeyPrimaryServer, kDefaultPrimaryServer, kKeyChangedPrimaryServer);
+  }
+
+  /// Returns the cached value
+  String getPrimaryServerSync() {
+    return _cachedValues[kKeyPrimaryServer]!;
   }
 
   Future<void> setPrimaryServer(String value) async {
@@ -84,6 +122,11 @@ class SettingsService {
         kKeyFallbackServer, kDefaultFallbackServer, kKeyChangedFallbackServer);
   }
 
+  /// Returns the cached value
+  String getFallbackServerSync() {
+    return _cachedValues[kKeyFallbackServer]!;
+  }
+
   Future<void> setFallbackServer(String value) async {
     return setSetting(kKeyFallbackServer, value, kDefaultFallbackServer,
         kKeyChangedFallbackServer);
@@ -92,6 +135,11 @@ class SettingsService {
   Future<bool> getFallbackEnabled() async {
     return getSetting(kKeyFallbackEnabled, kDefaultFallbackEnabled,
         kKeyChangedFallbackEnabled);
+  }
+
+  /// Returns the cached value
+  bool getFallbackEnabledSync() {
+    return _cachedValues[kKeyFallbackEnabled]!;
   }
 
   Future<void> setFallbackEnabled(bool value) async {
