@@ -26,6 +26,7 @@ enum ManUpStatus {
 
 class ManUpService {
   final String url;
+  final String? fallback;
   final Client http;
   final String os;
 
@@ -34,10 +35,15 @@ class ManUpService {
   ManUpStatus get status => _status;
 
   ManUpMetadata? _metadata;
+
   PlatformData? get configData => _metadata?.getPlatformData(os);
 
-  ManUpService({required this.url, required this.http, String? os})
-      : os = os ?? (kIsWeb ? 'web' : Platform.operatingSystem);
+  ManUpService({
+    required this.url,
+    this.fallback,
+    required this.http,
+    String? os,
+  }) : os = os ?? (kIsWeb ? 'web' : Platform.operatingSystem);
 
   Future<ManUpStatus> validate() async {
     print("ManUpService: Validating...");
@@ -78,22 +84,38 @@ class ManUpService {
         "min version: $minVersion, latest version: $latestVersion");
   }
 
-  Future<void> _fetchConfig() async {
+  Future<bool> _tryFetchConfig(String url) async {
     try {
       final uri = Uri.parse(url);
       final response = await http.get(uri);
       if (response.statusCode != 200) {
-        _status = ManUpStatus.error;
         print('ManUpService: Failed to fetch config from $url '
             'with status code ${response.statusCode}');
-        return;
+        return false;
       }
       Map<String, dynamic> config = jsonDecode(response.body);
       _metadata = ManUpMetadata(config);
-      //print('ManUpService: Fetched config from $url');
+      return true;
     } catch (e) {
-      _status = ManUpStatus.error;
       print('ManUpService: Failed to fetch config from $url: $e');
+      return false;
+    }
+  }
+
+  Future<void> _fetchConfig() async {
+    final primarySuc = await _tryFetchConfig(url);
+    if (primarySuc) {
+      return;
+    }
+    if (fallback == null) {
+      _status = ManUpStatus.error;
+      print('ManUpService: Primary server failed, no fallback provided');
+      return;
+    }
+    final fallbackSuc = await _tryFetchConfig(fallback!);
+    if (!fallbackSuc) {
+      _status = ManUpStatus.error;
+      print('ManUpService: Failed to fetch config from fallback server');
       return;
     }
     return;

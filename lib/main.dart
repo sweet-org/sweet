@@ -15,17 +15,17 @@ import 'package:sweet/repository/ship_fitting_repository.dart';
 import 'package:sweet/service/attribute_calculator_service.dart';
 import 'package:sweet/service/local_notifications_service.dart';
 import 'package:sweet/service/manup/manup_service.dart';
+import 'package:sweet/service/settings_service.dart';
 import 'package:sweet/util/constants.dart';
 import 'package:sweet/util/platform_helper.dart';
 
 import 'repository/item_repository.dart';
 import 'themed_app.dart';
 
-
 import 'util/crash_reporting.dart';
 import 'util/http_client.dart' as http_client;
-late File? file;
 
+late File? file;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,8 +33,8 @@ Future<void> main() async {
   if (enableFileLogging || shouldEnableLogging) {
     file = await PlatformHelper.logFile();
     print("Logging output goes to ${file!.path}");
-    file!.writeAsStringSync(
-        "[${DateTime.now()}] Startup\n", mode: FileMode.write);
+    file!.writeAsStringSync("[${DateTime.now()}] Startup\n",
+        mode: FileMode.write);
 
     overridePrint(() async {
       // Everything inside this is being logged to a file
@@ -54,6 +54,7 @@ Future<void> main() async {
     final shouldEnableSSLFix = await PlatformHelper.shouldEnableSSLFix();
     http_client.enableSSLFix = shouldEnableSSLFix;
     file = null;
+    await SettingsService().loadCache();
     runApp(
       buildRepositories(
         child: buildBlocProviders(
@@ -65,26 +66,33 @@ Future<void> main() async {
 }
 
 void Function() overridePrint(Future<void> Function() mainFn) => () {
-  var spec = ZoneSpecification(
-      print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
+      var spec = ZoneSpecification(
+          print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
         if (file != null) {
-          file!.writeAsStringSync(
-              "[${DateTime.now()}] $line\n", mode: FileMode.append);
+          file!.writeAsStringSync("[${DateTime.now()}] $line\n",
+              mode: FileMode.append);
         }
         parent.print(zone, line);
-      }
-  );
-  return Zone.current.fork(specification: spec).run(mainFn);
-};
+      });
+      return Zone.current.fork(specification: spec).run(mainFn);
+    };
 
-MultiRepositoryProvider buildRepositories({required Widget child}) {
+MultiRepositoryProvider buildRepositories({
+  required Widget child,
+}) {
   final client = http_client.createHttpClient();
+  final settings = SettingsService();
 
   return MultiRepositoryProvider(
     providers: [
       RepositoryProvider<ManUpService>(
         create: (_) => ManUpService(
-          url: kManUpUrl,
+          url: settings.getPrimaryServerSync().replaceAll("/*\$", "") +
+              kManUpUrl,
+          fallback: settings.getFallbackEnabledSync()
+              ? settings.getFallbackServerSync().replaceAll("/*\$", "") +
+                  kManUpUrl
+              : null,
           http: client,
           os: Platform.operatingSystem,
         ),

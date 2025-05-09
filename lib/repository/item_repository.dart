@@ -20,6 +20,7 @@ import 'package:sweet/model/implant/implant_loadout_definition.dart';
 import 'package:sweet/model/implant/slot_type.dart';
 import 'package:sweet/model/nihilus_space_modifier.dart';
 import 'package:sweet/model/ship/ship_fitting_slot_module.dart';
+import 'package:sweet/service/settings_service.dart';
 import 'package:sweet/util/http_client.dart';
 
 import '../extensions/item_meta_extension.dart';
@@ -110,9 +111,46 @@ class ItemRepository {
     if (!isOK) return false;
 
     if (checkEtag) {
-      final dbUrl = Uri.parse(kDBUrl);
-      final response = await createHttpClient().send(http.Request('HEAD', dbUrl));
-      final dbEtag = response.headers['etag'];
+      final client = createHttpClient();
+      late http.StreamedResponse response;
+      late dynamic dbEtag;
+
+      try {
+        String baseUrl = await SettingsService().getPrimaryServer();
+        if (baseUrl.endsWith("/")) {
+          baseUrl = baseUrl.replaceAll(RegExp("/*\$"), "");
+        }
+        final dbUrl = Uri.parse(baseUrl + kDBUrl);
+        final res = await client.send(http.Request('HEAD', dbUrl));
+        if (res.statusCode != 200) {
+          throw http.ClientException(
+              'Invalid Status code: ${res.statusCode}', dbUrl);
+        }
+        final etag = res.headers['etag'];
+        response = res;
+        dbEtag = etag;
+      } catch (e) {
+        print("Primary server failed for db check: $e");
+        if (e is! http.ClientException) {
+          rethrow;
+        }
+
+        final hasFallback = await SettingsService().getFallbackEnabled();
+        if (!hasFallback) {
+          throw Exception('Failed to check database: $e');
+        }
+        print("Primary server failed, trying fallback: $e");
+
+        String baseUrl = await SettingsService().getFallbackServer();
+        if (baseUrl.endsWith("/")) {
+          baseUrl = baseUrl.replaceAll(RegExp("/*\$"), "");
+        }
+        final dbUrl = Uri.parse(baseUrl + kDBUrl);
+        final res = await client.send(http.Request('HEAD', dbUrl));
+        final etag = res.headers['etag'];
+        response = res;
+        dbEtag = etag;
+      }
 
       if (response.statusCode >= 400) {
         throw Exception('Invalid Status code: ${response.statusCode}');
@@ -154,6 +192,23 @@ class ItemRepository {
     return crc32;
   }
 
+  Future<http.StreamedResponse> _downloadDb({
+    required String baseUrl,
+}) async {
+    String dbUrl = baseUrl.replaceAll(RegExp("/*\$"), "") + kDBUrl;
+    final dbTestUrl = Uri.parse(dbUrl);
+    print('Downloading DB from $dbTestUrl');
+
+    var response = await createHttpClient().send(http.Request('GET', dbTestUrl));
+
+    if (response.statusCode >= 400) {
+      throw http.ClientException(
+          'Invalid Status code: ${response.statusCode}', dbTestUrl);
+    }
+
+    return response;
+  }
+
   Future<void> downloadDatabase({
     required int latestVersion,
     required Emitter<DataLoadingBlocState> emitter,
@@ -164,17 +219,32 @@ class ItemRepository {
     // Download the latest DB
     print('Downloading DB...');
     emitter(LoadingRepositoryState('Downloading DB for v$latestVersion...'));
-    final dbTestUrl = Uri.parse(kDBUrl);
-    print('Downloading DB from $dbTestUrl');
 
-    var response = await createHttpClient().send(http.Request('GET', dbTestUrl));
+    late http.StreamedResponse response;
+    bool isPrimary = true;
+    try {
+      final res = await _downloadDb(
+        baseUrl: await SettingsService().getPrimaryServer(),
+      );
+      response = res;
+    } catch (e) {
+      if (e is! http.ClientException) {
+        rethrow;
+      }
+      final hasFallback = await SettingsService().getFallbackEnabled();
+      if (!hasFallback) {
+        throw Exception('Failed to download database: $e');
+      }
+      print("Primary server failed, trying fallback: $e");
+      response = await _downloadDb(
+        baseUrl: await SettingsService().getFallbackServer(),
+      );
+      isPrimary = false;
+    }
+
     var totalBytes = response.contentLength;
     var downloadedBytes = 0;
     var bytes = <int>[];
-
-    if (response.statusCode >= 400) {
-      throw Exception('Invalid Status code: ${response.statusCode}');
-    }
 
     var stream = response.stream;
 
@@ -185,7 +255,8 @@ class ItemRepository {
         downloadedBytes: downloadedBytes,
         totalBytes: totalBytes!,
         message:
-            'Downloading Database\n${filesize(downloadedBytes, 2)} of ${filesize(totalBytes, 2)}',
+            'Downloading Database ${isPrimary ? "" : "from fallback"}\n'
+            '${filesize(downloadedBytes, 2)} of ${filesize(totalBytes, 2)}',
       ));
     }
 

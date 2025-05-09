@@ -47,8 +47,8 @@ const kPatchDayManUpKey = 'patch_day';
 const kPatchHourManUpKey = 'patch_hour';
 const kPatchMinuteManUpKey = 'patch_minute';
 
-const kManUpUrl = 'https://sweet.silkypants.dev/manup.json';
-const kDBUrl = 'https://sweet.silkypants.dev/game_data/echoes_db.tbz';
+const kManUpUrl = '/manup.json';
+const kDBUrl = '/game_data/echoes_db.tbz';
 
 const kNihilusCapAdjustmentModifierTypeCode = '/Nihilus/ChargeDe/';
 const kImplantShieldArmorModifierTypeCode = '/implant/global/shieldarmor';
