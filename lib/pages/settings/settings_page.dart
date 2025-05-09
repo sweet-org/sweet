@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:flutter/cupertino.dart';
+import 'bloc/settings_bloc/settings_bloc.dart';
+import 'widgets/settings_list.dart';
 
 class SettingsPage extends StatelessWidget {
   static const routeName = '/settings';
@@ -8,9 +11,10 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      child: Center(
-        child: Text('Settings Page'),
+    return BlocProvider<SettingsBloc>(
+      create: (context) => SettingsBloc(),
+      child: Scaffold(
+        body: const SettingsList(),
       ),
     );
   }
