@@ -87,9 +87,9 @@ MultiRepositoryProvider buildRepositories({
     providers: [
       RepositoryProvider<ManUpService>(
         create: (_) => ManUpService(
-          url: settings.getPrimaryServerSync().replaceAll("/*\$", "") +
+          url: () => settings.getPrimaryServerSync().replaceAll("/*\$", "") +
               kManUpUrl,
-          fallback: settings.getFallbackEnabledSync()
+          fallback: () => settings.getFallbackEnabledSync()
               ? settings.getFallbackServerSync().replaceAll("/*\$", "") +
                   kManUpUrl
               : null,

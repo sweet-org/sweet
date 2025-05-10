@@ -24,9 +24,12 @@ enum ManUpStatus {
   unknown,
 }
 
+typedef UrlGetter = String Function();
+typedef OptionalUrlGetter = String? Function();
+
 class ManUpService {
-  final String url;
-  final String? fallback;
+  final UrlGetter url;
+  final OptionalUrlGetter? fallback;
   final Client http;
   final String os;
 
@@ -103,16 +106,17 @@ class ManUpService {
   }
 
   Future<void> _fetchConfig() async {
-    final primarySuc = await _tryFetchConfig(url);
+    final primarySuc = await _tryFetchConfig(url());
     if (primarySuc) {
       return;
     }
-    if (fallback == null) {
+    final fallbackUrl = fallback?.call();
+    if (fallbackUrl == null) {
       _status = ManUpStatus.error;
       print('ManUpService: Primary server failed, no fallback provided');
       return;
     }
-    final fallbackSuc = await _tryFetchConfig(fallback!);
+    final fallbackSuc = await _tryFetchConfig(fallbackUrl);
     if (!fallbackSuc) {
       _status = ManUpStatus.error;
       print('ManUpService: Failed to fetch config from fallback server');
