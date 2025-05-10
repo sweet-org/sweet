@@ -66,6 +66,7 @@ class ImplantFittingBloc extends Bloc<ImplantFittingEvent, ImplantFittingState> 
           [
             _itemRepository.marketGroupMap[MarketGroupFilters.generalUnits.marketGroupId]!,
             _itemRepository.marketGroupMap[MarketGroupFilters.advancedUnits.marketGroupId]!,
+            _itemRepository.marketGroupMap[MarketGroupFilters.reactiveUnits.marketGroupId]!,
           ],
           null,
         );
