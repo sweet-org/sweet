@@ -1,6 +1,8 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sweet/service/settings_service.dart';
+import 'package:sweet/util/localisation_constants.dart';
 
 import '../bloc/settings_bloc/settings_bloc.dart';
 import 'text_setting_widget.dart';
@@ -28,6 +30,14 @@ class _SettingsListState extends State<SettingsList> {
 
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, state) {
+        final darkTheme = AdaptiveTheme.of(context);
+
+        final currentMode = darkTheme.mode == AdaptiveThemeMode.system
+            ? 'System'
+            : darkTheme.mode == AdaptiveThemeMode.dark
+            ? 'Dark'
+            : 'Light';
+
         return ListView(
           padding: const EdgeInsets.all(16),
           children: [
@@ -82,6 +92,18 @@ class _SettingsListState extends State<SettingsList> {
                 context
                     .read<SettingsBloc>()
                     .add(ToggleFallbackServerEvent(value));
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.nightlight_round,
+                size: 24,
+                color: Theme.of(context).primaryColor,
+              ),
+              title: Text(StaticLocalisationStrings.theme),
+              subtitle: Text(currentMode),
+              onTap: () {
+                darkTheme.toggleThemeMode();
               },
             ),
             const SizedBox(height: 32),

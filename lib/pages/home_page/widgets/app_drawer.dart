@@ -34,14 +34,6 @@ class AppDrawer extends StatefulWidget {
 class _AppDrawerState extends State<AppDrawer> with FileSelector {
   @override
   Widget build(BuildContext context) {
-    final theme = AdaptiveTheme.of(context);
-
-    final currentMode = theme.mode == AdaptiveThemeMode.system
-        ? 'System'
-        : theme.mode == AdaptiveThemeMode.dark
-            ? 'Dark'
-            : 'Light';
-
     final charRepo = RepositoryProvider.of<CharacterRepository>(context);
 
     return SafeArea(
@@ -116,18 +108,6 @@ class _AppDrawerState extends State<AppDrawer> with FileSelector {
                         title: 'Settings',
                         icon: Icons.settings,
                         event: ShowSettingsPage(),
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          Icons.nightlight_round,
-                          size: 24,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        title: Text(StaticLocalisationStrings.theme),
-                        subtitle: Text(currentMode),
-                        onTap: () {
-                          theme.toggleThemeMode();
-                        },
                       ),
                       ListTile(
                         leading: Icon(
