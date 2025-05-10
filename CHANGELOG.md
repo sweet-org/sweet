@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.3.8]
+#### Added
+- Added a settings page
+- Added a fallback download server
+- Added jump-drive related stats to the navigation stats
+- Added reactive implant units
+
+#### Changed
+- Switched to a new download server to fix caching and SSL issues (this can be changed in the settings)
+- Replaced the manup package with a custom implementation to remove Firebase dependencies
+
+#### Fixed
+- Fixed calculation issue with recursive drone attributes
+- Fixed display issue with drone attributes
+- Fixed issue with removed attributes that were hardcoded
+
 ### [0.3.7]
 #### Added
 - Added support for corp structures
