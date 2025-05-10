@@ -7,7 +7,8 @@ import 'text_setting_widget.dart';
 import 'toggle_setting_widget.dart';
 
 class SettingsList extends StatefulWidget {
-  const SettingsList({super.key});
+  final bool closeButtonEnabled;
+  const SettingsList({super.key, this.closeButtonEnabled = false});
 
   @override
   State<SettingsList> createState() => _SettingsListState();
@@ -84,17 +85,32 @@ class _SettingsListState extends State<SettingsList> {
               },
             ),
             const SizedBox(height: 32),
-            Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  foregroundColor: Theme.of(context).textTheme.bodySmall?.color,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                widget.closeButtonEnabled ? ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    foregroundColor:
+                        Theme.of(context).textTheme.bodySmall?.color,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Close'),
+                ) : null,
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    foregroundColor:
+                        Theme.of(context).textTheme.bodySmall?.color,
+                  ),
+                  onPressed: () {
+                    context.read<SettingsBloc>().add(ResetSettingsEvent());
+                  },
+                  child: Text('Reset to Defaults'),
                 ),
-                onPressed: () {
-                  context.read<SettingsBloc>().add(ResetSettingsEvent());
-                },
-                child: Text('Reset to Defaults'),
-              ),
+              ].nonNulls.toList(growable: false),
             ),
           ],
         );

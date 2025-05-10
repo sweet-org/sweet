@@ -6,15 +6,16 @@ import 'widgets/settings_list.dart';
 
 class SettingsPage extends StatelessWidget {
   static const routeName = '/settings';
+  final bool closeButtonEnabled;
 
-  const SettingsPage({super.key});
+  const SettingsPage({super.key, this.closeButtonEnabled = false});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<SettingsBloc>(
       create: (context) => SettingsBloc(),
       child: Scaffold(
-        body: const SettingsList(),
+        body: SettingsList(closeButtonEnabled: closeButtonEnabled),
       ),
     );
   }

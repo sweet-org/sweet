@@ -13,6 +13,7 @@ import 'package:sweet/util/localisation_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../service/manup/manup_service.dart';
+import '../settings/settings_page.dart';
 
 class RootPage extends StatelessWidget with FileSelector {
   @override
@@ -212,6 +213,7 @@ class RootPage extends StatelessWidget with FileSelector {
                 alignment: WrapAlignment.center,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 spacing: 8,
+                runSpacing: 8,
                 children: _buildButtonsForState(context, state),
               ),
             ),
@@ -277,7 +279,7 @@ class RootPage extends StatelessWidget with FileSelector {
         ),
       ),
       SizedBox(
-        width: 150,
+        width: 175,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).primaryColor),
@@ -295,7 +297,7 @@ class RootPage extends StatelessWidget with FileSelector {
         ),
       ),
       SizedBox(
-        width: 150,
+        width: 175,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).primaryColor),
@@ -322,7 +324,7 @@ class RootPage extends StatelessWidget with FileSelector {
         ),
       ),
       SizedBox(
-        width: 150,
+        width: 175,
         child: ElevatedButton(
           onPressed: () => copyStateToClipboard(context, state),
           style: ElevatedButton.styleFrom(
@@ -335,6 +337,27 @@ class RootPage extends StatelessWidget with FileSelector {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text('Copy Error'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      // Button that opens the app settings
+      SizedBox(
+        width: 150,
+        child: ElevatedButton(
+          onPressed: () => Navigator.pushNamed(context, SettingsPage.routeName),
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).primaryColor),
+          child: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.settings),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text('Settings'),
                 ),
               ],
             ),

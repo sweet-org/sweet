@@ -50,7 +50,7 @@ class App extends StatelessWidget {
 
           if (settings.name == SettingsPage.routeName) {
             return PageRouteBuilder(
-              pageBuilder: (_, __, ___) => SettingsPage(),
+              pageBuilder: (_, __, ___) => SettingsPage(closeButtonEnabled: true),
               transitionsBuilder: (_, anim, __, child) {
                 return buildSlideTransitionForChild(anim, child);
               },
