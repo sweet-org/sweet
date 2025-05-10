@@ -63,6 +63,8 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
           manUpStatus: status,
         ));
         return;
+      } else if (status == ManUpStatus.error) {
+        emit(AppVersionCheckFailed('Failed to check for updates'));
       } else if (status != ManUpStatus.latest &&
           status != ManUpStatus.unknown) {
         emit(AppUpdateAvailable(
@@ -70,51 +72,55 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
         ));
       }
 
-      final version =
-          _manUpService.setting<int>(key: kEEVersionManUpKey, orElse: 0);
-      final expectedDbCrc =
-          _manUpService.setting<int>(key: kDbCrcManUpKey, orElse: 0);
-      final performCrcCheck =
-          _manUpService.setting<bool>(key: kPerformCrcManUpKey, orElse: false);
-      final useNewDbLocation =
-          _manUpService.setting<bool>(key: kUseNewDbLocation, orElse: true);
+      if (status != ManUpStatus.error) {
+        final version =
+        _manUpService.setting<int>(key: kEEVersionManUpKey, orElse: 0);
+        final expectedDbCrc =
+        _manUpService.setting<int>(key: kDbCrcManUpKey, orElse: 0);
+        final performCrcCheck =
+        _manUpService.setting<bool>(key: kPerformCrcManUpKey, orElse: false);
+        final useNewDbLocation =
+        _manUpService.setting<bool>(key: kUseNewDbLocation, orElse: true);
 
-      try {
-        final downloadDb = event.forceDbDownload ||
-            await _itemRepository.checkForDatabaseUpdate(
+        try {
+          final downloadDb = event.forceDbDownload ||
+              await _itemRepository.checkForDatabaseUpdate(
+                latestVersion: version,
+                dbCrc: expectedDbCrc,
+                performCrcCheck: performCrcCheck,
+                checkEtag: useNewDbLocation,
+              );
+
+          if (downloadDb) {
+            await _itemRepository.downloadDatabase(
               latestVersion: version,
-              dbCrc: expectedDbCrc,
-              performCrcCheck: performCrcCheck,
-              checkEtag: useNewDbLocation,
+              emitter: emit,
             );
-
-        if (downloadDb) {
-          await _itemRepository.downloadDatabase(
-            latestVersion: version,
-            emitter: emit,
-          );
+          }
+        } on ClientException catch (e, stack) {
+          print("Error: Failed to check/download database: $e");
+          print(stack);
+          emit(DatabaseDownloadFailedState(
+              message: "Failed to check/download database: $e"));
+          await Future.delayed(Duration(seconds: 3));
+          if (event.forceDbDownload) rethrow;
         }
-      } on ClientException catch (e, stack) {
-        print("Error: Failed to check/download database: $e");
-        print(stack);
-        emit(DatabaseDownloadFailedState(
-            message: "Failed to check/download database: $e"));
-        await Future.delayed(Duration(seconds: 3));
-        if (event.forceDbDownload) rethrow;
-      }
 
-      if (performCrcCheck) {
-        emit(LoadingRepositoryState('Validating database...'));
-        final dbCrc = await _itemRepository.databaseCrc();
-        if (dbCrc != expectedDbCrc) {
-          emit(RepositoryFailedLoad(
-            message:
-                'Database is missing or invalid. Please retry to download.',
-            expectedCrc: expectedDbCrc,
-            actualCrc: dbCrc,
-          ));
-          return;
+        if (performCrcCheck) {
+          emit(LoadingRepositoryState('Validating database...'));
+          final dbCrc = await _itemRepository.databaseCrc();
+          if (dbCrc != expectedDbCrc) {
+            emit(RepositoryFailedLoad(
+              message:
+              'Database is missing or invalid. Please retry to download.',
+              expectedCrc: expectedDbCrc,
+              actualCrc: dbCrc,
+            ));
+            return;
+          }
         }
+      } else {
+        print("${DateTime.now()}: Did not try to download database - ManUp service failed");
       }
 
       emit(LoadingRepositoryState('Loading data...\nOpening DB'));

@@ -17,7 +17,7 @@ class AppUpdateBanner extends StatelessWidget {
         builder: (context, snapshot) {
           final status = snapshot.data;
 
-          if (status == null || status == ManUpStatus.latest || status == ManUpStatus.unknown) {
+          if (status == null || status == ManUpStatus.latest || status == ManUpStatus.unknown || status == ManUpStatus.error) {
             return Container();
           }
 

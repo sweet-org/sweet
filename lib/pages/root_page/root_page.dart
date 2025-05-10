@@ -20,8 +20,8 @@ class RootPage extends StatelessWidget with FileSelector {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocConsumer<DataLoadingBloc, DataLoadingBlocState>(
-          listenWhen: (prev, curr) => curr is AppUpdateAvailable,
-          buildWhen: (prev, curr) => curr is! AppUpdateAvailable,
+          listenWhen: (prev, curr) => curr is AppUpdateAvailable || curr is AppVersionCheckFailed,
+          buildWhen: (prev, curr) => curr is! AppUpdateAvailable && curr is! AppVersionCheckFailed,
           listener: (context, state) {
             if (state is AppUpdateAvailable) {
               final theme = Theme.of(context);
@@ -45,6 +45,18 @@ class RootPage extends StatelessWidget with FileSelector {
                           context,
                         );
                       }),
+                ),
+              );
+            } else if (state is AppVersionCheckFailed) {
+              final theme = Theme.of(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    state.message,
+                    style: theme.textTheme.bodyLarge,
+                  ),
+                  backgroundColor: theme.primaryColor,
+                  duration: Duration(seconds: 10),
                 ),
               );
             }

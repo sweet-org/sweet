@@ -59,6 +59,15 @@ class AppUpdateAvailable extends DataLoadingBlocState {
       ];
 }
 
+class AppVersionCheckFailed extends DataLoadingBlocState {
+  final String message;
+
+  AppVersionCheckFailed(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 class AppUnsupportedState extends DataLoadingBlocState {
   final bool isDisabled;
   final bool isUnsupported;
