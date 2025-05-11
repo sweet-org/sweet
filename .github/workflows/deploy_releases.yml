@@ -255,6 +255,13 @@ jobs:
         SWEET_JSON_KEY_DATA: ${{ secrets.SWEET_JSON_KEY_DATA }}
         AAB_PATH: build/app/outputs/bundle/release/app-release.aab
 
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.app_build.outputs.name }}-android
+        path: build/app/outputs/bundle/release/app-release.aab
+        retention-days: 5
+
   upload-release-s3:
     needs: [job-linux, job-apple, job-windows]
     runs-on: ubuntu-latest
