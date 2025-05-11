@@ -9,7 +9,12 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />  
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
+    <!-- ToDo: Don't know if we need this - I think Firebase used to add this and since the removal of
+               firebase, the google play console did throw an error because the permission is missing.
+               Though the app does not use any ads, but I am not sure if this is also required for general
+               metrics of the play console so I did add this for now -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
     
     <!-- Provide required visibility configuration for API level 30 and above -->
     <queries>
