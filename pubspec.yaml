@@ -43,7 +43,7 @@ dependencies:
   intl: ^0.20.2
 
   # Scanning QR specific
-  scan: ^1.4.3
+  mobile_scanner: ^7.0.0
   qr_flutter: ^4.0.0
   image_picker: ^1.0.4
   file_picker: ^9.2.3 #for native picking

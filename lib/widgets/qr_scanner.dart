@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:scan/scan.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 class QrScanner extends StatefulWidget {
   QrScanner({Key? key}) : super(key: key);
@@ -10,7 +12,7 @@ class QrScanner extends StatefulWidget {
 }
 
 class _QrScannerState extends State<QrScanner> {
-  final ScanController _captureController = ScanController();
+  final MobileScannerController  _captureController = MobileScannerController();
 
   final picker = ImagePicker();
 
@@ -19,6 +21,13 @@ class _QrScannerState extends State<QrScanner> {
   @override
   void initState() {
     super.initState();
+    unawaited(_captureController.start());
+  }
+
+  @override
+  Future<void> dispose() async {
+    super.dispose();
+    await _captureController.dispose();
   }
 
   @override
@@ -27,10 +36,9 @@ class _QrScannerState extends State<QrScanner> {
       body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          ScanView(
+          MobileScanner(
             controller: _captureController,
-            scanAreaScale: 1.0,
-            onCapture: (data) => onScannedData(data),
+            onDetect: (data) => onScannedData(data.barcodes.first.rawValue),
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -63,7 +71,7 @@ class _QrScannerState extends State<QrScanner> {
               ),
               RawMaterialButton(
                 onPressed: () {
-                  _captureController.toggleTorchMode();
+                  _captureController.toggleTorch();
 
                   setState(() {
                     _isTorchOn = !_isTorchOn;
@@ -83,9 +91,9 @@ class _QrScannerState extends State<QrScanner> {
                       await picker.pickImage(source: ImageSource.gallery);
 
                   var data = pickedFile != null
-                      ? await Scan.parse(pickedFile.path)
+                      ? await _captureController.analyzeImage(pickedFile.path)
                       : null;
-                  onScannedData(data);
+                  onScannedData(data?.barcodes.first.rawValue);
                 },
                 fillColor: Colors.blue.shade700,
                 shape: CircleBorder(),
