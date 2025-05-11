@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Changed
 - Switched to a new download server to fix caching and SSL issues (this can be changed in the settings)
 - Replaced the manup package with a custom implementation to remove Firebase dependencies
+- Bumped Android compile/target version to API Level 36
+- Migrated to Gradle 8
+- Switched from scan to mobile_scanner for QR code scanning
 
 #### Fixed
 - Fixed calculation issue with recursive drone attributes
