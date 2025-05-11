@@ -43,6 +43,7 @@ if (flutterVersionName == null) {
 }
 
 android {
+    namespace "dev.sillykat.eve.sweet"
     compileSdkVersion 36
 
     compileOptions {
