@@ -94,7 +94,9 @@ class ItemDao extends BaseDao<Item> with BaseDaoMixin {
       };
 
   Future<Iterable<Item>> selectWithCategory({required int categoryId}) async =>
-      await select(whereClause: 'WHERE id / 1000000000 = $categoryId');
+      await select(whereClause: '''
+        WHERE id >= ${categoryId * 1000000000} AND id < ${(categoryId + 1) * 1000000000}
+      ''');
 
   Future<Iterable<Item>> selectWithGroup({required int groupId}) async =>
       await select(whereClause: 'WHERE id / 1000000 = $groupId');

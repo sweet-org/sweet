@@ -282,6 +282,15 @@ class ItemRepository {
 
     await _echoesDatabase.openDatabase(path: dbFile.absolute.path);
 
+    if (!await hasModifierSkillCache()) {
+      await db.closeDatabase();
+      await _echoesDatabase.openDatabase(path: dbFile.absolute.path, readOnly: false);
+      await createModifierSkillColumn();
+      await genModifierSkillCache();
+      await _echoesDatabase.closeDatabase();
+      await _echoesDatabase.openDatabase(path: dbFile.absolute.path);
+    }
+
     fittingSkills = {
       for (var s in await fittingSkillsFromDbSkills()) s.itemId: s
     };
@@ -414,7 +423,7 @@ class ItemRepository {
     final skills = await skillItems;
 
     final ids = skills.map((e) => e.id);
-    final items = {for (var item in await skillItems) item.id: item};
+    final items = {for (var item in skills) item.id: item};
 
     // Get all the attributes
     final itemAttributes = await getBaseAttributesForItemIds(ids);

@@ -206,7 +206,7 @@ extension ItemRepositoryDb on ItemRepository {
     return await _echoesDatabase.db.rawQuery('''
       SELECT items.id as itemId, item_modifiers.*
       FROM items
-      JOIN item_modifiers ON item_modifiers.code BETWEEN printf(items.mainCalCode, 1) AND printf(items.mainCalCode, 5)  
+      JOIN item_modifiers ON item_modifiers.baseCode = items.mainCalCode
       WHERE items.id IN (${ids.join(', ')})
     ''').then(
       (rows) => groupBy(rows, (dynamic row) => row['itemId'] as int? ?? 0).map(
@@ -217,6 +217,43 @@ extension ItemRepositoryDb on ItemRepository {
       ),
     );
   }
+
+  Future<bool> hasModifierSkillCache() async {
+    final columnExists = await _echoesDatabase.db.rawQuery('''
+      PRAGMA table_info(item_modifiers);
+    ''').then((columns) => columns.any((column) => column['name'] == 'baseCode'));
+    if (!columnExists) return false;
+    // Check if at least one row exists
+
+    final rows = await _echoesDatabase.db.rawQuery('''
+      SELECT baseCode
+      FROM item_modifiers
+      WHERE baseCode IS NOT NULL
+      LIMIT 1;
+    ''');
+    if (rows.isEmpty || rows.first.isEmpty) return false;
+    return true;
+  }
+
+  Future<void> createModifierSkillColumn() async {
+    final columnExists = await _echoesDatabase.db.rawQuery('''
+      PRAGMA table_info(item_modifiers);
+    ''').then((columns) => columns.any((column) => column['name'] == 'baseCode'));
+
+    if (!columnExists) {
+      await _echoesDatabase.db.rawUpdate(
+          "ALTER TABLE item_modifiers ADD COLUMN baseCode TEXT NULL;");
+    }
+  }
+
+  Future<void> genModifierSkillCache() async {
+    await _echoesDatabase.db.rawUpdate('''
+      UPDATE item_modifiers
+      SET baseCode = SUBSTR(code, 1, INSTR(code, '/Lv') + 2) || '%d/'
+      WHERE code LIKE '%/Lv%/';
+    ''');
+  }
+
 
   ///
   ///
