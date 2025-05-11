@@ -243,7 +243,7 @@ jobs:
       run: flutter build appbundle --build-number $BUILD_NUMBER --release
 
     - name: Setup Ruby
-      uses: ruby/setup-ruby@v1.133.2
+      uses: ruby/setup-ruby@v1
       with:
         bundler-cache: true
 
