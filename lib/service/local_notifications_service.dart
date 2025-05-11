@@ -24,15 +24,7 @@ class LocalNotificationsService {
     final initializationSettingsIOS = DarwinInitializationSettings(
         requestAlertPermission: true,
         requestBadgePermission: false,
-        requestSoundPermission: false,
-        onDidReceiveLocalNotification: (
-          int id,
-          String? title,
-          String? body,
-          String? payload,
-        ) async {
-          print(id);
-        });
+        requestSoundPermission: false);
 
     const initializationSettingsMacOS = DarwinInitializationSettings(
       requestAlertPermission: true,
@@ -40,11 +32,18 @@ class LocalNotificationsService {
       requestSoundPermission: false,
     );
 
+    const initializationSettingsWindows = WindowsInitializationSettings(
+        appName: "sweet",
+        appUserModelId: "dev.sillykat.eve.sweet",
+        guid: "96415652-173f-4e49-ae4d-5f1ec9a2c2d0"  // Just a random guid
+    );
+
     final initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
       macOS: initializationSettingsMacOS,
       linux: LinuxInitializationSettings(defaultActionName: ''),
+      windows: initializationSettingsWindows,
     );
 
     await _notificationsPlugin.initialize(
@@ -62,6 +61,7 @@ class LocalNotificationsService {
     required String message,
     required Duration duration,
   }) async {
+    // ToDo: Windows is supported since 19.0.0, but haven't looked into it yet
     if (!Platform.isWindows) {
       await _notificationsPlugin.zonedSchedule(
         0,
@@ -75,8 +75,6 @@ class LocalNotificationsService {
           ),
         ),
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
       );
     }
 
