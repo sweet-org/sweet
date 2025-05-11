@@ -1,4 +1,3 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sweet/model/character/character.dart';
 import 'package:sweet/database/entities/item.dart';
@@ -33,10 +32,7 @@ class App extends StatelessWidget {
         darkTheme: darkTheme,
         initialRoute: '/',
         navigatorObservers: [
-          if (PlatformHelper.hasFirebase)
-            FirebaseAnalyticsObserver(
-              analytics: RepositoryProvider.of<FirebaseAnalytics>(context),
-            ),
+          // Firebase Analytics observer got removed
         ],
         onGenerateRoute: (settings) {
           if (settings.name == '/') {

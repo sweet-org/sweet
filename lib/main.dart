@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -119,10 +118,6 @@ MultiRepositoryProvider buildRepositories({
       RepositoryProvider<ImplantFittingLoadoutRepository>(
         create: (_) => ImplantFittingLoadoutRepository(),
       ),
-      if (PlatformHelper.hasFirebase)
-        RepositoryProvider<FirebaseAnalytics>(
-          create: (_) => FirebaseAnalytics.instance,
-        ),
       RepositoryProvider<LocalNotificationsService>(
         lazy: false,
         create: (_) => LocalNotificationsService(),

@@ -59,11 +59,6 @@ dependencies:
   flutter_countdown_timer: ^4.1.0
   tinycolor2: ^3.0.1
 
-  #Firebase
-  firebase_core: ^3.4.1
-  firebase_analytics: ^11.3.1
-  firebase_crashlytics: ^4.1.1
-
   path: ^1.8.2
   timezone: ^0.10.1
 

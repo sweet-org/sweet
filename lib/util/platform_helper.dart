@@ -14,7 +14,7 @@ class PlatformHelper {
       MediaQuery.of(context).platformBrightness == Brightness.dark;
 
   static bool get isMobile => (Platform.isAndroid || Platform.isIOS);
-  static bool get hasFirebase => (isMobile || Platform.isMacOS);
+  static bool get hasFirebase => false;
   static bool get isDesktop =>
       (Platform.isWindows || Platform.isMacOS || Platform.isLinux);
   static bool get shouldCopyDB => (isMobile || Platform.isMacOS);
