@@ -8,6 +8,16 @@ on:
         required: true
         type: boolean
         default: true
+      build_ios:
+        description: 'Build and Deploy iOS'
+        required: true
+        type: boolean
+        default: false
+      deploy_ios:
+        description: 'Deploy iOS to TestFlight'
+        required: true
+        type: boolean
+        default: false
       build_desktop:
         description: 'Build and Deploy Desktop'
         required: true
@@ -130,7 +140,7 @@ jobs:
 
   job-apple:
     runs-on: macos-latest
-    if: ${{ inputs.build_desktop }}
+    if: ${{ inputs.build_desktop || inputs.build_ios }}
 
     steps:
     - uses: actions/checkout@v2
@@ -143,9 +153,15 @@ jobs:
         architecture: x64
 
     - name: Update dependencies
+      if: ${{ !inputs.build_ios }}
       run: | 
         flutter config --enable-macos-desktop
         flutter pub get
+    - name: Update dependencies
+      if: ${{ inputs.build_ios }}
+      run: | 
+          flutter config --enable-ios --enable-macos-desktop
+          flutter pub get
     
     # This is to give an offset since builds before this repo were in the 100's
     - name: Generate run number with offset
@@ -159,31 +175,35 @@ jobs:
       run: echo "##[set-output name=name;]$(echo sweet_$BUILD_NUMBER)"
       id: app_build
 
-    # - name: Building ${{ steps.app_build.outputs.name }} iOS
-    #   run: flutter build ios --build-number $BUILD_NUMBER --release --no-codesign --config-only
+    - name: Building ${{ steps.app_build.outputs.name }} iOS
+      if: ${{ inputs.build_ios }}
+      run: flutter build ios --build-number $BUILD_NUMBER --release --no-codesign --config-only
 
-    # - name: Setup Ruby
-    #   uses: ruby/setup-ruby@v1.133.2
-    #   with:
-    #     bundler-cache: true
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1.133.2
+      with:
+        bundler-cache: true
 
-    # - name: Build and upload to TestFlight
-    #   run: |
-    #     bundle install
-    #     bundle exec fastlane ios beta
-    #   env:
-    #     SWEET_MATCH_ACCESS_TOKEN: ${{ secrets.SWEET_MATCH_ACCESS_TOKEN }}
-    #     MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-    #     FASTLANE_USER: ${{ secrets.FASTLANE_APPLE_ID }}
-    #     FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
-    #     FASTLANE_APPLE_ID: ${{ secrets.FASTLANE_APPLE_ID }}
-    #     FASTLANE_ITC_TEAM_ID: ${{ secrets.FASTLANE_ITC_TEAM_ID }}
-    #     FASTLANE_TEAM_ID: ${{ secrets.FASTLANE_TEAM_ID }}
+    - name: Build and upload to TestFlight
+      if: ${{ inputs.build_ios && inputs.deploy_ios }}
+      run: |
+        bundle install
+        bundle exec fastlane ios beta
+      env:
+        SWEET_MATCH_ACCESS_TOKEN: ${{ secrets.SWEET_MATCH_ACCESS_TOKEN }}
+        MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        FASTLANE_USER: ${{ secrets.FASTLANE_APPLE_ID }}
+        FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+        FASTLANE_APPLE_ID: ${{ secrets.FASTLANE_APPLE_ID }}
+        FASTLANE_ITC_TEAM_ID: ${{ secrets.FASTLANE_ITC_TEAM_ID }}
+        FASTLANE_TEAM_ID: ${{ secrets.FASTLANE_TEAM_ID }}
 
     - name: Building ${{ steps.app_build.outputs.name }} MacOS
+      if: ${{ inputs.build_desktop }}
       run: flutter build macos --build-number $BUILD_NUMBER --release
 
     - name: 'Zipping build'
+      if: ${{ inputs.build_desktop }}
       run: |
         pushd build/macos/Build/Products/Release/
         zip -r ${{ steps.app_build.outputs.name }}-macos.zip SWEET.app
@@ -191,6 +211,7 @@ jobs:
         mv build/macos/Build/Products/Release/${{ steps.app_build.outputs.name }}-macos.zip ./${{ steps.app_build.outputs.name }}-macos.zip
 
     - name: 'Uploading artifact'
+      if: ${{ inputs.build_desktop }}
       uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.app_build.outputs.name }}-macos
