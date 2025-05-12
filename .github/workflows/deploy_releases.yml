@@ -9,7 +9,7 @@ on:
         type: boolean
         default: true
       build_ios:
-        description: 'Build and Deploy iOS'
+        description: 'Build iOS'
         required: true
         type: boolean
         default: false
@@ -152,12 +152,12 @@ jobs:
         channel: 'stable'
         architecture: x64
 
-    - name: Update dependencies
+    - name: Update dependencies (macOS)
       if: ${{ !inputs.build_ios }}
       run: | 
         flutter config --enable-macos-desktop
         flutter pub get
-    - name: Update dependencies
+    - name: Update dependencies (macOS and iOS)
       if: ${{ inputs.build_ios }}
       run: | 
           flutter config --enable-ios --enable-macos-desktop
@@ -180,7 +180,7 @@ jobs:
       run: flutter build ios --build-number $BUILD_NUMBER --release --no-codesign --config-only
 
     - name: Setup Ruby
-      uses: ruby/setup-ruby@v1.133.2
+      uses: ruby/setup-ruby@v1
       with:
         bundler-cache: true
 
