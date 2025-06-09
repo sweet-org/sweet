@@ -124,6 +124,8 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
       case SlotType.hangarRigSlots:
       case SlotType.lightDDSlot:
       case SlotType.lightFFSlot:
+      case SlotType.lightCASlot:
+      case SlotType.lightBCSlot:
         {
           group = _itemRepository.marketGroupMap[filter.marketGroupId]!;
           initialItems = group.items ?? [];

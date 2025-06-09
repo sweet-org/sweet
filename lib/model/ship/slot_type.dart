@@ -11,9 +11,9 @@ enum SlotType {
   nanocore,
   lightFFSlot,
   lightDDSlot,
-  // lightCASlot,
-  // lightBCSlot,
-  // lightBBSlot,
+  lightCASlot,
+  lightBCSlot,
+  //lightBBSlot,
   hangarRigSlots,
 }
 
@@ -39,10 +39,10 @@ extension SlotTypeExtensions on SlotType {
         return MarketGroupFilters.lightweightFrigates;
       case SlotType.lightDDSlot:
         return MarketGroupFilters.lightweightDestroyers;
-      // case SlotType.lightCASlot:
-      //   return MarketGroupFilters.all;
-      // case SlotType.lightBCSlot:
-      //   return MarketGroupFilters.all;
+      case SlotType.lightCASlot:
+        return MarketGroupFilters.lightweightCruisers;
+      case SlotType.lightBCSlot:
+        return MarketGroupFilters.lightweightBattlecruisers;
       // case SlotType.lightBBSlot:
       //   return MarketGroupFilters.all;
       case SlotType.implantSlots:

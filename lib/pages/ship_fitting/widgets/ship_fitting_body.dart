@@ -328,6 +328,8 @@ class _ShipFittingBodyState extends State<ShipFittingBody>
       switch (slotType) {
         case SlotType.lightFFSlot:
         case SlotType.lightDDSlot:
+        case SlotType.lightCASlot:
+        case SlotType.lightBCSlot:
         case SlotType.drone:
           module = await itemRepo.drone(
             id: item.id,

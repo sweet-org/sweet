@@ -14,6 +14,8 @@ enum MarketGroupFilters {
   implants,
   lightweightFrigates,
   lightweightDestroyers,
+  lightweightCruisers,
+  lightweightBattlecruisers,
   hangarRigs,
 
   lightweightShips,
@@ -36,6 +38,8 @@ final kMidslotExcludeMarketGroups = [
   MarketGroupFilters.fighters,
   MarketGroupFilters.lightweightFrigates,
   MarketGroupFilters.lightweightDestroyers,
+  MarketGroupFilters.lightweightCruisers,
+  MarketGroupFilters.lightweightBattlecruisers,
 ];
 
 final kMidslotExcludeMarketGroupIds = kMidslotExcludeMarketGroups.map(
@@ -94,6 +98,10 @@ extension MarketGroupFilterExtension on MarketGroupFilters {
         return 102003021;
       case MarketGroupFilters.lightweightDestroyers:
         return 102003022;
+      case MarketGroupFilters.lightweightCruisers:
+        return 102003023;
+      case MarketGroupFilters.lightweightBattlecruisers:
+        return 102003024;
 
       case MarketGroupFilters.hangarRigs:
         return 1050080;

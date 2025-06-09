@@ -18,6 +18,9 @@ ShipLoadoutDefinition _$ShipLoadoutDefinitionFromJson(
       numNanocoreSlots: (json['numNanocoreSlots'] as num).toInt(),
       numLightFrigatesSlots: (json['numLightFrigatesSlots'] as num).toInt(),
       numLightDestroyersSlots: (json['numLightDestroyersSlots'] as num).toInt(),
+      numLightCruisersSlots: (json['numLightCruisersSlots'] as num).toInt(),
+      numLightBattlecruisersSlots:
+          (json['numLightBattlecruisersSlots'] as num).toInt(),
       numHangarRigSlots: (json['numHangarRigSlots'] as num).toInt(),
     );
 
@@ -33,5 +36,7 @@ Map<String, dynamic> _$ShipLoadoutDefinitionToJson(
       'numNanocoreSlots': instance.numNanocoreSlots,
       'numLightFrigatesSlots': instance.numLightFrigatesSlots,
       'numLightDestroyersSlots': instance.numLightDestroyersSlots,
+      'numLightCruisersSlots': instance.numLightCruisersSlots,
+      'numLightBattlecruisersSlots': instance.numLightBattlecruisersSlots,
       'numHangarRigSlots': instance.numHangarRigSlots,
     };

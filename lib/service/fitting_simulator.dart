@@ -807,6 +807,8 @@ class FittingSimulator extends ChangeNotifier {
       SlotType.drone,
       SlotType.lightDDSlot,
       SlotType.lightFFSlot,
+      SlotType.lightCASlot,
+      SlotType.lightBCSlot,
     ];
     return moduleSlots
         .map(_fitting.fittedModulesForSlot)
@@ -1064,6 +1066,12 @@ class FittingSimulator extends ChangeNotifier {
       case SlotType.lightDDSlot:
         numSlotAttr = EveEchoesAttribute.lightDDSlot;
         break;
+      case SlotType.lightCASlot:
+        numSlotAttr = EveEchoesAttribute.lightCASlot;
+        break;
+      case SlotType.lightBCSlot:
+        numSlotAttr = EveEchoesAttribute.lightBCSlot;
+        break;
       case SlotType.hangarRigSlots:
         numSlotAttr = EveEchoesAttribute.hangarRigSlots;
         break;
@@ -1089,6 +1097,8 @@ class FittingSimulator extends ChangeNotifier {
       numNanocoreSlots: numSlotsForType(SlotType.nanocore),
       numLightFrigatesSlots: numSlotsForType(SlotType.lightFFSlot),
       numLightDestroyersSlots: numSlotsForType(SlotType.lightDDSlot),
+      numLightCruisersSlots: numSlotsForType(SlotType.lightCASlot),
+      numLightBattlecruisersSlots: numSlotsForType(SlotType.lightBCSlot),
       numHangarRigSlots: numSlotsForType(SlotType.hangarRigSlots),
     );
 

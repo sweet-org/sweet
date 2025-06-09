@@ -13,6 +13,8 @@ class ShipLoadoutDefinition {
   final int numNanocoreSlots;
   final int numLightFrigatesSlots;
   final int numLightDestroyersSlots;
+  final int numLightCruisersSlots;
+  final int numLightBattlecruisersSlots;
   final int numHangarRigSlots;
 
   ShipLoadoutDefinition({
@@ -25,6 +27,8 @@ class ShipLoadoutDefinition {
     required this.numNanocoreSlots,
     required this.numLightFrigatesSlots,
     required this.numLightDestroyersSlots,
+    required this.numLightCruisersSlots,
+    required this.numLightBattlecruisersSlots,
     required this.numHangarRigSlots,
   });
 

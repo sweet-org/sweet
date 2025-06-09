@@ -49,6 +49,10 @@ class Fitting {
         List.filled(definition.numLightFrigatesSlots, FittingModule.empty);
     _fittingData[SlotType.lightDDSlot] =
         List.filled(definition.numLightDestroyersSlots, FittingModule.empty);
+    _fittingData[SlotType.lightCASlot] =
+        List.filled(definition.numLightCruisersSlots, FittingModule.empty);
+    _fittingData[SlotType.lightBCSlot] =
+        List.filled(definition.numLightBattlecruisersSlots, FittingModule.empty);
   }
 
   void setFromLoadout(ShipFittingLoadout loadout) {
@@ -75,6 +79,10 @@ class Fitting {
         List.filled(loadout.lightFrigatesSlots.maxSlots, FittingModule.empty);
     _fittingData[SlotType.lightDDSlot] =
         List.filled(loadout.lightDestroyersSlots.maxSlots, FittingModule.empty);
+    _fittingData[SlotType.lightCASlot] =
+        List.filled(loadout.lightCruisersSlots.maxSlots, FittingModule.empty);
+    _fittingData[SlotType.lightBCSlot] =
+        List.filled(loadout.lightBattlecruisersSlots.maxSlots, FittingModule.empty);
   }
 
   void updateLoadout(ShipLoadoutDefinition updatedLoadout) {
@@ -88,6 +96,8 @@ class Fitting {
       SlotType.nanocore: updatedLoadout.numNanocoreSlots,
       SlotType.lightFFSlot: updatedLoadout.numLightFrigatesSlots,
       SlotType.lightDDSlot: updatedLoadout.numLightDestroyersSlots,
+      SlotType.lightCASlot: updatedLoadout.numLightCruisersSlots,
+      SlotType.lightBCSlot: updatedLoadout.numLightBattlecruisersSlots,
       SlotType.hangarRigSlots: updatedLoadout.numHangarRigSlots,
     };
 

@@ -29,6 +29,10 @@ ShipFittingLoadout _$ShipFittingLoadoutFromJson(Map<String, dynamic> json) =>
           json['lightFrigatesSlots'] as Map<String, dynamic>),
       lightDestroyersSlots: ShipFittingSlot.fromJson(
           json['lightDestroyersSlots'] as Map<String, dynamic>),
+      lightCruisersSlots: ShipFittingSlot.fromJson(
+          json['lightCruisersSlots'] as Map<String, dynamic>),
+      lightBattlecruisersSlots: ShipFittingSlot.fromJson(
+          json['lightBattlecruisersSlots'] as Map<String, dynamic>),
       hangarRigSlots: ShipFittingSlot.fromJson(
           json['hangarRigSlots'] as Map<String, dynamic>),
       implantIds: (json['implantIds'] as List<dynamic>?)
@@ -52,5 +56,7 @@ Map<String, dynamic> _$ShipFittingLoadoutToJson(ShipFittingLoadout instance) =>
       'nanocoreSlots': instance.nanocoreSlots,
       'lightFrigatesSlots': instance.lightFrigatesSlots,
       'lightDestroyersSlots': instance.lightDestroyersSlots,
+      'lightCruisersSlots': instance.lightCruisersSlots,
+      'lightBattlecruisersSlots': instance.lightBattlecruisersSlots,
       'hangarRigSlots': instance.hangarRigSlots,
     };

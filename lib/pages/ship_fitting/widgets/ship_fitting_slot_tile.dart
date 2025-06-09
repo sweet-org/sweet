@@ -45,6 +45,10 @@ class ShipFittingSlotTile extends StatelessWidget {
         return 'Lightweight Frigates';
       case SlotType.lightDDSlot:
         return 'Lightweight Destroyers';
+      case SlotType.lightCASlot:
+        return 'Lightweight Cruisers';
+      case SlotType.lightBCSlot:
+        return 'Lightweight Battlecruisers';
       case SlotType.hangarRigSlots:
         return 'Hangar Modules';
       case SlotType.implantSlots:

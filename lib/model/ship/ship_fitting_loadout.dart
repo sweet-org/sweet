@@ -76,6 +76,8 @@ class ShipFittingLoadout extends ChangeNotifier
   final ShipFittingSlot nanocoreSlots;
   final ShipFittingSlot lightFrigatesSlots;
   final ShipFittingSlot lightDestroyersSlots;
+  final ShipFittingSlot lightCruisersSlots;
+  final ShipFittingSlot lightBattlecruisersSlots;
   final ShipFittingSlot hangarRigSlots;
 
   ShipFittingLoadout({
@@ -91,6 +93,8 @@ class ShipFittingLoadout extends ChangeNotifier
     required this.nanocoreSlots,
     required this.lightFrigatesSlots,
     required this.lightDestroyersSlots,
+    required this.lightCruisersSlots,
+    required this.lightBattlecruisersSlots,
     required this.hangarRigSlots,
     List<String?>? implantIds,
   })  : _id = id ?? Uuid().v1(),
@@ -102,6 +106,10 @@ class ShipFittingLoadout extends ChangeNotifier
         json['lightFrigatesSlots'] ?? <String, dynamic>{};
     json['lightDestroyersSlots'] =
         json['lightDestroyersSlots'] ?? <String, dynamic>{};
+    json['lightCruisersSlots'] =
+        json['lightCruisersSlots'] ?? <String, dynamic>{};
+    json['lightBattlecruisersSlots'] =
+        json['lightBattlecruisersSlots'] ?? <String, dynamic>{};
     json['hangarRigSlots'] = json['hangarRigSlots'] ?? <String, dynamic>{};
     json['type'] = json['type'] ?? 'LOADOUT';
     if (json['implantId'] != null) {
@@ -143,6 +151,12 @@ class ShipFittingLoadout extends ChangeNotifier
         ),
         lightDestroyersSlots: ShipFittingSlot(
           maxSlots: loadoutDefinition.numLightDestroyersSlots,
+        ),
+        lightCruisersSlots: ShipFittingSlot(
+          maxSlots: loadoutDefinition.numLightCruisersSlots,
+        ),
+        lightBattlecruisersSlots: ShipFittingSlot(
+          maxSlots: loadoutDefinition.numLightBattlecruisersSlots,
         ),
         hangarRigSlots: ShipFittingSlot(
           maxSlots: loadoutDefinition.numHangarRigSlots,
@@ -190,6 +204,12 @@ class ShipFittingLoadout extends ChangeNotifier
         lightDestroyersSlots: ShipFittingSlot(
           maxSlots: 0,
         ),
+        lightCruisersSlots: ShipFittingSlot(
+          maxSlots: 0,
+        ),
+        lightBattlecruisersSlots: ShipFittingSlot(
+          maxSlots: 0,
+        ),
         hangarRigSlots: ShipFittingSlot(
           maxSlots: 0,
         ),
@@ -206,6 +226,8 @@ class ShipFittingLoadout extends ChangeNotifier
         nanocoreSlots,
         lightFrigatesSlots,
         lightDestroyersSlots,
+        lightCruisersSlots,
+        lightBattlecruisersSlots,
         hangarRigSlots,
       ];
 
@@ -245,6 +267,8 @@ class ShipFittingLoadout extends ChangeNotifier
         droneBay,
         lightFrigatesSlots,
         lightDestroyersSlots,
+        lightCruisersSlots,
+        lightBattlecruisersSlots,
         hangarRigSlots,
       ];
 
@@ -285,6 +309,12 @@ class ShipFittingLoadout extends ChangeNotifier
       case SlotType.lightDDSlot:
         lightDestroyersSlots.modules[module.index] = fittedModule;
         break;
+      case SlotType.lightCASlot:
+        lightCruisersSlots.modules[module.index] = fittedModule;
+        break;
+      case SlotType.lightBCSlot:
+        lightBattlecruisersSlots.modules[module.index] = fittedModule;
+        break;
       case SlotType.hangarRigSlots:
         hangarRigSlots.modules[module.index] = fittedModule;
         break;
@@ -306,6 +336,8 @@ class ShipFittingLoadout extends ChangeNotifier
         nanocoreSlots: nanocoreSlots.copy(),
         lightFrigatesSlots: lightFrigatesSlots.copy(),
         lightDestroyersSlots: lightDestroyersSlots.copy(),
+        lightCruisersSlots: lightCruisersSlots.copy(),
+        lightBattlecruisersSlots: lightBattlecruisersSlots.copy(),
         hangarRigSlots: hangarRigSlots.copy(),
       );
 
@@ -325,6 +357,12 @@ class ShipFittingLoadout extends ChangeNotifier
     );
     lightDestroyersSlots.updateSlotCount(
       maxSlots: definition.numLightDestroyersSlots,
+    );
+    lightCruisersSlots.updateSlotCount(
+      maxSlots: definition.numLightCruisersSlots,
+    );
+    lightBattlecruisersSlots.updateSlotCount(
+      maxSlots: definition.numLightBattlecruisersSlots,
     );
     hangarRigSlots.updateSlotCount(
       maxSlots: definition.numHangarRigSlots,

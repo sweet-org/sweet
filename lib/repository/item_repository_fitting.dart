@@ -395,6 +395,8 @@ extension ItemRepositoryFitting on ItemRepository {
     switch (slot) {
       case SlotType.lightFFSlot:
       case SlotType.lightDDSlot:
+      case SlotType.lightCASlot:
+      case SlotType.lightBCSlot:
       case SlotType.drone:
         moduleFutures = slotModules.map((slotModule) => slotModule.moduleId == 0
             ? Future.value(FittingModule.empty)
@@ -500,6 +502,21 @@ extension ItemRepositoryFitting on ItemRepository {
         ))
             ?.toInt() ??
         0;
+
+    final numLightCruisersSlots = (await attributeValue(
+          id: EveEchoesAttribute.lightCASlot.attributeId,
+          itemId: shipId,
+        ))
+            ?.toInt() ??
+        0;
+
+    final numLightBattlecruisersSlots = (await attributeValue(
+          id: EveEchoesAttribute.lightBCSlot.attributeId,
+          itemId: shipId,
+        ))
+            ?.toInt() ??
+        0;
+
     // ToDo: Refactor hangar rig system
     var numHangarRigSlots = (await attributeValue(
           id: EveEchoesAttribute.hangarRigSlots.attributeId,
@@ -528,6 +545,8 @@ extension ItemRepositoryFitting on ItemRepository {
       numNanocoreSlots: numNanocoreSlots,
       numLightFrigatesSlots: numLightFrigatesSlots,
       numLightDestroyersSlots: numLightDestroyersSlots,
+      numLightCruisersSlots: numLightCruisersSlots,
+      numLightBattlecruisersSlots: numLightBattlecruisersSlots,
       numHangarRigSlots: numHangarRigSlots,
     );
   }
