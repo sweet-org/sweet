@@ -40,6 +40,9 @@ class ImplantSlotListView extends StatelessWidget {
           case ImplantSlotType.common:
             slotName = "General Unit";
             break;
+          case ImplantSlotType.slaveCommon:
+            slotName = "Reactive Unit";
+            break;
           case ImplantSlotType.branch:
             slotName = "Branch";
             break;

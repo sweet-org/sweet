@@ -138,6 +138,8 @@ extension ItemRepositoryFitting on ItemRepository {
     return FittingImplantModule(
       item: item,
       level: -1,
+      // Mhm, not sure if setting common here is correct, this gets also used
+      // for other item types, but it seems to work
       slot: ImplantSlotType.common,
       baseAttributes: baseAttributes.toList(),
       modifiers: modifiers.toList(),
@@ -572,6 +574,7 @@ extension ItemRepositoryFitting on ItemRepository {
       slots[slotNum] = slotType;
 
       if (slotType == ImplantSlotType.common) return;
+      if (slotType == ImplantSlotType.slaveCommon) return;
 
       // The remaining values in "value" contain the allowed items
       restrictions[slotNum] = value.sublist(1);

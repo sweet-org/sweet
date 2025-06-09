@@ -36,5 +36,6 @@ const _$ImplantSlotTypeEnumMap = {
   ImplantSlotType.common: 'common',
   ImplantSlotType.upgrade: 'upgrade',
   ImplantSlotType.slave: 'slave',
+  ImplantSlotType.slaveCommon: 'slaveCommon',
   ImplantSlotType.disabled: 'disabled',
 };

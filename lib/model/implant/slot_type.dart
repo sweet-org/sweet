@@ -1,5 +1,13 @@
 enum ImplantSlotType {
-  core, branch, common, upgrade, slave, disabled
+  core,
+  branch,
+  common,
+  upgrade,
+  slave,
+  slaveCommon,
+  @Deprecated("Is no longer required")
+  // ToDo: Can't remember why I did even add this, got replaced with slave_common I think
+  disabled
 }
 
 extension TypeIdExtension on ImplantSlotType {
@@ -15,8 +23,10 @@ extension TypeIdExtension on ImplantSlotType {
         return 3;
       case ImplantSlotType.slave:
         return 4;
-      case ImplantSlotType.disabled:
+      case ImplantSlotType.slaveCommon:
         return 5;
+      case ImplantSlotType.disabled:
+        return -1;
     }
   }
 }

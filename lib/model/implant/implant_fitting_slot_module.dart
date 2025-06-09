@@ -18,6 +18,8 @@ class ImplantFittingSlotModule with EquatableMixin {
       moduleId: 0, type: ImplantSlotType.branch, state: ModuleState.inactive);
   static ImplantFittingSlotModule get emptyCommon => ImplantFittingSlotModule(
       moduleId: 0, type: ImplantSlotType.common, state: ModuleState.inactive);
+  static ImplantFittingSlotModule get emptySlaveCommon => ImplantFittingSlotModule(
+          moduleId: 0, type: ImplantSlotType.slaveCommon, state: ModuleState.inactive);
   static ImplantFittingSlotModule get emptyUpgrade => ImplantFittingSlotModule(
       moduleId: 0, type: ImplantSlotType.upgrade, state: ModuleState.inactive);
   static ImplantFittingSlotModule get invalid => ImplantFittingSlotModule(
@@ -31,8 +33,11 @@ class ImplantFittingSlotModule with EquatableMixin {
         return emptyCommon;
       case ImplantSlotType.upgrade:
         return emptyUpgrade;
+      case ImplantSlotType.slaveCommon:
+        return emptySlaveCommon;
       case ImplantSlotType.disabled:
-      default:
+      case ImplantSlotType.core:
+      case ImplantSlotType.slave:
         return invalid;
     }
   }

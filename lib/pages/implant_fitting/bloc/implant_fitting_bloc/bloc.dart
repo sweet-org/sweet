@@ -66,6 +66,15 @@ class ImplantFittingBloc extends Bloc<ImplantFittingEvent, ImplantFittingState> 
           [
             _itemRepository.marketGroupMap[MarketGroupFilters.generalUnits.marketGroupId]!,
             _itemRepository.marketGroupMap[MarketGroupFilters.advancedUnits.marketGroupId]!,
+          ],
+          null,
+        );
+        break;
+      case ImplantSlotType.slaveCommon:
+        // Slave Units
+        group = MarketGroup.clone(
+            _itemRepository.marketGroupMap[MarketGroupFilters.implants.marketGroupId]!,
+          [
             _itemRepository.marketGroupMap[MarketGroupFilters.reactiveUnits.marketGroupId]!,
           ],
           null,

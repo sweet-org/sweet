@@ -40,6 +40,9 @@ class FittingImplantModule extends FittingItem with EquatableMixin {
   static FittingImplantModule get emptyCommon => _empty.copyWith(
       slot: ImplantSlotType.common, state: ModuleState.inactive, level: -1
   );
+  static FittingImplantModule get emptySlaveCommon => _empty.copyWith(
+      slot: ImplantSlotType.slaveCommon, state: ModuleState.inactive, level: -1
+  );
   static FittingImplantModule get emptyUpgrade => _empty.copyWith(
       slot: ImplantSlotType.upgrade, state: ModuleState.inactive, level: -1
   );
@@ -53,8 +56,11 @@ class FittingImplantModule extends FittingItem with EquatableMixin {
         return emptyCommon;
       case ImplantSlotType.upgrade:
         return emptyUpgrade;
+      case ImplantSlotType.slaveCommon:
+        return emptySlaveCommon;
       case ImplantSlotType.disabled:
-      default:
+      case ImplantSlotType.core:
+      case ImplantSlotType.slave:
         return null;
     }
   }
