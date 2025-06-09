@@ -8,9 +8,9 @@ part of 'item_attribute_value.dart';
 
 ItemAttributeValue _$ItemAttributeValueFromJson(Map<String, dynamic> json) =>
     ItemAttributeValue(
-      json['attributeId'] as int,
+      (json['attributeId'] as num).toInt(),
       (json['value'] as num).toDouble(),
-      json['itemId'] as int,
+      (json['itemId'] as num).toInt(),
     );
 
 Map<String, dynamic> _$ItemAttributeValueToJson(ItemAttributeValue instance) =>

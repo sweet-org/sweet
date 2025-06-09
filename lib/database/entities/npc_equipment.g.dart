@@ -7,11 +7,16 @@ part of 'npc_equipment.dart';
 // **************************************************************************
 
 NpcEquipment _$NpcEquipmentFromJson(Map<String, dynamic> json) => NpcEquipment(
-      id: json['id'] as int,
-      highslot:
-          (json['highslot'] as List<dynamic>).map((e) => e as int).toList(),
-      medslot: (json['medslot'] as List<dynamic>).map((e) => e as int).toList(),
-      lowslot: (json['lowslot'] as List<dynamic>).map((e) => e as int).toList(),
+      id: (json['id'] as num).toInt(),
+      highslot: (json['highslot'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
+      medslot: (json['medslot'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
+      lowslot: (json['lowslot'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
     );
 
 Map<String, dynamic> _$NpcEquipmentToJson(NpcEquipment instance) =>

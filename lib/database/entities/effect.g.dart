@@ -8,22 +8,23 @@ part of 'effect.dart';
 
 Effect _$EffectFromJson(Map<String, dynamic> json) => Effect(
       disallowAutoRepeat: json['disallowAutoRepeat'] as bool,
-      dischargeAttributeId: json['dischargeAttributeId'] as int,
-      durationAttributeId: json['durationAttributeId'] as int,
-      effectCategory: json['effectCategory'] as int,
-      id: json['id'] as int,
+      dischargeAttributeId: (json['dischargeAttributeId'] as num).toInt(),
+      durationAttributeId: (json['durationAttributeId'] as num).toInt(),
+      effectCategory: (json['effectCategory'] as num).toInt(),
+      id: (json['id'] as num).toInt(),
       effectName: json['effectName'] as String,
       electronicChance: json['electronicChance'] as bool,
-      falloffAttributeId: json['falloffAttributeId'] as int,
+      falloffAttributeId: (json['falloffAttributeId'] as num).toInt(),
       fittingUsageChanceAttributeId:
-          json['fittingUsageChanceAttributeId'] as int,
+          (json['fittingUsageChanceAttributeId'] as num).toInt(),
       guid: json['guid'] as String,
       isAssistance: json['isAssistance'] as bool,
       isOffensive: json['isOffensive'] as bool,
       isWarpSafe: json['isWarpSafe'] as bool,
-      rangeAttributeId: json['rangeAttributeId'] as int,
+      rangeAttributeId: (json['rangeAttributeId'] as num).toInt(),
       rangeChance: json['rangeChance'] as bool,
-      trackingSpeedAttributeId: json['trackingSpeedAttributeId'] as int,
+      trackingSpeedAttributeId:
+          (json['trackingSpeedAttributeId'] as num).toInt(),
     );
 
 Map<String, dynamic> _$EffectToJson(Effect instance) => <String, dynamic>{

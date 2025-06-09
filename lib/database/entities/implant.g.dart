@@ -7,13 +7,13 @@ part of 'implant.dart';
 // **************************************************************************
 
 Implant _$ImplantFromJson(Map<String, dynamic> json) => Implant(
-      id: json['id'] as int,
-      originalTypeId: json['originalTypeId'] as int,
-      rarity: json['rarity'] as int,
-      implantType: json['implantType'] as int,
+      id: (json['id'] as num).toInt(),
+      originalTypeId: (json['originalTypeId'] as num).toInt(),
+      rarity: (json['rarity'] as num).toInt(),
+      implantType: (json['implantType'] as num).toInt(),
       implantFramework: (json['implantFramework'] as Map<String, dynamic>).map(
-        (k, e) =>
-            MapEntry(k, (e as List<dynamic>).map((e) => e as int).toList()),
+        (k, e) => MapEntry(
+            k, (e as List<dynamic>).map((e) => (e as num).toInt()).toList()),
       ),
     );
 

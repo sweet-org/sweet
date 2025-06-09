@@ -7,30 +7,21 @@ part of 'group.dart';
 // **************************************************************************
 
 Group _$GroupFromJson(Map<String, dynamic> json) => Group(
-      id: json['id'] as int,
-      localisedNameIndex: json['localisedNameIndex'] as int,
+      id: (json['id'] as num).toInt(),
+      localisedNameIndex: (json['localisedNameIndex'] as num).toInt(),
       sourceName: json['sourceName'] as String,
-      itemIds:
-          (json['itemIds'] as List<dynamic>?)?.map((e) => e as int).toList(),
+      itemIds: (json['itemIds'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
       items: (json['items'] as List<dynamic>?)
           ?.map((e) => Item.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
-Map<String, dynamic> _$GroupToJson(Group instance) {
-  final val = <String, dynamic>{
-    'id': instance.id,
-    'localisedNameIndex': instance.localisedNameIndex,
-    'sourceName': instance.sourceName,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('itemIds', instance.itemIds);
-  writeNotNull('items', instance.items);
-  return val;
-}
+Map<String, dynamic> _$GroupToJson(Group instance) => <String, dynamic>{
+      'id': instance.id,
+      'localisedNameIndex': instance.localisedNameIndex,
+      'sourceName': instance.sourceName,
+      if (instance.itemIds case final value?) 'itemIds': value,
+      if (instance.items case final value?) 'items': value,
+    };

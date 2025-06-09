@@ -7,9 +7,9 @@ part of 'item_effect.dart';
 // **************************************************************************
 
 ItemEffect _$ItemEffectFromJson(Map<String, dynamic> json) => ItemEffect(
-      json['effectId'] as int,
+      (json['effectId'] as num).toInt(),
       json['isDefault'] as bool,
-      json['itemId'] as int,
+      (json['itemId'] as num).toInt(),
     );
 
 Map<String, dynamic> _$ItemEffectToJson(ItemEffect instance) =>

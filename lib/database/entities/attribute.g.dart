@@ -7,27 +7,28 @@ part of 'attribute.dart';
 // **************************************************************************
 
 Attribute _$AttributeFromJson(Map<String, dynamic> json) => Attribute(
-      attributeCategory: json['attributeCategory'] as int,
-      id: json['id'] as int,
+      attributeCategory: (json['attributeCategory'] as num).toInt(),
+      id: (json['id'] as num).toInt(),
       attributeName: json['attributeName'] as String,
       available: json['available'] as bool,
-      chargeRechargeTimeId: json['chargeRechargeTimeId'] as int,
+      chargeRechargeTimeId: (json['chargeRechargeTimeId'] as num).toInt(),
       defaultValue: (json['defaultValue'] as num).toDouble(),
       highIsGood: json['highIsGood'] as bool,
-      maxAttributeId: json['maxAttributeId'] as int,
+      maxAttributeId: (json['maxAttributeId'] as num).toInt(),
       attributeOperator: (json['attributeOperator'] as List<dynamic>)
-          .map((e) => e as int)
+          .map((e) => (e as num).toInt())
           .toList(),
       stackable: json['stackable'] as bool,
-      toAttrId:
-          (json['toAttrId'] as List<dynamic>).map((e) => e as int).toList(),
-      unitId: json['unitId'] as int,
-      unitLocalisationKey: json['unitLocalisationKey'] as int?,
+      toAttrId: (json['toAttrId'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
+      unitId: (json['unitId'] as num).toInt(),
+      unitLocalisationKey: (json['unitLocalisationKey'] as num?)?.toInt(),
       attributeSourceUnit: json['attributeSourceUnit'] as String?,
       attributeTip: json['attributeTip'] as String?,
       attributeSourceName: json['attributeSourceName'] as String?,
-      nameLocalisationKey: json['nameLocalisationKey'] as int?,
-      tipLocalisationKey: json['tipLocalisationKey'] as int?,
+      nameLocalisationKey: (json['nameLocalisationKey'] as num?)?.toInt(),
+      tipLocalisationKey: (json['tipLocalisationKey'] as num?)?.toInt(),
       attributeFormula: json['attributeFormula'] as String? ?? 'A',
       baseValue: (json['baseValue'] as num?)?.toDouble() ?? 0,
     );

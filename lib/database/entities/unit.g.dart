@@ -7,7 +7,7 @@ part of 'unit.dart';
 // **************************************************************************
 
 Unit _$UnitFromJson(Map<String, dynamic> json) => Unit(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       description: json['description'] as String?,
       displayName: json['displayName'] as String?,
       unitName: json['unitName'] as String,
