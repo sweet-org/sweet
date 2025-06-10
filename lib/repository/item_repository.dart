@@ -283,12 +283,26 @@ class ItemRepository {
     await _echoesDatabase.openDatabase(path: dbFile.absolute.path);
 
     if (!await hasModifierSkillCache()) {
+      print("Creating modifier skill cache...");
       await db.closeDatabase();
       await _echoesDatabase.openDatabase(path: dbFile.absolute.path, readOnly: false);
       await createModifierSkillColumn();
       await genModifierSkillCache();
       await _echoesDatabase.closeDatabase();
       await _echoesDatabase.openDatabase(path: dbFile.absolute.path);
+    } else {
+      print("Modifier skill cache already exists, skipping creation");
+    }
+
+    if (!await hasMarketGroupIndex()) {
+      print("Creating market group index...");
+      await db.closeDatabase();
+      await _echoesDatabase.openDatabase(path: dbFile.absolute.path, readOnly: false);
+      await createMarketGroupIndex();
+      await _echoesDatabase.closeDatabase();
+      await _echoesDatabase.openDatabase(path: dbFile.absolute.path);
+    } else {
+      print("Market group index already exists, skipping creation");
     }
 
     fittingSkills = {

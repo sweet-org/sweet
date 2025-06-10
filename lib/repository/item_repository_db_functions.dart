@@ -254,6 +254,23 @@ extension ItemRepositoryDb on ItemRepository {
     ''');
   }
 
+  Future<bool> hasMarketGroupIndex() async {
+    final indexExists = await _echoesDatabase.db.rawQuery('''
+      SELECT name FROM sqlite_master 
+      WHERE type='index' AND tbl_name='items' AND name='idx_items_marketGroupId';
+    ''').then((rows) => rows.isNotEmpty);
+    return indexExists;
+  }
+
+  Future<void> createMarketGroupIndex() async {
+    final indexExists = await hasMarketGroupIndex();
+    if (!indexExists) {
+      await _echoesDatabase.db.rawUpdate('''
+        CREATE INDEX idx_items_marketGroupId ON items (marketGroupId);
+      ''');
+    }
+  }
+
 
   ///
   ///
