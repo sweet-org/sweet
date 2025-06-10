@@ -77,6 +77,7 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
   ) async {
     var filter = filterForSlot(event.slotType);
     MarketGroup group;
+    var childGroups = <int>[];  // Only for lightweight ships
     var initialItems = <Item>[];
 
     switch (event.slotType) {
@@ -120,18 +121,37 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
           break;
         }
 
+      // The rule is, smaller ships can be fitted into larger slots, so we want
+      // to fallthrough all following cases (which dart does not allow -_-)
+      case SlotType.lightBCSlot:
+        childGroups.add(MarketGroupFilters.lightweightBattlecruisers.marketGroupId);
+        continue lightCAModules;
+      lightCAModules:
+      case SlotType.lightCASlot:
+        childGroups.add(MarketGroupFilters.lightweightCruisers.marketGroupId);
+        continue lightDDModules;
+      lightDDModules:
+      case SlotType.lightDDSlot:
+        childGroups.add(MarketGroupFilters.lightweightDestroyers.marketGroupId);
+        continue lightFFModules;
+      lightFFModules:
+      case SlotType.lightFFSlot:
+        childGroups.add(MarketGroupFilters.lightweightFrigates.marketGroupId);
+        final baseGroup = _itemRepository
+            .marketGroupMap[MarketGroupFilters.fighters.marketGroupId]!;
+        group = MarketGroup.clone(
+          baseGroup,
+          baseGroup.children.where((g) => childGroups.contains(g.id)).toList(),
+          null
+        );
+        initialItems = [];
+        break;
+
       // These ones are for Items only
       case SlotType.hangarRigSlots:
-      case SlotType.lightDDSlot:
-      case SlotType.lightFFSlot:
-      case SlotType.lightCASlot:
-      case SlotType.lightBCSlot:
-        {
-          group = _itemRepository.marketGroupMap[filter.marketGroupId]!;
-          initialItems = group.items ?? [];
-          break;
-        }
-
+        group = _itemRepository.marketGroupMap[filter.marketGroupId]!;
+        initialItems = group.items ?? [];
+        break;
       // We fall through here, and deal with any exclusions
       // which at present are only on Midslots
       case SlotType.high:
