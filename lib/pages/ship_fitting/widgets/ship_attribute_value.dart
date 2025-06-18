@@ -10,11 +10,11 @@ class ShipAttributeValue extends StatelessWidget {
   final bool hideIfZero;
 
   const ShipAttributeValue({
-    Key? key,
+    super.key,
     required this.attribute,
     this.titleOverride,
     this.hideIfZero = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

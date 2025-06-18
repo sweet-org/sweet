@@ -9,14 +9,14 @@ class SpeedDialFab extends StatefulWidget {
   final List<Widget> children;
 
   const SpeedDialFab({
-    Key? key,
+    super.key,
     this.onPressed,
     this.tooltip,
     this.icon,
     this.buttonClosedColor,
     this.buttonOpenedColor,
     required this.children,
-  }) : super(key: key);
+  });
 
   @override
   State<SpeedDialFab> createState() => _SpeedDialFabState();

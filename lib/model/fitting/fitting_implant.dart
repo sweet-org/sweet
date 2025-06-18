@@ -7,7 +7,6 @@ import 'package:sweet/model/ship/module_state.dart';
 import 'package:sweet/model/ship/slot_type.dart';
 
 import '../../database/entities/attribute.dart';
-import '../../database/entities/item.dart';
 import '../../database/entities/item_modifier.dart';
 
 import 'fitting_module.dart';
@@ -28,13 +27,10 @@ class ImplantFitting extends FittingModule {
     required this.name,
     required this.trainedLevel,
     required this.isPassive,
-    required Item item,
-    required List<Attribute> baseAttributes,
-    required List<ItemModifier> modifiers,
+    required super.item,
+    required super.baseAttributes,
+    required super.modifiers,
   }) : super(
-    item: item,
-    baseAttributes: baseAttributes,
-    modifiers: modifiers,
     slot: SlotType.implantSlots
   );
 

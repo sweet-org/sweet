@@ -1,6 +1,5 @@
 
 
-import '../database.dart';
 import '../type_converters/type_converter.dart';
 import '../entities/item_bonus_text.dart';
 
@@ -8,7 +7,7 @@ import 'base_dao.dart';
 import 'base_dao_mixin.dart';
 
 class ItemBonusTexDao extends BaseDao<ItemBonusText> with BaseDaoMixin {
-  ItemBonusTexDao(EveEchoesDatabase db) : super(db);
+  ItemBonusTexDao(super.db);
 
   @override
   String get tableName => 'item_bonus_text';

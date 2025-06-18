@@ -1,6 +1,5 @@
 import 'package:sweet/database/database_exports.dart';
 
-import 'modifier_change_type.dart';
 
 class NihilusSpaceModifier extends ItemModifier {
   final Attribute attribute;
@@ -17,22 +16,13 @@ class NihilusSpaceModifier extends ItemModifier {
 
   NihilusSpaceModifier({
     required this.attribute,
-    required String code,
-    required String typeCode,
-    required ModifierChangeType changeType,
-    required bool attributeOnly,
-    required String changeRange,
-    required int changeRangeModuleNameId,
-    required int attributeId,
-    required double attributeValue,
-  }) : super(
-          code: code,
-          typeCode: typeCode,
-          changeType: changeType,
-          attributeOnly: attributeOnly,
-          changeRange: changeRange,
-          changeRangeModuleNameId: changeRangeModuleNameId,
-          attributeId: attributeId,
-          attributeValue: attributeValue,
-        );
+    required super.code,
+    required super.typeCode,
+    required super.changeType,
+    required super.attributeOnly,
+    required super.changeRange,
+    required super.changeRangeModuleNameId,
+    required super.attributeId,
+    required super.attributeValue,
+  });
 }

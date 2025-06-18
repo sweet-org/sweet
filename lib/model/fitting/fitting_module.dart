@@ -35,18 +35,14 @@ class FittingModule extends FittingItem with EquatableMixin {
   );
 
   FittingModule({
-    required Item item,
+    required super.item,
     this.slot = SlotType.high,
     this.index = 0,
-    required List<Attribute> baseAttributes,
-    required List<ItemModifier> modifiers,
+    required super.baseAttributes,
+    required super.modifiers,
     this.state = ModuleState.inactive,
     this.isDroneModule = false,
-  }) : super(
-          item: item,
-          baseAttributes: baseAttributes,
-          modifiers: modifiers,
-        );
+  });
 
   FittingModule copyWith({
     SlotType? slot,

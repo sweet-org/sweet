@@ -1,7 +1,6 @@
 import 'package:sweet/bloc/item_repository_bloc/market_group_filters.dart';
 import 'package:sweet/database/entities/item.dart';
 import 'package:sweet/mixins/scan_qrcode_mixin.dart';
-import 'package:sweet/model/fitting/fitting_item.dart';
 import 'package:sweet/model/implant/implant_handler.dart';
 import 'package:sweet/model/implant/implant_loadout_definition.dart';
 import 'package:sweet/model/items/eve_echoes_categories.dart';

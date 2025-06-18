@@ -12,15 +12,14 @@ class NanocoreAffixContextDrawer extends StatefulWidget {
   final List<int> blacklistItems;
 
   NanocoreAffixContextDrawer({
-    Key? key,
+    super.key,
     List<GoldNanoAttrClass>? topClasses,
     List<ItemNanocoreAffix>? initialFilteredItems,
     List<int>? blacklistItems,
   })  : assert(topClasses != null || initialFilteredItems != null),
         topClasses = topClasses ?? [],
         initialItems = initialFilteredItems ?? [],
-        blacklistItems = blacklistItems ?? List<int>.empty(),
-        super(key: key);
+        blacklistItems = blacklistItems ?? List<int>.empty();
 
   @override
   State<NanocoreAffixContextDrawer> createState() =>
@@ -102,8 +101,8 @@ typedef AffixCallback = void Function(ItemNanocoreAffix item);
 
 class GoldLibraryGroupTile extends StatelessWidget {
   const GoldLibraryGroupTile(
-      {Key? key, required this.attrClass, required this.onAffixSelected, List<int>? blacklistItems })
-      : blacklistItems = blacklistItems ?? const [], super(key: key);
+      {super.key, required this.attrClass, required this.onAffixSelected, List<int>? blacklistItems })
+      : blacklistItems = blacklistItems ?? const [];
 
   final GoldNanoAttrClass attrClass;
   final AffixCallback onAffixSelected;
@@ -144,10 +143,10 @@ class GoldLibraryGroupTile extends StatelessWidget {
 
 class AffixListTile extends StatelessWidget {
   const AffixListTile({
-    Key? key,
+    super.key,
     required this.affix,
     required this.onSelected,
-  }) : super(key: key);
+  });
 
   final ItemNanocoreAffix affix;
   final AffixCallback onSelected;

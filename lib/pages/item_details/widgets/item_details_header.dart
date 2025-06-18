@@ -6,7 +6,7 @@ import 'package:sweet/widgets/localised_text.dart';
 class ItemDetailsHeader extends StatelessWidget {
   final Item item;
 
-  const ItemDetailsHeader({Key? key, required this.item}) : super(key: key);
+  const ItemDetailsHeader({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {

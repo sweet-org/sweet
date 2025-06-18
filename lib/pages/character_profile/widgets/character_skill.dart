@@ -15,9 +15,9 @@ import 'package:sweet/widgets/localised_text.dart';
 
 class CharacterSkill extends StatefulWidget {
   const CharacterSkill({
-    Key? key,
+    super.key,
     required this.skill,
-  }) : super(key: key);
+  });
 
   final Item skill;
 

@@ -12,7 +12,7 @@ abstract class ImplantFittingState extends Equatable {
 }
 
 class InitialImplantFitting extends ImplantFittingState {
-  InitialImplantFitting(ImplantHandler implant) : super(implant);
+  InitialImplantFitting(super.implant);
 
   @override
   List<Object> get props => [
@@ -22,7 +22,7 @@ class InitialImplantFitting extends ImplantFittingState {
 }
 
 class UpdatingImplantFitting extends ImplantFittingState {
-  UpdatingImplantFitting(ImplantHandler implant) : super(implant);
+  UpdatingImplantFitting(super.implant);
 
   @override
   List<Object> get props => [
@@ -32,7 +32,7 @@ class UpdatingImplantFitting extends ImplantFittingState {
 }
 
 class ImplantFittingUpdatedState extends ImplantFittingState {
-  ImplantFittingUpdatedState(ImplantHandler implant) : super(implant);
+  ImplantFittingUpdatedState(super.implant);
 
   @override
   List<Object> get props => [

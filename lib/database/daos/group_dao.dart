@@ -1,6 +1,5 @@
 import '../../database/entities/category.dart';
 
-import '../database.dart';
 import 'base_dao.dart';
 import 'base_dao_mixin.dart';
 
@@ -9,7 +8,7 @@ import '../type_converters/type_converters.dart';
 import '../../database/entities/group.dart';
 
 class GroupDao extends BaseDao<Group> with BaseDaoMixin {
-  GroupDao(EveEchoesDatabase db) : super(db);
+  GroupDao(super.db);
 
   @override
   String get tableName => 'groups';

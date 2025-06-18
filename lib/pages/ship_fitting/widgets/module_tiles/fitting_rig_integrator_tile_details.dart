@@ -10,10 +10,10 @@ import 'package:tinycolor2/tinycolor2.dart';
 
 class FittingRigIntegratorTileDetails extends StatelessWidget {
   const FittingRigIntegratorTileDetails({
-    Key? key,
+    super.key,
     required this.fitting,
     required this.integrator,
-  }) : super(key: key);
+  });
 
   final FittingRigIntegrator integrator;
   final FittingSimulator fitting;

@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../service/manup/manup_service.dart';
 
 class AppUpdateBanner extends StatelessWidget {
-  const AppUpdateBanner({Key? key}) : super(key: key);
+  const AppUpdateBanner({super.key});
 
   @override
   Widget build(BuildContext context) {

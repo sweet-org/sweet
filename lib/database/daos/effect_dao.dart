@@ -1,5 +1,4 @@
 
-import '../database.dart';
 import 'base_dao.dart';
 import 'base_dao_mixin.dart';
 
@@ -8,7 +7,7 @@ import '../type_converters/type_converters.dart';
 import '../entities/effect.dart';
 
 class EffectDao extends BaseDao<Effect> with BaseDaoMixin {
-  EffectDao(EveEchoesDatabase db) : super(db);
+  EffectDao(super.db);
 
   @override
   String get tableName => 'effects';

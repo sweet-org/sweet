@@ -1,7 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter/foundation.dart' show FlutterError, kDebugMode;
 
-import 'package:sweet/util/platform_helper.dart';
 
 // ToDo: Clean this up, Firebase has been removed from the project
 Future<void> initializeFirebase() async {

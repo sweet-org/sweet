@@ -13,7 +13,7 @@ abstract class ShipFittingState extends Equatable {
 }
 
 class InitialShipFitting extends ShipFittingState {
-  InitialShipFitting(FittingSimulator fitting) : super(fitting);
+  InitialShipFitting(super.fitting);
 
   @override
   List<Object> get props => [
@@ -23,7 +23,7 @@ class InitialShipFitting extends ShipFittingState {
 }
 
 class UpdatingShipFitting extends ShipFittingState {
-  UpdatingShipFitting(FittingSimulator fitting) : super(fitting);
+  UpdatingShipFitting(super.fitting);
 
   @override
   List<Object> get props => [
@@ -113,7 +113,7 @@ class OpenNanocoreAffixDrawer extends ShipFittingState {
 }
 
 class ShipFittingUpdatedState extends ShipFittingState {
-  ShipFittingUpdatedState(FittingSimulator fitting) : super(fitting);
+  ShipFittingUpdatedState(super.fitting);
 
   @override
   List<Object> get props => [
@@ -123,7 +123,7 @@ class ShipFittingUpdatedState extends ShipFittingState {
 }
 
 class OpenPilotDrawerState extends ShipFittingState {
-  OpenPilotDrawerState(FittingSimulator fitting) : super(fitting);
+  OpenPilotDrawerState(super.fitting);
 
   @override
   List<Object> get props => [
@@ -133,7 +133,7 @@ class OpenPilotDrawerState extends ShipFittingState {
 }
 
 class OpenDamagePatternDrawerState extends ShipFittingState {
-  OpenDamagePatternDrawerState(FittingSimulator fitting) : super(fitting);
+  OpenDamagePatternDrawerState(super.fitting);
 
   @override
   List<Object> get props => [
@@ -143,7 +143,7 @@ class OpenDamagePatternDrawerState extends ShipFittingState {
 }
 
 class OpenFittingStatsDrawerState extends ShipFittingState {
-  OpenFittingStatsDrawerState(FittingSimulator fitting) : super(fitting);
+  OpenFittingStatsDrawerState(super.fitting);
 
   @override
   List<Object> get props => [

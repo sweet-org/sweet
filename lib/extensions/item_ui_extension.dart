@@ -1,4 +1,3 @@
-import 'package:sweet/bloc/item_repository_bloc/market_group_filters.dart';
 import 'package:sweet/database/entities/item.dart';
 import 'package:sweet/model/ship/eve_echoes_attribute.dart';
 

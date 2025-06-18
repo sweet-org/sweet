@@ -5,8 +5,8 @@ import 'package:sweet/widgets/utc_clock.dart';
 
 class AppBanner extends StatelessWidget {
   const AppBanner({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

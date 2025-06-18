@@ -13,8 +13,7 @@ class CharacterProfilePage extends StatelessWidget {
   static const routeName = '/character';
   final Character character;
 
-  const CharacterProfilePage({Key? key, required this.character})
-      : super(key: key);
+  const CharacterProfilePage({super.key, required this.character});
 
   @override
   Widget build(BuildContext context) {

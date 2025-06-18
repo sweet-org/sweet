@@ -8,11 +8,11 @@ class BorderedText extends StatelessWidget {
 
   const BorderedText(
     this.text, {
-    Key? key,
+    super.key,
     required this.borderColor,
     required this.borderWidth,
     this.style,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

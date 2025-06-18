@@ -10,8 +10,8 @@ import '../../../database/entities/item.dart';
 
 class ImplantContextDrawer extends StatelessWidget {
   const ImplantContextDrawer({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

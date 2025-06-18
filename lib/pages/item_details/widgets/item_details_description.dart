@@ -7,9 +7,9 @@ class ItemDetailDescripton extends StatelessWidget {
   final String itemDescription;
 
   const ItemDetailDescripton({
-    Key? key,
+    super.key,
     required this.itemDescription,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

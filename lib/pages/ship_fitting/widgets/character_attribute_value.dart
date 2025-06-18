@@ -14,7 +14,7 @@ class CharacterAttributeValue extends StatelessWidget {
   final TextStyle? style;
 
   const CharacterAttributeValue({
-    Key? key,
+    super.key,
     required this.attribute,
     this.titleOverride,
     this.titleIdOverride,
@@ -22,7 +22,7 @@ class CharacterAttributeValue extends StatelessWidget {
     this.formulaOverride,
     this.useSpacer = true,
     this.style,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

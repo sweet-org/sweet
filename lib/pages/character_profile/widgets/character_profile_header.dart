@@ -280,9 +280,9 @@ class _CharacterProfileHeaderState extends State<CharacterProfileHeader>
 
 class CharacterProfileHeaderDetails extends StatelessWidget {
   const CharacterProfileHeaderDetails({
-    Key? key,
+    super.key,
     required this.character,
-  }) : super(key: key);
+  });
 
   final Character character;
 
@@ -324,12 +324,12 @@ class CharacterProfileHeaderDetails extends StatelessWidget {
 
 class ImportExportDialog extends StatelessWidget {
   ImportExportDialog({
-    Key? key,
+    super.key,
     required this.title,
     required this.description,
     required this.onExport,
     required this.onImport,
-  }) : super(key: key) {
+  }) {
     assert(title.trim().isNotEmpty, 'Must have a title');
     assert(description.trim().isNotEmpty, 'Must have a description');
   }

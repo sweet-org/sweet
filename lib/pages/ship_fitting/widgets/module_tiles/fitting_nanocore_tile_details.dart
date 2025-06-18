@@ -1,8 +1,6 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sweet/model/fitting/fitting.dart';
 import 'package:sweet/model/fitting/fitting_module.dart';
 import 'package:sweet/model/fitting/fitting_nanocore.dart';
 import 'package:sweet/model/fitting/fitting_nanocore_attribute_list.dart';
@@ -25,10 +23,10 @@ import '../../nanocore_affix_bonus.dart';
 
 class FittingNanocoreTileDetails extends StatelessWidget {
   const FittingNanocoreTileDetails({
-    Key? key,
+    super.key,
     required this.fitting,
     required this.module,
-  }) : super(key: key);
+  });
 
   final FittingModule module;
   final FittingSimulator fitting;
@@ -113,12 +111,12 @@ typedef SelectedAttributeValidator = bool Function(
 
 class NanocoreAttributeListTile extends StatelessWidget {
   const NanocoreAttributeListTile({
-    Key? key,
+    super.key,
     required this.title,
     required this.nanocoreAttribute,
     required this.fitting,
     this.validator,
-  }) : super(key: key);
+  });
 
   final Widget title;
   final FittingNanocoreAttributeList nanocoreAttribute;
@@ -194,12 +192,12 @@ class NanocoreAttributeListTile extends StatelessWidget {
 
 class NanocoreAttributeSelector extends StatelessWidget {
   const NanocoreAttributeSelector({
-    Key? key,
+    super.key,
     required this.attribute,
     required this.color,
     required this.onTap,
     this.validator,
-  }) : super(key: key);
+  });
 
   final FittingNanocoreAttributeList attribute;
 
@@ -250,13 +248,13 @@ class NanocoreAttributeSelector extends StatelessWidget {
 
 class NanocoreAffixListTile extends StatelessWidget {
   const NanocoreAffixListTile({
-    Key? key,
+    super.key,
     required this.nanocore,
     required this.fitting,
     required this.active,
     this.title = "Nanocore Library",
     this.description,
-  }) : super(key: key);
+  });
 
   final FittingNanocore nanocore;
   final FittingSimulator fitting;

@@ -9,7 +9,7 @@ class ItemRawPropertiesList extends StatelessWidget {
 
   final Item item;
 
-  const ItemRawPropertiesList({Key? key, required this.item}) : super(key: key);
+  const ItemRawPropertiesList({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {

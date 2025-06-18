@@ -23,7 +23,7 @@ class ItemDetailsPage extends StatefulWidget {
   static const routeName = '/item';
   final Item item;
 
-  const ItemDetailsPage({Key? key, required this.item}) : super(key: key);
+  const ItemDetailsPage({super.key, required this.item});
 
   @override
   State<ItemDetailsPage> createState() => _ItemDetailsPageState();
@@ -101,7 +101,7 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
 class ItemDetailsWidget extends StatelessWidget {
   final Item item;
 
-  const ItemDetailsWidget({Key? key, required this.item}) : super(key: key);
+  const ItemDetailsWidget({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {

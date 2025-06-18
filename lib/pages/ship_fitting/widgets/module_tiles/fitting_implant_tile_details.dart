@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sweet/database/entities/entities.dart';
 import 'package:sweet/model/fitting/fitting_implant.dart';
@@ -16,11 +15,11 @@ typedef ImplantModuleToggle = void Function(int implantNumber, int slotId, Modul
 
 class FittingImplantTileDetails extends StatelessWidget {
   const FittingImplantTileDetails({
-    Key? key,
+    super.key,
     required this.fitting,
     required this.implant,
     required this.onStateToggle,
-  }) : super(key: key);
+  });
 
   final ImplantFitting implant;
   final FittingSimulator fitting;

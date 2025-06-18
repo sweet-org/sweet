@@ -9,9 +9,9 @@ class ShipFittingStatsDrawer extends StatelessWidget {
   final FittingSimulator fitting;
 
   const ShipFittingStatsDrawer({
-    Key? key,
+    super.key,
     required this.fitting,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

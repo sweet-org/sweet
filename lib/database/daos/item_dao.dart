@@ -1,4 +1,3 @@
-import '../database.dart';
 import 'base_dao.dart';
 import 'base_dao_mixin.dart';
 
@@ -8,7 +7,7 @@ import '../entities/item.dart';
 import '../entities/category.dart';
 
 class ItemDao extends BaseDao<Item> with BaseDaoMixin {
-  ItemDao(EveEchoesDatabase db) : super(db);
+  ItemDao(super.db);
 
   @override
   String get tableName => 'items';

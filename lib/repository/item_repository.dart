@@ -10,7 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:archive/archive.dart';
 import 'package:http/http.dart' as http;
 import 'package:sweet/bloc/item_repository_bloc/market_group_filters.dart';
-import 'package:sweet/database/entities/item_nanocore_affix.dart';
 import 'package:sweet/model/fitting/fitting_implant_module.dart';
 import 'package:sweet/model/fitting/fitting_nanocore.dart';
 import 'package:sweet/model/fitting/fitting_nanocore_affix.dart';

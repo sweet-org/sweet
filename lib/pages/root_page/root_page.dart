@@ -428,10 +428,10 @@ class RootPage extends StatelessWidget with FileSelector {
 
 class ExceptionWidget extends StatelessWidget {
   const ExceptionWidget({
-    Key? key,
+    super.key,
     required this.exception,
     required this.stackTrace,
-  }) : super(key: key);
+  });
 
   final String? exception;
   final StackTrace? stackTrace;

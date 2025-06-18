@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sweet/model/fitting/fitting_implant_module.dart';
@@ -17,10 +16,10 @@ class ImplantSlotListView extends StatelessWidget {
   final ImplantFittingSlotCallback onTap;
 
   ImplantSlotListView({
-    Key? key,
+    super.key,
     required this.implant,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final ImplantHandler implant;
 

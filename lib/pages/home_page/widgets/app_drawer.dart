@@ -1,4 +1,3 @@
-import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -24,8 +23,8 @@ import 'version_label.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<AppDrawer> createState() => _AppDrawerState();

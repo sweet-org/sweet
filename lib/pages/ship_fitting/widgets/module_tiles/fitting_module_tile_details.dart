@@ -8,10 +8,10 @@ import 'package:sweet/widgets/item_damage_pattern.dart';
 
 class FittingModuleTileDetails extends StatelessWidget {
   const FittingModuleTileDetails({
-    Key? key,
+    super.key,
     required this.fitting,
     required this.module,
-  }) : super(key: key);
+  });
 
   final FittingModule module;
   final FittingSimulator fitting;

@@ -16,8 +16,7 @@ class ShipFittingCard extends StatelessWidget {
   final ShipFittingLoadout loadout;
   final ShipFittingLoadoutCallback onTap;
 
-  const ShipFittingCard({Key? key, required this.loadout, required this.onTap})
-      : super(key: key);
+  const ShipFittingCard({super.key, required this.loadout, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +87,7 @@ class ShipFittingCard extends StatelessWidget {
 class FittingControls extends StatefulWidget {
   final ShipFittingLoadout loadout;
 
-  const FittingControls({Key? key, required this.loadout}) : super(key: key);
+  const FittingControls({super.key, required this.loadout});
 
   @override
   State<FittingControls> createState() => _FittingControlsState();

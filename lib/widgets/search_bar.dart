@@ -7,12 +7,12 @@ class SweetSearchBar extends StatefulWidget {
   final bool triggerOnChange;
 
   SweetSearchBar({
-    Key? key,
+    super.key,
     required this.onSubmit,
     this.labelText,
     this.minOnChangedLength = 3,
     this.triggerOnChange = false,
-  }) : super(key: key);
+  });
 
   @override
   State<SweetSearchBar> createState() => _SearchBarState();

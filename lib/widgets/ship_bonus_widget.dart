@@ -9,8 +9,7 @@ class ShipBonusWidget extends StatelessWidget {
   final Iterable<ShipAttributeBonus> bonuses;
 
   const ShipBonusWidget(
-      {Key? key, required this.bonusSkillNameId, required this.bonuses})
-      : super(key: key);
+      {super.key, required this.bonusSkillNameId, required this.bonuses});
 
   @override
   Widget build(BuildContext context) {

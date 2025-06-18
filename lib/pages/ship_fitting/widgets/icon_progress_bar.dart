@@ -11,14 +11,14 @@ class IconProgressbar extends StatelessWidget {
   final double borderWidth;
 
   const IconProgressbar({
-    Key? key,
+    super.key,
     required this.value,
     required this.color,
     this.icon,
     required this.label,
     this.height = 24,
     this.borderWidth = 0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

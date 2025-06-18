@@ -1,4 +1,3 @@
-import '../database.dart';
 import 'base_dao.dart';
 import 'base_dao_mixin.dart';
 
@@ -25,7 +24,7 @@ class ShipNanocore {
 }
 
 class ShipNanocoreDao extends BaseDao<ShipNanocore> with BaseDaoMixin {
-  ShipNanocoreDao(EveEchoesDatabase db) : super(db);
+  ShipNanocoreDao(super.db);
 
   @override
   String get tableName => 'ship_nanocore';

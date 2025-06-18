@@ -27,14 +27,9 @@ class FittingShip extends FittingItem {
   }
 
   FittingShip({
-    required Item item,
+    required super.item,
     FittingModule? shipMode,
-    required List<Attribute> baseAttributes,
-    required List<ItemModifier> modifiers,
-  })  : _shipMode = shipMode,
-        super(
-          item: item,
-          baseAttributes: baseAttributes,
-          modifiers: modifiers,
-        );
+    required super.baseAttributes,
+    required super.modifiers,
+  })  : _shipMode = shipMode;
 }

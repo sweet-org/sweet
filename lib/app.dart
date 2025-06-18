@@ -9,7 +9,6 @@ import 'package:sweet/pages/character_profile/character_profile_page.dart';
 import 'package:sweet/pages/item_details/item_details_page.dart';
 import 'package:sweet/pages/ship_fitting/ship_fitting_page.dart';
 import 'package:flutter/material.dart';
-import 'package:sweet/util/platform_helper.dart';
 
 import 'model/implant/implant_handler.dart';
 import 'pages/root_page/root_page.dart';
@@ -19,10 +18,10 @@ class App extends StatelessWidget {
   final ThemeData darkTheme;
 
   const App({
-    Key? key,
+    super.key,
     required this.lightTheme,
     required this.darkTheme,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) => MaterialApp(

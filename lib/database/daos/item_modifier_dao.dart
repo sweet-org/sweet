@@ -1,6 +1,5 @@
 import '../../model/ship/ship_bonus.dart';
 
-import '../database.dart';
 import '../entities/item_modifier.dart';
 import '../type_converters/type_converters.dart';
 
@@ -8,7 +7,7 @@ import 'base_dao.dart';
 import 'base_dao_mixin.dart';
 
 class ItemModifierDao extends BaseDao<ItemModifier> with BaseDaoMixin {
-  ItemModifierDao(EveEchoesDatabase db) : super(db);
+  ItemModifierDao(super.db);
 
   @override
   String get tableName => 'item_modifiers';

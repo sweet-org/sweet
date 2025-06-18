@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:expressions/expressions.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sweet/mixins/fitting_item_details_mixin.dart';
@@ -28,7 +27,7 @@ class ImplantModuleTile extends StatelessWidget with FittingItemDetailsMixin {
   final ImplantHandler? implant;
 
   const ImplantModuleTile({
-    Key? key,
+    super.key,
     required this.index,
     required this.module,
     required this.onTap,
@@ -36,7 +35,7 @@ class ImplantModuleTile extends StatelessWidget with FittingItemDetailsMixin {
     required this.onClonePressed,
     required this.onStateToggle,
     this.implant,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) => InkWell(

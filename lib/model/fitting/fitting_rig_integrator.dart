@@ -168,17 +168,13 @@ class FittingRigIntegrator extends FittingModule {
 
   FittingRigIntegrator({
     required Item baseItem,
-    required List<Attribute> baseAttributes,
-    required List<ItemModifier> modifiers,
+    required super.baseAttributes,
+    required super.modifiers,
     required List<FittingModule> selectedRigs,
-    SlotType slot = SlotType.combatRig,
-    int index = 0,
+    super.slot = SlotType.combatRig,
+    super.index,
   }) : super(
           item: baseItem,
-          baseAttributes: baseAttributes,
-          modifiers: modifiers,
-          slot: slot,
-          index: index,
           state: ModuleState.inactive,
         ) {
     // if (selectedRigs.isEmpty) {

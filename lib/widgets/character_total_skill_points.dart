@@ -9,10 +9,10 @@ import 'package:sweet/util/constants.dart';
 
 class CharacterTotalSkillPoints extends StatelessWidget {
   const CharacterTotalSkillPoints({
-    Key? key,
+    super.key,
     required this.character,
     this.style,
-  }) : super(key: key);
+  });
   final Character character;
   final TextStyle? style;
 

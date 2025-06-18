@@ -6,11 +6,11 @@ import 'package:sweet/widgets/localised_text.dart';
 
 class ShipModeToggle extends StatelessWidget {
   const ShipModeToggle({
-    Key? key,
+    super.key,
     required this.shipMode,
     required this.onInfoTapped,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   final FittingModule? shipMode;
   final void Function(bool enabled) onChanged;

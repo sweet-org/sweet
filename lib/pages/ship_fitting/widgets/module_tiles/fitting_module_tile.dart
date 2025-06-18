@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:sweet/mixins/fitting_item_details_mixin.dart';
 import 'package:sweet/model/fitting/fitting_drone.dart';
 import 'package:sweet/model/fitting/fitting_implant.dart';
-import 'package:sweet/model/fitting/fitting_implant_module.dart';
 
 import 'package:sweet/model/fitting/fitting_module.dart';
 import 'package:sweet/model/fitting/fitting_rig_integrator.dart';
@@ -34,14 +33,14 @@ class FittingModuleTile extends StatelessWidget with FittingItemDetailsMixin {
   final ModuleStateToggleCallback onStateToggle;
 
   const FittingModuleTile({
-    Key? key,
+    super.key,
     required this.index,
     required this.module,
     required this.onTap,
     required this.onClearPressed,
     required this.onClonePressed,
     required this.onStateToggle,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) => InkWell(

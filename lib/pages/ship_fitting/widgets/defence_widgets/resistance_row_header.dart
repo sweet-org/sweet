@@ -6,11 +6,11 @@ import 'package:sweet/model/ship/eve_echoes_attribute.dart';
 
 class ResistanceRowHeader extends StatelessWidget {
   const ResistanceRowHeader({
-    Key? key,
+    super.key,
     required this.rowHeight,
     required this.showEHP,
     required this.onEHPToggle,
-  }) : super(key: key);
+  });
 
   final double rowHeight;
   final bool showEHP;

@@ -11,8 +11,7 @@ class ShipFittingDPSToolbarButton extends StatelessWidget {
   final IconData icon;
   final GestureTapCallback onTap;
 
-  const ShipFittingDPSToolbarButton({Key? key, required this.icon, required this.onTap})
-      : super(key: key);
+  const ShipFittingDPSToolbarButton({super.key, required this.icon, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

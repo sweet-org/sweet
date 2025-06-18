@@ -66,17 +66,13 @@ class FittingImplantModule extends FittingItem with EquatableMixin {
   }
 
   FittingImplantModule({
-    required Item item,
+    required super.item,
     required this.slot,
     required this.level,
-    required List<Attribute> baseAttributes,
-    required List<ItemModifier> modifiers,
+    required super.baseAttributes,
+    required super.modifiers,
     this.state = ModuleState.inactive,
-  }) : super(
-    item: item,
-    baseAttributes: baseAttributes,
-    modifiers: modifiers,
-  );
+  });
 
   FittingImplantModule copyWith({
     ImplantSlotType? slot,

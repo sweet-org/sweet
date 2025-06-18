@@ -14,10 +14,10 @@ class ShipFittingDefenceWidget extends StatefulWidget {
   final bool condensed;
 
   const ShipFittingDefenceWidget({
-    Key? key,
+    super.key,
     this.rowHeight = 28,
     this.condensed = false,
-  }) : super(key: key);
+  });
 
   final double rowHeight;
 

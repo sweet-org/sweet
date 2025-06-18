@@ -1,4 +1,3 @@
-import 'package:sweet/database/entities/entities.dart';
 import 'package:sweet/model/ship/module_state.dart';
 import 'package:sweet/service/fitting_simulator.dart';
 import 'package:sweet/model/ship/slot_type.dart';
@@ -9,21 +8,14 @@ class FittingDrone extends FittingModule {
   final FittingSimulator fitting;
 
   FittingDrone({
-    required Item item,
-    required List<Attribute> baseAttributes,
-    required List<ItemModifier> modifiers,
-    SlotType slot = SlotType.high,
-    int index = 0,
-    ModuleState state = ModuleState.active,
+    required super.item,
+    required super.baseAttributes,
+    required super.modifiers,
+    super.slot,
+    super.index,
+    super.state = ModuleState.active,
     required this.fitting,
-  }) : super(
-          item: item,
-          baseAttributes: baseAttributes,
-          modifiers: modifiers,
-          slot: slot,
-          index: index,
-          state: state,
-        );
+  });
 
   @override
   FittingDrone copyWith({

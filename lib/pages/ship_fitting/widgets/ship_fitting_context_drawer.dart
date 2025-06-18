@@ -14,15 +14,14 @@ class ShipFittingContextDrawer extends StatefulWidget {
   final List<int> blacklistItems;
 
   ShipFittingContextDrawer({
-    Key? key,
+    super.key,
     MarketGroup? marketGroup,
     List<Item>? initialFilteredItems,
     List<int>? blacklistItems,
   })  : assert(marketGroup != null || initialFilteredItems != null),
         marketGroup = marketGroup ?? MarketGroup.invalid,
         initialItems = initialFilteredItems ?? [],
-        blacklistItems = blacklistItems ?? List<int>.empty(),
-        super(key: key);
+        blacklistItems = blacklistItems ?? List<int>.empty();
 
   @override
   State<ShipFittingContextDrawer> createState() =>

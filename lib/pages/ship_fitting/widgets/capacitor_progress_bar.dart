@@ -16,9 +16,9 @@ class CapacitorUsageWidget extends StatelessWidget {
   final bool condensed;
 
   const CapacitorUsageWidget({
-    Key? key,
+    super.key,
     this.condensed = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -164,13 +164,13 @@ class CapacitorUsageWidget extends StatelessWidget {
 
 class CapacitorProgressBar extends StatelessWidget {
   const CapacitorProgressBar({
-    Key? key,
+    super.key,
     required this.rings,
     required this.steps,
     required this.capSimResults,
     required this.minSize,
     required this.sizeStep,
-  }) : super(key: key);
+  });
 
   final int rings;
   final int steps;

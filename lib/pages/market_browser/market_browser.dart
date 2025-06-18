@@ -56,8 +56,8 @@ typedef ItemCallback = void Function(Item item);
 
 class MarketGroupTile extends StatelessWidget {
   const MarketGroupTile(
-      {Key? key, required this.marketGroup, required this.onItemSelected, List<int>? blacklistItems })
-      : blacklistItems = blacklistItems ?? const [], super(key: key);
+      {super.key, required this.marketGroup, required this.onItemSelected, List<int>? blacklistItems })
+      : blacklistItems = blacklistItems ?? const [];
 
   final MarketGroup marketGroup;
   final ItemCallback onItemSelected;
@@ -98,10 +98,10 @@ class MarketGroupTile extends StatelessWidget {
 
 class ItemListTile extends StatelessWidget {
   const ItemListTile({
-    Key? key,
+    super.key,
     required this.item,
     required this.onSelected,
-  }) : super(key: key);
+  });
 
   final Item item;
   final ItemCallback onSelected;

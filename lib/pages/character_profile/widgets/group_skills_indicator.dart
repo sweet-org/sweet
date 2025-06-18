@@ -4,10 +4,10 @@ import 'package:sweet/database/entities/item.dart';
 
 class GroupSkillsIndicator extends StatelessWidget {
   const GroupSkillsIndicator({
-    Key? key,
+    super.key,
     required this.skills,
     required this.characterSkills,
-  }) : super(key: key);
+  });
 
   final Iterable<Item> skills;
   final List<LearnedSkill> characterSkills;

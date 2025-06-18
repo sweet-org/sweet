@@ -8,9 +8,9 @@ class FittingTotalPrice extends StatelessWidget {
   final ShipFittingLoadout fitting;
 
   const FittingTotalPrice({
-    Key? key,
+    super.key,
     required this.fitting,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

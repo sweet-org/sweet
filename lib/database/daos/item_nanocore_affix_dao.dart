@@ -3,14 +3,13 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import '../entities/item_nanocore_affix.dart';
 
-import '../database.dart';
 import '../type_converters/type_converters.dart';
 import 'base_dao.dart';
 import 'base_dao_mixin.dart';
 
 class ItemNanocoreAffixDao extends BaseDao<ItemNanocoreAffix>
     with BaseDaoMixin {
-  ItemNanocoreAffixDao(EveEchoesDatabase db) : super(db);
+  ItemNanocoreAffixDao(super.db);
 
   @override
   String get tableName => 'item_nanocore_affix';

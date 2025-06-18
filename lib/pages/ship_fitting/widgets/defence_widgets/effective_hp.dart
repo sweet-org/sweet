@@ -7,9 +7,9 @@ import 'package:sweet/util/localisation_constants.dart';
 
 class EffectiveHP extends StatelessWidget {
   const EffectiveHP({
-    Key? key,
+    super.key,
     this.condense = true,
-  }) : super(key: key);
+  });
 
   final bool condense;
 

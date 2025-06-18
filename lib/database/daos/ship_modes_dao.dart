@@ -1,6 +1,5 @@
 
 
-import '../database.dart';
 import 'base_dao.dart';
 import 'base_dao_mixin.dart';
 
@@ -9,7 +8,7 @@ import '../type_converters/type_converters.dart';
 import '../entities/ship_default_mode.dart';
 
 class ShipModesDao extends BaseDao<ShipDefaultMode> with BaseDaoMixin {
-  ShipModesDao(EveEchoesDatabase db) : super(db);
+  ShipModesDao(super.db);
 
   @override
   String get tableName => 'ship_modes';

@@ -16,8 +16,7 @@ class FittingFolderCard extends StatefulWidget {
   final Future<void> Function(ShipFittingLoadout loadout) onLoadoutTap;
 
   const FittingFolderCard(
-      {Key? key, required this.folder, required this.onLoadoutTap})
-      : super(key: key);
+      {super.key, required this.folder, required this.onLoadoutTap});
 
   @override
   State<StatefulWidget> createState() => _FittingFolderState();

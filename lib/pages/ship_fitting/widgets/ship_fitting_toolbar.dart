@@ -23,8 +23,8 @@ enum FittingStats {
 
 class ShipFittingToolbar extends StatefulWidget {
   const ShipFittingToolbar({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<ShipFittingToolbar> createState() => _ShipFittingToolbarState();

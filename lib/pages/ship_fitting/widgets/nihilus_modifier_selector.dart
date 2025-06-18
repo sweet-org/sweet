@@ -9,8 +9,8 @@ import 'package:tinycolor2/tinycolor2.dart';
 
 class NihilusModifierSelector extends StatefulWidget {
   const NihilusModifierSelector({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<NihilusModifierSelector> createState() =>

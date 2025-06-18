@@ -13,8 +13,8 @@ class ShipFittingDetailPanel extends StatelessWidget {
   final _scrollController = ScrollController();
 
   ShipFittingDetailPanel({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

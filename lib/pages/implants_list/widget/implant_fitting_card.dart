@@ -109,7 +109,7 @@ class ImplantFittingCard extends StatelessWidget {
 class FittingControls extends StatefulWidget {
   final ImplantFittingLoadout loadout;
 
-  const FittingControls({Key? key, required this.loadout}) : super(key: key);
+  const FittingControls({super.key, required this.loadout});
 
   @override
   State<FittingControls> createState() => _FittingControlsState();

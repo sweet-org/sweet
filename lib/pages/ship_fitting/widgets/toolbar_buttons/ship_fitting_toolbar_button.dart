@@ -6,8 +6,7 @@ class ShipFittingToolbarButton extends StatelessWidget {
   final GestureTapCallback onTap;
 
   const ShipFittingToolbarButton(
-      {Key? key, required this.icon, required this.title, required this.onTap})
-      : super(key: key);
+      {super.key, required this.icon, required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

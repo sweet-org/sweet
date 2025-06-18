@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 
-import '../database.dart';
 import 'base_dao.dart';
 import 'base_dao_mixin.dart';
 
@@ -11,7 +10,7 @@ import '../type_converters/type_converters.dart';
 import '../entities/item_nanocore.dart';
 
 class ItemNanocoreDao extends BaseDao<ItemNanocore> with BaseDaoMixin {
-  ItemNanocoreDao(EveEchoesDatabase db) : super(db);
+  ItemNanocoreDao(super.db);
 
   @override
   String get tableName => 'item_nanocores';

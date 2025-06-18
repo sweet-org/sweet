@@ -12,7 +12,7 @@ import '../../database/entities/category.dart';
 import '../../database/entities/group.dart';
 
 class ItemBrowserPage extends StatefulWidget {
-  ItemBrowserPage({Key? key, required this.title}) : super(key: key);
+  ItemBrowserPage({super.key, required this.title});
 
   final String title;
 
@@ -88,9 +88,9 @@ class _ItemBrowserPageState extends State<ItemBrowserPage> {
 
 class CategoryExpansionTile extends StatelessWidget {
   const CategoryExpansionTile({
-    Key? key,
+    super.key,
     required this.category,
-  }) : super(key: key);
+  });
 
   final Category category;
 
@@ -127,9 +127,9 @@ class CategoryExpansionTile extends StatelessWidget {
 
 class GroupExpansionTile extends StatelessWidget {
   const GroupExpansionTile({
-    Key? key,
+    super.key,
     required this.group,
-  }) : super(key: key);
+  });
 
   final Group group;
 
@@ -167,9 +167,9 @@ class GroupExpansionTile extends StatelessWidget {
 
 class ItemListCardWidget extends StatelessWidget {
   const ItemListCardWidget({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   final Item item;
 

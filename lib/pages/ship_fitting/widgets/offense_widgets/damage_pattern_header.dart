@@ -5,10 +5,10 @@ import 'package:sweet/model/ship/eve_echoes_attribute.dart';
 
 class DamagePatternHeader extends StatelessWidget {
   const DamagePatternHeader({
-    Key? key,
+    super.key,
     required this.rowHeight,
     this.trailing,
-  }) : super(key: key);
+  });
 
   final double rowHeight;
   final Widget? trailing;

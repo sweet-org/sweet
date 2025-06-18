@@ -15,7 +15,7 @@ class LocalisedText extends StatelessWidget {
   final bool autoSize;
 
   const LocalisedText({
-    Key? key,
+    super.key,
     this.style,
     this.item,
     this.localiseId,
@@ -27,8 +27,7 @@ class LocalisedText extends StatelessWidget {
   })  : assert(
           !(item == null && localiseId == null),
           'Must give item or id!',
-        ),
-        super(key: key);
+        );
 
   @override
   Widget build(BuildContext context) {

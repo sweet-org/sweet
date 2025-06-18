@@ -157,7 +157,7 @@ class FittingNanocore extends FittingModule {
 
   FittingNanocore({
     required Item baseItem,
-    int index = 0,
+    super.index,
     required this.isGolden,
     required this.mainAttribute,
     this.secondMainAttribute,
@@ -170,7 +170,6 @@ class FittingNanocore extends FittingModule {
           baseAttributes: [],
           modifiers: [],
           slot: SlotType.nanocore,
-          index: index,
           state: ModuleState.inactive,
         ) {
     final mainAttributeId = metadata[kSelectableAttributeIdKey] as int? ?? 0;

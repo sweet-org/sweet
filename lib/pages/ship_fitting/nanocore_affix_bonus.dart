@@ -13,8 +13,7 @@ class NanocoreAffixTile extends StatelessWidget {
   final TapAffixSelectLevel onSelectLevel;
 
   const NanocoreAffixTile(
-      {Key? key, required this.index, required this.affix, required this.onSelectLevel})
-      : super(key: key);
+      {super.key, required this.index, required this.affix, required this.onSelectLevel});
 
   @override
   Widget build(BuildContext context) {

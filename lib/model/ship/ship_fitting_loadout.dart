@@ -118,6 +118,7 @@ class ShipFittingLoadout extends ChangeNotifier
     return _$ShipFittingLoadoutFromJson(json);
   }
 
+  @override
   Map<String, dynamic> toJson() => _$ShipFittingLoadoutToJson(this);
 
   factory ShipFittingLoadout.fromShip(

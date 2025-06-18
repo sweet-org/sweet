@@ -3,14 +3,13 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 
 import '../entities/gold_nano_attr_class.dart';
-import '../database.dart';
 import '../type_converters/type_converters.dart';
 import 'base_dao.dart';
 import 'base_dao_mixin.dart';
 
 class GoldNanoAttrClassDao extends BaseDao<GoldNanoAttrClass>
     with BaseDaoMixin {
-  GoldNanoAttrClassDao(EveEchoesDatabase db) : super(db);
+  GoldNanoAttrClassDao(super.db);
 
   @override
   String get tableName => 'gold_nano_attr_class';

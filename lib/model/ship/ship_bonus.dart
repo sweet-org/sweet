@@ -60,27 +60,20 @@ class ShipAttributeBonus extends ItemModifier {
   final int? bonusSkillNameId;
 
   ShipAttributeBonus({
-    required String code,
-    required String typeCode,
-    required ModifierChangeType changeType,
-    required String changeRange,
-    required int changeRangeModuleNameId,
-    required int attributeId,
+    required super.code,
+    required super.typeCode,
+    required super.changeType,
+    required super.changeRange,
+    required super.changeRangeModuleNameId,
+    required super.attributeId,
     required this.attributeName,
-    required double attributeValue,
+    required super.attributeValue,
     required this.attributeNameId,
     required this.attributeUnitNameId,
     required this.attributeFormula,
     required this.bonusSkillId,
     this.bonusSkillNameId,
   }) : super(
-          code: code,
-          typeCode: typeCode,
-          changeType: changeType,
-          changeRange: changeRange,
-          changeRangeModuleNameId: changeRangeModuleNameId,
-          attributeId: attributeId,
-          attributeValue: attributeValue,
           attributeOnly: false,
         );
 

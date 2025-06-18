@@ -6,13 +6,13 @@ import '../attribute_progress_bar.dart';
 
 class DamagePatternRow extends StatelessWidget {
   const DamagePatternRow({
-    Key? key,
+    super.key,
     required this.rowHeight,
     required this.damagePattern,
     this.rowIcon,
     this.leading,
     this.trailing,
-  }) : super(key: key);
+  });
 
   final Widget? leading;
   final Widget? rowIcon;

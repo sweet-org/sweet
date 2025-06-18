@@ -9,8 +9,8 @@ import 'package:sweet/repository/item_repository.dart';
 
 class PilotContextDrawer extends StatelessWidget {
   const PilotContextDrawer({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

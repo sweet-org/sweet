@@ -1,6 +1,5 @@
 
 
-import '../database.dart';
 import 'base_dao.dart';
 import 'base_dao_mixin.dart';
 
@@ -9,7 +8,7 @@ import '../type_converters/type_converters.dart';
 import '../entities/npc_equipment.dart';
 
 class NpcEquipmentDao extends BaseDao<NpcEquipment> with BaseDaoMixin {
-  NpcEquipmentDao(EveEchoesDatabase db) : super(db);
+  NpcEquipmentDao(super.db);
 
   @override
   String get tableName => 'npc_equipment';

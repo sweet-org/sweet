@@ -9,11 +9,11 @@ class ValueWithTitle extends StatelessWidget {
   final bool useSpacer;
 
   const ValueWithTitle({
-    Key? key,
+    super.key,
     required this.title,
     required this.value,
     this.useSpacer = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) => Row(

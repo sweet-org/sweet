@@ -1,5 +1,4 @@
 
-import '../database.dart';
 
 import 'base_dao.dart';
 import 'base_dao_mixin.dart';
@@ -9,7 +8,7 @@ import '../type_converters/type_converters.dart';
 import '../entities/attribute.dart';
 
 class AttributeDao extends BaseDao<Attribute> with BaseDaoMixin {
-  AttributeDao(EveEchoesDatabase db) : super(db);
+  AttributeDao(super.db);
 
   @override
   String get tableName => 'attributes';

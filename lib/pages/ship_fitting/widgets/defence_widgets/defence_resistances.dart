@@ -14,12 +14,12 @@ class DefenceResistances extends StatefulWidget {
   final double rowMargin;
 
   const DefenceResistances({
-    Key? key,
+    super.key,
     required this.rowHeight,
     required this.damagePattern,
     required this.onEhpToggle,
     this.rowMargin = 2,
-  }) : super(key: key);
+  });
 
   @override
   State<DefenceResistances> createState() => _DefenceResistancesState();

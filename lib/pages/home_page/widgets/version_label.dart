@@ -12,9 +12,9 @@ class VersionLabel extends StatefulWidget {
   final Color? color;
 
   const VersionLabel({
-    Key? key,
+    super.key,
     this.color,
-  }) : super(key: key);
+  });
 
   @override
   State<VersionLabel> createState() => _VersionLabelState();

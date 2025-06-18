@@ -12,10 +12,10 @@ class ShipFittingEHPToolbarButton extends StatelessWidget {
   final GestureTapCallback onTap;
 
   const ShipFittingEHPToolbarButton({
-    Key? key,
+    super.key,
     required this.icon,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

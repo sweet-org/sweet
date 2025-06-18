@@ -18,10 +18,10 @@ class NanocoreAttributeBonus extends StatelessWidget {
   final SelectedModifierCallback onTap;
 
   NanocoreAttributeBonus({
-    Key? key,
+    super.key,
     required this.nanocoreAttribute,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

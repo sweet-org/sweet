@@ -7,10 +7,10 @@ class ProgressBarGroup extends StatelessWidget {
   final Widget? icon;
 
   const ProgressBarGroup({
-    Key? key,
+    super.key,
     required this.attributes,
     this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

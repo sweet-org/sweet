@@ -29,23 +29,17 @@ abstract class CharacterProfileUpdate extends CharacterProfileState {
 
 class CharacterProfileUpdating extends CharacterProfileUpdate {
   CharacterProfileUpdating({
-    required Character character,
-    required List<Group> skillGroups,
-    required bool showSpinner,
-  }) : super(
-          character: character,
-          skillGroups: skillGroups,
-          showSpinner: showSpinner,
-        );
+    required super.character,
+    required super.skillGroups,
+    required super.showSpinner,
+  });
 }
 
 class CharacterProfileUpdated extends CharacterProfileUpdate {
   CharacterProfileUpdated({
-    required Character character,
-    required List<Group> skillGroups,
+    required super.character,
+    required super.skillGroups,
   }) : super(
-          character: character,
-          skillGroups: skillGroups,
           showSpinner: false,
         );
 }

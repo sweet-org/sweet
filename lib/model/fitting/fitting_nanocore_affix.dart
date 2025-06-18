@@ -13,13 +13,11 @@ class FittingNanocoreAffixItem extends FittingItem {
 
   FittingNanocoreAffixItem({
     required this.affix,
-    required List<Attribute> baseAttributes,
-    required List<ItemModifier> modifiers,
+    required super.baseAttributes,
+    required super.modifiers,
     required this.passiveModifiers,
   }) : super(
-            item: affix.item!,
-            baseAttributes: baseAttributes,
-            modifiers: modifiers);
+            item: affix.item!);
 }
 
 class FittingNanocoreAffix with EquatableMixin {

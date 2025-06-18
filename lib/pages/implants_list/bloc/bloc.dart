@@ -1,9 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:sweet/model/ship/ship_fitting_folder.dart';
-import 'package:sweet/model/ship/ship_fitting_loadout.dart';
 import 'package:sweet/repository/implant_fitting_loadout_repository.dart';
 import 'package:sweet/repository/item_repository.dart';
-import 'package:sweet/repository/ship_fitting_repository.dart';
 
 import '../../../model/implant/implant_fitting_loadout.dart';
 import 'events.dart';

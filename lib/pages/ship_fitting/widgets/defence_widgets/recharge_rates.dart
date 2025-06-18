@@ -8,10 +8,10 @@ class RechargeRates extends StatelessWidget {
   final bool showEhp;
 
   const RechargeRates({
-    Key? key,
+    super.key,
     required this.damagePattern,
     required this.showEhp,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

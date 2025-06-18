@@ -64,7 +64,7 @@ class FittingSimulator extends ChangeNotifier {
       _totalImplantLevels ?? _pilot?.totalImplantLevels ?? 0;
 
   final Fitting _fitting;
-  List<ImplantHandler?> _implants;
+  final List<ImplantHandler?> _implants;
 
   Iterable<FittingModule> modules({required SlotType slotType}) =>
       _fitting[slotType] ?? [];

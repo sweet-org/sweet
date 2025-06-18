@@ -19,13 +19,13 @@ class CharacterCard extends StatelessWidget {
   final bool showClone;
 
   const CharacterCard({
-    Key? key,
+    super.key,
     required this.character,
     required this.onTap,
     this.showDelete = false,
     this.showClone = false,
     this.totalSkills = 0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

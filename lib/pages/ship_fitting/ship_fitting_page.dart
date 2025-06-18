@@ -16,7 +16,7 @@ class ShipFittingPage extends StatelessWidget {
   static const routeName = '/fitting';
   final FittingSimulator fitting;
 
-  const ShipFittingPage({Key? key, required this.fitting}) : super(key: key);
+  const ShipFittingPage({super.key, required this.fitting});
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sweet/model/fitting/fitting_item.dart';
 
 import 'package:sweet/model/ship/slot_type.dart';
 import 'package:sweet/pages/ship_fitting/bloc/ship_fitting_bloc/ship_fitting.dart';
@@ -13,9 +12,9 @@ class ShipSlotListView extends StatelessWidget {
   final _scrollController = ScrollController();
 
   ShipSlotListView({
-    Key? key,
+    super.key,
     required this.fitting,
-  }) : super(key: key);
+  });
 
   final FittingSimulator fitting;
 

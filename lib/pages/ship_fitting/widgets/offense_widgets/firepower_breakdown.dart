@@ -9,9 +9,9 @@ class FirepowerBreakdown extends StatefulWidget {
   final bool condensed;
 
   const FirepowerBreakdown({
-    Key? key,
+    super.key,
     this.condensed = false,
-  }) : super(key: key);
+  });
 
   @override
   State<FirepowerBreakdown> createState() => _FirepowerBreakdownState();

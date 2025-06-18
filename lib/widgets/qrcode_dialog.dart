@@ -14,11 +14,11 @@ import 'package:sweet/mixins/file_selector_mixin.dart';
 
 class QRCodeDialog extends StatelessWidget with FileSelector {
   QRCodeDialog({
-    Key? key,
+    super.key,
     required this.data,
     required this.title,
     this.leadingAction,
-  }) : super(key: key);
+  });
 
   final _qrCodeKey = GlobalKey();
 

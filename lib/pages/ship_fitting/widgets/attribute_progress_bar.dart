@@ -18,14 +18,14 @@ class AttributeProgressBar extends StatefulWidget {
   final bool inverted;
 
   const AttributeProgressBar({
-    Key? key,
+    super.key,
     required this.attribute,
     required this.attributeValue,
     this.height = 24,
     this.inverted = false,
     this.formulaOverride,
     this.unitOverride,
-  }) : super(key: key);
+  });
 
   @override
   State<AttributeProgressBar> createState() => _AttributeProgressBarState();

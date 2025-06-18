@@ -4,16 +4,11 @@ import 'package:bloc/bloc.dart';
 import 'package:sweet/bloc/item_repository_bloc/market_group_filters.dart';
 import 'package:sweet/database/database_exports.dart';
 import 'package:sweet/model/character/character.dart';
-import 'package:sweet/model/implant/implant_fitting_loadout.dart';
 import 'package:sweet/model/implant/implant_handler.dart';
 import 'package:sweet/model/implant/slot_type.dart';
 import 'package:sweet/repository/implant_fitting_loadout_repository.dart';
-import 'package:sweet/service/fitting_simulator.dart';
-import 'package:sweet/model/ship/slot_type.dart';
 import 'package:sweet/repository/item_repository.dart';
-import 'package:sweet/repository/ship_fitting_repository.dart';
 
-import 'package:sweet/model/fitting/fitting_implant.dart';
 import 'events.dart';
 import 'states.dart';
 

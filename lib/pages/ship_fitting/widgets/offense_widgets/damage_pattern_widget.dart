@@ -11,11 +11,11 @@ class DamagePatternWidget extends StatelessWidget {
   final VoidCallback onChangeDamagePattern;
 
   const DamagePatternWidget({
-    Key? key,
+    super.key,
     required this.rowHeight,
     required this.damagePattern,
     required this.onChangeDamagePattern,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

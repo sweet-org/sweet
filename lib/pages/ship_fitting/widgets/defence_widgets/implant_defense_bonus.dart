@@ -7,8 +7,8 @@ import 'package:sweet/util/sweet_icons.dart';
 
 class ImplantDefenseBonusWidget extends StatefulWidget {
   const ImplantDefenseBonusWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<ImplantDefenseBonusWidget> createState() =>

@@ -14,10 +14,10 @@ import 'package:sweet/widgets/item_damage_pattern.dart';
 
 class FittingDroneTileDetails extends StatelessWidget {
   const FittingDroneTileDetails({
-    Key? key,
+    super.key,
     required this.fitting,
     required this.drone,
-  }) : super(key: key);
+  });
 
   final FittingDrone drone;
   final FittingSimulator fitting;

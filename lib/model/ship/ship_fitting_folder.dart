@@ -96,6 +96,7 @@ class ShipFittingFolder extends ChangeNotifier with FittingListElement, Equatabl
     return _$ShipFittingFolderFromJson(json);
   }
 
+  @override
   Map<String, dynamic> toJson() => _$ShipFittingFolderToJson(this);
 
   @override

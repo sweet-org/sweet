@@ -12,9 +12,9 @@ class ShipFittingNavigationDetails extends StatelessWidget {
   final bool condensed;
 
   const ShipFittingNavigationDetails({
-    Key? key,
+    super.key,
     this.condensed = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

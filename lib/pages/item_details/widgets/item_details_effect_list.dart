@@ -10,7 +10,7 @@ class ItemDetailEffectsList extends StatelessWidget {
 
   final Item item;
 
-  const ItemDetailEffectsList({Key? key, required this.item}) : super(key: key);
+  const ItemDetailEffectsList({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {

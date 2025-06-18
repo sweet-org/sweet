@@ -4,12 +4,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 class SocialButton extends StatelessWidget {
   SocialButton({
-    Key? key,
+    super.key,
     required this.assetName,
     required this.socialUrl,
     this.title = '',
     this.size = 20,
-  }) : super(key: key);
+  });
 
   final String assetName;
   final String socialUrl;

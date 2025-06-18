@@ -13,8 +13,7 @@ class ItemDetailAttributesList extends StatelessWidget {
 
   final Item item;
 
-  const ItemDetailAttributesList({Key? key, required this.item})
-      : super(key: key);
+  const ItemDetailAttributesList({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {

@@ -11,8 +11,7 @@ class ShipFittingPowergridUsageButton extends StatelessWidget {
   final GestureTapCallback onTap;
 
   const ShipFittingPowergridUsageButton(
-      {Key? key, required this.icon, required this.onTap})
-      : super(key: key);
+      {super.key, required this.icon, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

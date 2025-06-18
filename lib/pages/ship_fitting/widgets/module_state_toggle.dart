@@ -8,10 +8,10 @@ class ModuleStateToggle extends StatefulWidget {
   final ModuleState state;
 
   const ModuleStateToggle({
-    Key? key,
+    super.key,
     required this.onToggle,
     required this.state,
-  }) : super(key: key);
+  });
 
   @override
   State<ModuleStateToggle> createState() => _ModuleStateToggleState();

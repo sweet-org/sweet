@@ -4,14 +4,13 @@ import '../entities/entities.dart';
 
 import '../../util/murmur32.dart';
 
-import '../database.dart';
 import 'base_dao.dart';
 import 'base_dao_mixin.dart';
 
 import '../type_converters/type_converters.dart';
 
 class LocalisedStringDao extends BaseDao<LocalisationEntry> with BaseDaoMixin {
-  LocalisedStringDao(EveEchoesDatabase db) : super(db);
+  LocalisedStringDao(super.db);
 
   @override
   String get tableName => 'localised_strings';

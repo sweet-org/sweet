@@ -11,9 +11,9 @@ class ItemMarketDetails extends StatelessWidget {
   final int itemId;
 
   const ItemMarketDetails({
-    Key? key,
+    super.key,
     required this.itemId,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -19,11 +19,11 @@ class ShipFittingSlotTile extends StatelessWidget {
   final ShipFittingSlotCallback onTap;
 
   const ShipFittingSlotTile({
-    Key? key,
+    super.key,
     required this.slotType,
     required this.fittings,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   String get slotTileTitle {
     switch (slotType) {

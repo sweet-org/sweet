@@ -10,7 +10,7 @@ import 'package:sweet/util/platform_helper.dart';
 
 class ItemAttributeValueWidget extends StatelessWidget {
   ItemAttributeValueWidget({
-    Key? key,
+    super.key,
     required this.attributeId,
     required this.attributeValue,
     this.fixedDecimals = 2,
@@ -23,7 +23,7 @@ class ItemAttributeValueWidget extends StatelessWidget {
     this.hideIfZero = false,
     this.style,
     this.truncate = false,
-  }) : super(key: key);
+  });
 
   final int attributeId;
   final double attributeValue;

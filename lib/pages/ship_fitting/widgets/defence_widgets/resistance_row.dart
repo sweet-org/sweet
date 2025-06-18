@@ -10,14 +10,14 @@ import '../attribute_progress_bar.dart';
 
 class ResistanceRow extends StatelessWidget {
   const ResistanceRow({
-    Key? key,
+    super.key,
     required this.showEHP,
     required this.rowHeight,
     required this.rowAttribute,
     required this.resistanceAttributes,
     required this.damagePattern,
     this.margin = 2,
-  }) : super(key: key);
+  });
 
   final EveEchoesAttribute rowAttribute;
   final List<EveEchoesAttribute> resistanceAttributes;
