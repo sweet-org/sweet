@@ -24,6 +24,7 @@ class ShipFittingCard extends StatelessWidget {
     return ChangeNotifierProvider.value(
       value: loadout,
       child: Card(
+        color: Theme.of(context).colorScheme.surfaceContainer,
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: () => onTap(loadout),
@@ -43,6 +44,7 @@ class ShipFittingCard extends StatelessWidget {
                     child: Icon(
                       Icons.polymer,
                       size: 48.0,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   Expanded(

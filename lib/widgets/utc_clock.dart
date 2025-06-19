@@ -13,7 +13,6 @@ class UTCClock extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 4.0),
           child: Text(
             'UTC: ${DateFormat('HH:mm').format(DateTime.now().toUtc())}',
-            style: TextStyle(color: Colors.white),
           ),
         );
       },

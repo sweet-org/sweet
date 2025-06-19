@@ -98,7 +98,7 @@ class _SettingsListState extends State<SettingsList> {
               leading: Icon(
                 Icons.nightlight_round,
                 size: 24,
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).colorScheme.primary,
               ),
               title: Text(StaticLocalisationStrings.theme),
               subtitle: Text(currentMode),
@@ -112,9 +112,8 @@ class _SettingsListState extends State<SettingsList> {
               children: [
                 widget.closeButtonEnabled ? ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    foregroundColor:
-                        Theme.of(context).textTheme.bodySmall?.color,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   ),
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -123,9 +122,8 @@ class _SettingsListState extends State<SettingsList> {
                 ) : null,
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    foregroundColor:
-                        Theme.of(context).textTheme.bodySmall?.color,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   ),
                   onPressed: () {
                     context.read<SettingsBloc>().add(ResetSettingsEvent());

@@ -158,18 +158,19 @@ class _ImplantListState extends State<ImplantList> with ScanQrCode, RouteAware {
   }
 
   SpeedDialFab _buildFab(BuildContext context) {
+    final colorBg = Theme.of(context).colorScheme.secondary;
+    final colorOnBg = Theme.of(context).colorScheme.onSecondary;
     return SpeedDialFab(
-      buttonClosedColor: Theme.of(context).primaryColor,
       children: [
         SizedBox.fromSize(
           size: Size.square(48),
           child: RawMaterialButton(
             onPressed: () => showImplantList(context),
-            fillColor: Theme.of(context).primaryColor,
+            fillColor: colorBg,
             shape: CircleBorder(),
             child: Icon(
               Icons.add,
-              color: Colors.white,
+              color: colorOnBg,
             ),
           ),
         ),

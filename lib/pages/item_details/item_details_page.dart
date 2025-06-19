@@ -59,8 +59,8 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
 
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Theme.of(context).primaryColor,
-        unselectedItemColor: Colors.grey.shade300,
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: Theme.of(context).colorScheme.onSurface,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(ItemDetailDescripton.icon),

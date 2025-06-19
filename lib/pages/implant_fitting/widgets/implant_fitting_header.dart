@@ -55,7 +55,7 @@ class _ShipFittingHeaderState extends State<ImplantFittingHeader> {
 
       return Material(
         elevation: 5,
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).colorScheme.primaryContainer,
         child: SafeArea(
           bottom: false,
           child: Column(
@@ -75,7 +75,7 @@ class _ShipFittingHeaderState extends State<ImplantFittingHeader> {
                           IconButton(
                             icon: Icon(
                               Icons.arrow_back,
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.onPrimaryContainer,
                             ),
                             onPressed: () => shouldPopPage(context,
                                 loadout: fitting.loadout),
@@ -93,7 +93,7 @@ class _ShipFittingHeaderState extends State<ImplantFittingHeader> {
                                 IconButton(
                                   icon: Icon(
                                     editMode ? Icons.done : Icons.edit,
-                                    color: Colors.white,
+                                    color: Theme.of(context).colorScheme.onPrimaryContainer,
                                   ),
                                   onPressed: () => toggleEdit(fitting),
                                 ),
@@ -102,7 +102,7 @@ class _ShipFittingHeaderState extends State<ImplantFittingHeader> {
                                     : IconButton(
                                   icon: Icon(
                                     Icons.save,
-                                    color: Colors.white,
+                                    color: Theme.of(context).colorScheme.onPrimaryContainer,
                                   ),
                                   onPressed: () => saveFitting(fitting),
                                 ),
@@ -110,11 +110,11 @@ class _ShipFittingHeaderState extends State<ImplantFittingHeader> {
                             ),
                             editMode
                                 ? _buildFittingDetailsForm(fitting)
-                                : _buildFittingDetails(fitting),
+                                : _buildFittingDetails(context, fitting),
                             Text(
                               "$implantName (Lvl. ${fitting.loadout.level})",
                               style: TextStyle(
-                                color: Colors.white.withAlpha(96),
+                                color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(180),
                                 fontSize: 14,
                               ),
                             ),
@@ -196,7 +196,7 @@ class _ShipFittingHeaderState extends State<ImplantFittingHeader> {
     );
   }
 
-  Widget _buildFittingDetails(ImplantHandler fitting) {
+  Widget _buildFittingDetails(BuildContext context, ImplantHandler fitting) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -204,7 +204,7 @@ class _ShipFittingHeaderState extends State<ImplantFittingHeader> {
           fitting.name,
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onPrimaryContainer,
             fontSize: 30,
           ),
         ),

@@ -17,34 +17,37 @@ class ThemedApp extends StatelessWidget {
       );
 
   ThemeData _buildLightTheme() {
-    return ThemeData.light().copyWith(
-      primaryColor: Color(0xFF012966),
-      primaryColorLight: Color(0xFF012966),
-      primaryColorDark: Color(0xFF012966),
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: Color(0xFF0244A7),
+      brightness: Brightness.light,
+    );
+    return ThemeData(
+      useMaterial3: true,
       visualDensity: VisualDensity.adaptivePlatformDensity,
-      colorScheme: ColorScheme.light(background: Colors.grey.shade300),
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: Color(0xFF012966),
-      ),
+      colorScheme: colorScheme,
+      //floatingActionButtonTheme: FloatingActionButtonThemeData(
+      //  backgroundColor: Color(0xFF012966),
+      //),
       appBarTheme: AppBarTheme(
-        color: Color(0xFF0247D9),
+        foregroundColor: colorScheme.onPrimary,
+        backgroundColor: colorScheme.primary,
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
     );
   }
 
   ThemeData _buildDarkTheme() {
-    return ThemeData.dark().copyWith(
-      primaryColor: Color(0xFF0244A7),
-      primaryColorLight: Color(0xFF0244A7),
-      primaryColorDark: Color(0xFF0244A7),
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: Color(0xFF0244A7),
+      brightness: Brightness.dark,
+    );
+    return ThemeData(
+      useMaterial3: true,
       visualDensity: VisualDensity.adaptivePlatformDensity,
-      colorScheme: ColorScheme.dark(background: Colors.grey.shade600),
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: Color(0xFF0244A7),
-      ),
+      colorScheme: colorScheme,
       appBarTheme: AppBarTheme(
-        color: Color(0xFF0244A7),
+        foregroundColor: colorScheme.onPrimaryContainer,
+        backgroundColor: colorScheme.primaryContainer,
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
     );

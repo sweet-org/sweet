@@ -11,7 +11,7 @@ class AppBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).primaryColor,
+      color: Theme.of(context).colorScheme.primaryContainer,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SizedBox(

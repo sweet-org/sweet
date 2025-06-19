@@ -125,7 +125,7 @@ class NanocoreAttributeListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).primaryColor;
+    final color = Theme.of(context).colorScheme.primaryContainer;
     final loadoutRepo = RepositoryProvider.of<ShipFittingLoadoutRepository>(
       context,
     );
@@ -148,8 +148,8 @@ class NanocoreAttributeListTile extends StatelessWidget {
       builder: (context, snapshot) {
         final subtitle = snapshot.data ?? '';
         return ExpansionTile(
-          backgroundColor: Theme.of(context).cardColor.darken(2),
-          collapsedBackgroundColor: Theme.of(context).cardColor.darken(2),
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          collapsedBackgroundColor: Theme.of(context).colorScheme.surface,
           childrenPadding: EdgeInsets.only(bottom: 8),
           title: title,
           subtitle: subtitle.isNotEmpty
@@ -264,7 +264,6 @@ class NanocoreAffixListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).primaryColor;
     final loadoutRepo = RepositoryProvider.of<ShipFittingLoadoutRepository>(
       context,
     );
@@ -279,9 +278,7 @@ class NanocoreAffixListTile extends StatelessWidget {
         width: 185,
         height: 100,
         child: Card(
-          color: color.withAlpha(
-            0,
-          ),
+          color: Theme.of(context).colorScheme.surfaceBright,
           child: InkWell(
             onTap: () => {
               context
@@ -317,8 +314,8 @@ class NanocoreAffixListTile extends StatelessWidget {
     }
 
     return ExpansionTile(
-      backgroundColor: Theme.of(context).cardColor.darken(2),
-      collapsedBackgroundColor: Theme.of(context).cardColor.darken(2),
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      collapsedBackgroundColor: Theme.of(context).colorScheme.surface,
       childrenPadding: EdgeInsets.only(bottom: 8),
       title: Text(title),
       subtitle: Text(

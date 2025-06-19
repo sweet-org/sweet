@@ -12,7 +12,7 @@ class ItemDetailsHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       elevation: 5,
-      color: Theme.of(context).primaryColor,
+      color: Theme.of(context).colorScheme.primaryContainer,
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(
@@ -60,7 +60,7 @@ class ItemDetailsHeader extends StatelessWidget {
                       item: item,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
                         fontSize: 30,
                       ),
                       textAlign: TextAlign.end,
@@ -71,7 +71,8 @@ class ItemDetailsHeader extends StatelessWidget {
                         ? Text(
                             'ID: ${item.id}',
                             style: TextStyle(
-                              color: Colors.white.withAlpha(96),
+                              color: Theme.of(context).colorScheme
+                                  .onPrimaryContainer.withAlpha(180),
                               fontSize: 14,
                             ),
                             textAlign: TextAlign.end,

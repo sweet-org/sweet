@@ -13,8 +13,8 @@ class SpeedDialFab extends StatefulWidget {
     this.onPressed,
     this.tooltip,
     this.icon,
-    this.buttonClosedColor,
-    this.buttonOpenedColor,
+    @Deprecated("Was never used") this.buttonClosedColor,
+    @Deprecated("Was never used") this.buttonOpenedColor,
     required this.children,
   });
 
@@ -82,10 +82,11 @@ class _SpeedDialFabState extends State<SpeedDialFab>
     isOpened = !isOpened;
   }
 
-  Widget toggle() {
+  Widget toggle(BuildContext context) {
     return Container(
       child: FloatingActionButton(
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         onPressed: animate,
         tooltip: 'Toggle',
         child: AnimatedIcon(
@@ -118,7 +119,7 @@ class _SpeedDialFabState extends State<SpeedDialFab>
         .map((e) => e.value)
         .toList();
 
-    children.add(toggle());
+    children.add(toggle(context));
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,

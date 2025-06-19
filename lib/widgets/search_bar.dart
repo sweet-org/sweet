@@ -27,7 +27,7 @@ class _SearchBarState extends State<SweetSearchBar> {
     return SizedBox.fromSize(
       size: Size.fromHeight(48),
       child: Container(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.surface,
         child: Padding(
           padding: EdgeInsets.all(8),
           child: Container(

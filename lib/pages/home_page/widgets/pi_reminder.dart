@@ -41,7 +41,7 @@ class _PIReminderState extends State<PIReminder> {
       leading: Icon(
         Icons.public,
         size: 24,
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).colorScheme.primary,
       ),
       title: LocalisedText(
         localiseId: LocalisationStrings.planetaryInteraction,

@@ -115,7 +115,7 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
 
       return Material(
         elevation: 5,
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).colorScheme.onPrimary,
         child: SafeArea(
           bottom: false,
           child: Column(
@@ -135,7 +135,7 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
                           IconButton(
                             icon: Icon(
                               Icons.arrow_back,
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.onPrimaryContainer,
                             ),
                             onPressed: () => shouldPopPage(context,
                                 loadout: fitting.loadout),
@@ -156,7 +156,7 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
                                         splashRadius: 14,
                                         icon: Icon(
                                           Icons.manage_accounts,
-                                          color: Colors.white,
+                                          color: Theme.of(context).colorScheme.onPrimaryContainer,
                                         ),
                                         onPressed: () => showPilotDetails(
                                           context,
@@ -167,7 +167,7 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
                                 IconButton(
                                   icon: Icon(
                                     editMode ? Icons.done : Icons.edit,
-                                    color: Colors.white,
+                                    color: Theme.of(context).colorScheme.onPrimaryContainer,
                                   ),
                                   onPressed: () => toggleEdit(fitting),
                                 ),
@@ -176,7 +176,7 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
                                     : IconButton(
                                         icon: Icon(
                                           Icons.share,
-                                          color: Colors.white,
+                                          color: Theme.of(context).colorScheme.onPrimaryContainer,
                                         ),
                                         onPressed: () =>
                                             _displayQrCode(fitting),
@@ -186,7 +186,7 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
                                     : IconButton(
                                         icon: Icon(
                                           Icons.save,
-                                          color: Colors.white,
+                                          color: Theme.of(context).colorScheme.onPrimaryContainer,
                                         ),
                                         onPressed: () => saveFitting(fitting),
                                       ),
@@ -195,7 +195,7 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
                                     : IconButton(
                                         icon: Icon(
                                           Icons.person,
-                                          color: Colors.white,
+                                          color: Theme.of(context).colorScheme.onPrimaryContainer,
                                         ),
                                         onPressed: changePilot,
                                       ),
@@ -205,7 +205,7 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
                                         splashRadius: 14,
                                         icon: Icon(
                                           SweetIcons.implant,
-                                          color: Colors.white,
+                                          color: Theme.of(context).colorScheme.onPrimaryContainer,
                                         ),
                                         onPressed: () => showImplantDetails(
                                           context,
@@ -216,7 +216,7 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
                                 IconButton(
                                   icon: Icon(
                                     Icons.info,
-                                    color: Colors.white,
+                                    color: Theme.of(context).colorScheme.onPrimaryContainer,
                                   ),
                                   onPressed: () => showItemDetails(
                                     module: fitting.ship,
@@ -229,12 +229,12 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
                               ],
                             ),
                             editMode
-                                ? _buildFittingDetailsForm(fitting)
-                                : _buildFittingDetails(fitting),
+                                ? _buildFittingDetailsForm(context, fitting)
+                                : _buildFittingDetails(context, fitting),
                             Text(
                               '$implant$pilot - $shipName',
                               style: TextStyle(
-                                color: Colors.white.withAlpha(96),
+                                color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(180),
                                 fontSize: 14,
                               ),
                             ),
@@ -296,7 +296,7 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
     }
   }
 
-  Form _buildFittingDetailsForm(FittingSimulator fitting) {
+  Form _buildFittingDetailsForm(BuildContext context, FittingSimulator fitting) {
     return Form(
       key: _formKey,
       child: Column(
@@ -304,14 +304,14 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
         children: <Widget>[
           TextFormField(
             initialValue: fitting.name,
-            cursorColor: Colors.white,
-            style: TextStyle(color: Colors.white),
+            cursorColor: Theme.of(context).colorScheme.onPrimaryContainer,
+            style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer),
             decoration: InputDecoration(
               labelText: 'Enter Name',
               hintText: 'Name',
-              labelStyle: TextStyle(color: Colors.white.withAlpha(150)),
-              hintStyle: TextStyle(color: Colors.white.withAlpha(150)),
-              fillColor: Colors.white,
+              labelStyle: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(150)),
+              hintStyle: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(150)),
+              fillColor: Theme.of(context).colorScheme.onPrimaryContainer,
             ),
             validator: (value) {
               if (value!.trim().isEmpty) {
@@ -330,7 +330,7 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
     );
   }
 
-  Widget _buildFittingDetails(FittingSimulator fitting) {
+  Widget _buildFittingDetails(BuildContext context, FittingSimulator fitting) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -338,7 +338,7 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
           fitting.name,
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onPrimaryContainer,
             fontSize: 30,
           ),
         ),

@@ -34,6 +34,7 @@ class CharacterCard extends StatelessWidget {
       child: InkWell(
         onTap: () => onTap(character),
         child: Card(
+          color: Theme.of(context).colorScheme.secondaryContainer,
           clipBehavior: Clip.antiAlias,
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: 72),
@@ -49,6 +50,7 @@ class CharacterCard extends StatelessWidget {
                   Icon(
                     Icons.person,
                     size: 56.0,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
                   ),
                   Expanded(
                     flex: 2,
@@ -65,6 +67,7 @@ class CharacterCard extends StatelessWidget {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 40,
+                                color: Theme.of(context).colorScheme.onSecondaryContainer,
                               ),
                               maxLines: 1,
                             ),
@@ -72,11 +75,8 @@ class CharacterCard extends StatelessWidget {
                               'Skills Known: $knownSkills/$totalSkills',
                               style: TextStyle(
                                 fontSize: 16,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .color!
-                                    .withAlpha(96),
+                                color: Theme.of(context).colorScheme
+                                    .onSecondaryContainer.withAlpha(180),
                               ),
                             ),
                             CharacterTotalSkillPoints(
@@ -85,11 +85,8 @@ class CharacterCard extends StatelessWidget {
                                   .textTheme
                                   .bodySmall
                                   ?.copyWith(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .color!
-                                        .withAlpha(96),
+                                    color: Theme.of(context).colorScheme
+                                        .onSecondaryContainer.withAlpha(180),
                                   ),
                             ),
                           ],
