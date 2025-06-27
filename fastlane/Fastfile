@@ -45,7 +45,7 @@ platform :ios do
     build_app(workspace: "ios/Runner.xcworkspace", scheme: "Runner")
     
     upload_to_testflight(
-      apple_id: '1664398994',
+      apple_id: '6747888536',
       skip_waiting_for_build_processing: true
     )
   end
