@@ -1,0 +1,50 @@
+workflows:
+  ios-build:
+    name: iOS Build
+    instance_type: mac_mini_m2
+    max_build_duration: 30
+    integrations:
+      app_store_connect: Blaumeise03Manager
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: de.blaumeise03.sweet.dev
+      vars:
+        APP_ID: 6747888536
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Set up code signing settings on Xcode project
+        script: |
+          xcode-project use-profiles
+      - name: Get Flutter packages
+        script: |
+          flutter config --enable-ios
+          flutter packages pub get
+      - name: Install pods
+        script: |
+          find . -name "Podfile" -execdir pod install \;
+      #- name: Flutter analyze
+      #  script: |
+      #    flutter analyze
+      #- name: Flutter unit tests
+      #  script: |
+      #    flutter test
+      #  ignore_failure: true
+      - name: Flutter build ipa and automatic versioning
+        script: |
+          # See the following link about getting the latest App Store or TestFlight version - https://docs.codemagic.io/knowledge-codemagic/build-versioning/#app-store-or-testflight-latest-build-number
+          flutter build ipa --release \
+            --build-name=0.3.9 \
+            --build-number=$(($(app-store-connect get-latest-testflight-build-number --platform=IOS "$APP_ID") + 1)) \
+            --export-options-plist=/Users/builder/export_options.plist
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: false
