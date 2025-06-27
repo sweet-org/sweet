@@ -113,6 +113,7 @@ class ShipFittingSlotTile extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Card(
+                      color: Theme.of(context).colorScheme.surfaceContainer,
                       child: InkWell(
                         onTap: () => onTap(slot: slotType),
                         child: Padding(
@@ -127,6 +128,7 @@ class ShipFittingSlotTile extends StatelessWidget {
                   ),
                   Expanded(
                     child: Card(
+                      color: Theme.of(context).colorScheme.surfaceContainer,
                       child: InkWell(
                         onTap: () => Provider.of<FittingSimulator>(context,
                                 listen: false)
@@ -156,6 +158,7 @@ class ShipFittingSlotTile extends StatelessWidget {
             final module = fittings.elementAt(index);
             return Card(
               elevation: 4,
+              color: Theme.of(context).colorScheme.surfaceContainer,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: FittingModuleTile(

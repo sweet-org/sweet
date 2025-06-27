@@ -17,10 +17,13 @@ class NanocoreAttributeBonus extends StatelessWidget {
 
   final SelectedModifierCallback onTap;
 
+  final Color? foregroundColor;
+
   NanocoreAttributeBonus({
     super.key,
     required this.nanocoreAttribute,
     required this.onTap,
+    this.foregroundColor,
   });
 
   @override
@@ -80,6 +83,9 @@ class NanocoreAttributeBonus extends StatelessWidget {
                   minFontSize: 10,
                   maxFontSize: 14,
                   textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: foregroundColor,
+                  ),
                 ),
               ),
             ),
@@ -108,6 +114,7 @@ class NanocoreAttributeBonus extends StatelessWidget {
         maxFontSize: 20,
         style: TextStyle(
           fontWeight: FontWeight.bold,
+          color: foregroundColor,
         ),
         textAlign: TextAlign.center,
       );
@@ -131,6 +138,7 @@ class NanocoreAttributeBonus extends StatelessWidget {
               maxFontSize: 20,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                color: foregroundColor,
               ),
               textAlign: TextAlign.center,
             ),

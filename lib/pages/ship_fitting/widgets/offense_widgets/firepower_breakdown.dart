@@ -32,6 +32,9 @@ class _FirepowerBreakdownState extends State<FirepowerBreakdown> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.surfaceContainerHigh,
+                ),
                 onPressed: () => setState(() => _showMining = !_showMining),
                 child: Image.asset(
                   _showMining
@@ -43,6 +46,7 @@ class _FirepowerBreakdownState extends State<FirepowerBreakdown> {
             ],
           ),
           Card(
+            color: Theme.of(context).colorScheme.surfaceContainerHigh,
             margin: EdgeInsets.symmetric(vertical: 4),
             child: _showMining ? _buildMining() : _buildFirepower(),
           ),

@@ -34,7 +34,7 @@ class CharacterCard extends StatelessWidget {
       child: InkWell(
         onTap: () => onTap(character),
         child: Card(
-          color: Theme.of(context).colorScheme.secondaryContainer,
+          color: Theme.of(context).colorScheme.surfaceContainer,
           clipBehavior: Clip.antiAlias,
           child: ConstrainedBox(
             constraints: BoxConstraints(minHeight: 72),
@@ -50,7 +50,7 @@ class CharacterCard extends StatelessWidget {
                   Icon(
                     Icons.person,
                     size: 56.0,
-                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                   Expanded(
                     flex: 2,
@@ -67,7 +67,7 @@ class CharacterCard extends StatelessWidget {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 40,
-                                color: Theme.of(context).colorScheme.onSecondaryContainer,
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                               maxLines: 1,
                             ),
@@ -76,7 +76,7 @@ class CharacterCard extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Theme.of(context).colorScheme
-                                    .onSecondaryContainer.withAlpha(180),
+                                    .onSurface.withAlpha(180),
                               ),
                             ),
                             CharacterTotalSkillPoints(
@@ -86,7 +86,7 @@ class CharacterCard extends StatelessWidget {
                                   .bodySmall
                                   ?.copyWith(
                                     color: Theme.of(context).colorScheme
-                                        .onSecondaryContainer.withAlpha(180),
+                                        .onSurface.withAlpha(180),
                                   ),
                             ),
                           ],

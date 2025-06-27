@@ -26,6 +26,7 @@ class ShipFittingNavigationDetails extends StatelessWidget {
         children: [
           Expanded(
             child: Card(
+              color: Theme.of(context).colorScheme.surfaceContainerHigh,
               child: Column(
                 children: [
                   ShipAttributeValue(
@@ -66,6 +67,7 @@ class ShipFittingNavigationDetails extends StatelessWidget {
           ),
           Expanded(
             child: Card(
+              color: Theme.of(context).colorScheme.surfaceContainerHigh,
               child: Column(
                 children: [
                   ShipAttributeValue(

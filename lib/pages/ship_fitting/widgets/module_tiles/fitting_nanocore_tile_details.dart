@@ -125,7 +125,6 @@ class NanocoreAttributeListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.primaryContainer;
     final loadoutRepo = RepositoryProvider.of<ShipFittingLoadoutRepository>(
       context,
     );
@@ -161,7 +160,6 @@ class NanocoreAttributeListTile extends StatelessWidget {
           children: [
             NanocoreAttributeSelector(
               attribute: nanocoreAttribute,
-              color: color,
               validator: validator,
               onTap: (modifier, level) async {
                 if (nanocoreAttribute.selectedAttribute == modifier &&
@@ -194,14 +192,11 @@ class NanocoreAttributeSelector extends StatelessWidget {
   const NanocoreAttributeSelector({
     super.key,
     required this.attribute,
-    required this.color,
     required this.onTap,
     this.validator,
   });
 
   final FittingNanocoreAttributeList attribute;
-
-  final Color color;
 
   final SelectedModifierCallback onTap;
   final SelectedAttributeValidator? validator;
@@ -213,12 +208,18 @@ class NanocoreAttributeSelector extends StatelessWidget {
       children: attribute.attributes.map(
         (e) {
           final Color attrColor;
+          final Color textColor;
           if (validator != null && !validator!(e)) {
-            attrColor = Theme.of(context).disabledColor.darken(50);
+            attrColor = Theme.of(context).colorScheme.secondaryContainer;
+            textColor = Theme.of(context).colorScheme.onSecondaryContainer;
           } else {
-            attrColor = color.withAlpha(
-              attribute.selectedAttribute == e ? 255 : 0,
+            final isSelected = attribute.selectedAttribute == e;
+            attrColor = Theme.of(context).colorScheme.primaryContainer.withAlpha(
+              isSelected ? 255 : 0,
             );
+            textColor = isSelected
+                ? Theme.of(context).colorScheme.onPrimaryContainer
+                : Theme.of(context).colorScheme.onSurface;
           }
           return Container(
             width: 185,
@@ -235,6 +236,7 @@ class NanocoreAttributeSelector extends StatelessWidget {
                   child: NanocoreAttributeBonus(
                     nanocoreAttribute: e,
                     onTap: onTap,
+                    foregroundColor: textColor,
                   ),
                 ),
               ),

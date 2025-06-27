@@ -30,8 +30,8 @@ class _NihilusModifierSelectorState extends State<NihilusModifierSelector> {
     final fitting = RepositoryProvider.of<FittingSimulator>(context);
 
     return ExpansionTile(
-      backgroundColor: Theme.of(context).cardColor.darken(),
-      collapsedBackgroundColor: Theme.of(context).cardColor.darken(),
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHigh,
+      collapsedBackgroundColor: Theme.of(context).colorScheme.surfaceContainerHigh,
       childrenPadding: EdgeInsets.symmetric(horizontal: 8),
       title: LocalisedText(
         localiseId: LocalisationStrings.nihilusEnvironment,

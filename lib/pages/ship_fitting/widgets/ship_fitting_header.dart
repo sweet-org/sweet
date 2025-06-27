@@ -115,7 +115,7 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
 
       return Material(
         elevation: 5,
-        color: Theme.of(context).colorScheme.onPrimary,
+        color: Theme.of(context).colorScheme.primaryContainer,
         child: SafeArea(
           bottom: false,
           child: Column(
