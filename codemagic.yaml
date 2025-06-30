@@ -24,20 +24,18 @@ workflows:
           flutter packages pub get
       - name: Install pods
         script: |
+          # Not sure if this is really needed, but I believe in "if it works, don't change it"
           find . -name "Podfile" -execdir pod install \;
-      #- name: Flutter analyze
-      #  script: |
-      #    flutter analyze
-      #- name: Flutter unit tests
-      #  script: |
-      #    flutter test
-      #  ignore_failure: true
+      - name: Generate build number
+        env:
+          NUM: ${{ github.run_number }}
+        run: |
+          echo "BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number --platform=IOS "$APP_ID") + 1))" >> CM_ENV
       - name: Flutter build ipa and automatic versioning
         script: |
           # See the following link about getting the latest App Store or TestFlight version - https://docs.codemagic.io/knowledge-codemagic/build-versioning/#app-store-or-testflight-latest-build-number
           flutter build ipa --release \
-            --build-name=0.3.9 \
-            --build-number=$(($(app-store-connect get-latest-testflight-build-number --platform=IOS "$APP_ID") + 1)) \
+            --build-number=$BUILD_NUMBER \
             --export-options-plist=/Users/builder/export_options.plist
     artifacts:
       - build/ios/ipa/*.ipa
