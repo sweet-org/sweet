@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +17,16 @@ class EEMarketApiService {
 
   final _lastFetchKey = 'lastFetchedMarket';
   final _marketDataKey = 'marketData';
-  final _fetchTimeInMinutes = 15;
+  final _fetchTimeInMinutes = 60;
 
   Timer? _fetchTimer;
   DateTime? _lastFetch;
+
+  String? url;
+  String keyId = 'id';
+  String keyTime = 'date_updated';
+  String keyPrice = 'estimated_price';
+
 
   EEMarketApiService({
     required this.http,
@@ -65,13 +72,18 @@ class EEMarketApiService {
   }
 
   Future<bool> _fetchMarketData() async {
-    print('Fetching latest market data');
-    final url = Uri.parse(
-      'https://api.eve-echoes-market.com/market-stats/stats.csv',
-    );
+    if (url == null) {
+      return false;
+    }
+
+    print('Fetching latest market data from $url');
+    final csvUrl = Uri.parse(url!);
 
     try {
-      final response = await http.get(url);
+      final response = await http.get(csvUrl, headers: {
+        'User-Agent': 'SweetEchoes/1.0',
+        'Accept': 'text/csv',
+      });
 
       if (response.statusCode >= 300) {
         return false;
@@ -92,33 +104,31 @@ class EEMarketApiService {
   }
 
   Future<bool> _parseMarketData(String marketData) async {
-    final header = 'item_id,name,time,sell,buy,lowest_sell,highest_buy';
-    if (!marketData.startsWith(header)) {
-      return false;
-    }
-
     final lines = const CsvToListConverter().convert(
       marketData,
+      eol: "\n",
     );
 
     if (lines.isEmpty) return false;
 
-    // We are expecting a header line
-    // item_id,name,time,sell,buy,lowest_sell,highest_buy
+    // Verify the header
+    final indexId = lines[0].indexOf(keyId);
+    final indexTime = lines[0].indexOf(keyTime);
+    final indexPrice = lines[0].indexOf(keyPrice);
+    final minLen = max(indexId, max(indexTime, indexPrice)) + 1;
+
+    if (indexPrice < 0 || indexTime < 0 || indexId < 0) return false;
 
     final entries = lines
         .sublist(1)
-        .where((line) => line.length == 7 && line[0] is! String)
+        .where((line) => line.length >= minLen && line[indexId] is! String)
         .map(
       (line) {
         try {
           return EEMarketItem(
-            itemId: line[0] as int? ?? 0,
-            time: DateTime.parse(line[2]),
-            calculatedSell: line[3] is double ? line[3] as double : 0,
-            calculatedBuy: line[4] is double ? line[4] as double : 0,
-            lowestSell: line[5] is double ? line[5] as double : 0,
-            highestBuy: line[6] is double ? line[6] as double : 0,
+            itemId: line[indexId] as int? ?? 0,
+            time: DateTime.parse(line[indexTime]),
+            price: line[indexPrice] is double ? line[indexPrice] as double : 0,
           );
         } catch (e, stacktrace) {
           reportError(

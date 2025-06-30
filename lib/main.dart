@@ -12,6 +12,7 @@ import 'package:sweet/repository/implant_fitting_loadout_repository.dart';
 import 'package:sweet/repository/localisation_repository.dart';
 import 'package:sweet/repository/ship_fitting_repository.dart';
 import 'package:sweet/service/attribute_calculator_service.dart';
+import 'package:sweet/service/ee_market_api/ee_market_api_service.dart';
 import 'package:sweet/service/local_notifications_service.dart';
 import 'package:sweet/service/manup/manup_service.dart';
 import 'package:sweet/service/settings_service.dart';
@@ -96,6 +97,11 @@ MultiRepositoryProvider buildRepositories({
           os: Platform.operatingSystem,
         ),
       ),
+      RepositoryProvider<EEMarketApiService>(
+        create: (_) => EEMarketApiService(
+          http: client,
+        ),
+      ),
       RepositoryProvider<ItemRepository>(
         create: (_) => ItemRepository(),
       ),
@@ -138,6 +144,7 @@ Widget buildBlocProviders({required Widget child}) {
                 RepositoryProvider.of<ShipFittingLoadoutRepository>(context),
                 RepositoryProvider.of<ImplantFittingLoadoutRepository>(context),
                 RepositoryProvider.of<LocalisationRepository>(context),
+                RepositoryProvider.of<EEMarketApiService>(context),
                 RepositoryProvider.of<ManUpService>(context),
               )),
       BlocProvider<ItemRepositoryBloc>(

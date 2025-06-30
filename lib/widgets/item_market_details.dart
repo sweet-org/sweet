@@ -21,8 +21,7 @@ class ItemMarketDetails extends StatelessWidget {
 
     final marketDetails = market.marketDataForItem(itemId: itemId);
     final formatter = NumberFormat.compact();
-    final lowestSell = formatter.format(marketDetails.lowestSell);
-    final highestBuy = formatter.format(marketDetails.highestBuy);
+    final price = formatter.format(marketDetails.price);
 
     return Card(
       child: Padding(
@@ -36,18 +35,9 @@ class ItemMarketDetails extends StatelessWidget {
               child: Row(
                 children: [
                   Text('${StaticLocalisationStrings.sell}: '),
-                  Text('$lowestSell ISK'),
+                  Text('$price ISK'),
                 ],
               ),
-            ),
-            Row(
-              children: [
-                LocalisedText(
-                  localiseId: LocalisationStrings.buy,
-                  suffix: ': ',
-                ),
-                Text('$highestBuy ISK'),
-              ],
             ),
           ],
         ),

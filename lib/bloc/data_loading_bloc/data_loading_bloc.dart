@@ -12,6 +12,7 @@ import 'package:sweet/repository/implant_fitting_loadout_repository.dart';
 
 import 'package:sweet/service/fitting_simulator.dart';
 import 'package:sweet/service/manup/manup_service.dart';
+import 'package:sweet/service/ee_market_api/ee_market_api_service.dart';
 import 'package:sweet/util/platform_helper.dart';
 
 import '../../repository/character_repository.dart';
@@ -30,6 +31,7 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
   final ShipFittingLoadoutRepository _fittingRepository;
   final ImplantFittingLoadoutRepository _implantRepository;
   final LocalisationRepository _localisationRepository;
+  final EEMarketApiService _marketApiService;
   final ManUpService _manUpService;
 
   DataLoadingBloc(
@@ -38,6 +40,7 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
     this._fittingRepository,
     this._implantRepository,
     this._localisationRepository,
+    this._marketApiService,
     this._manUpService,
   ) : super(InitialRepositoryState()) {
     on<LoadRepositoryEvent>((event, emit) => _loadRepository(event, emit));
@@ -123,6 +126,13 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
         print("${DateTime.now()}: Did not try to download database - ManUp service failed");
       }
 
+      final marketSettings =
+      _manUpService.setting<Map>(key: 'market', orElse: {});
+      _marketApiService.url = marketSettings['url'];
+      _marketApiService.keyId = marketSettings['key_id'] ?? 'id';
+      _marketApiService.keyTime = marketSettings['key_time'] ?? 'time';
+      _marketApiService.keyPrice = marketSettings['key_price'] ?? 'price';
+
       emit(LoadingRepositoryState('Loading data...\nOpening DB'));
       print('${DateTime.now()}: Opening DB');
       await _itemRepository.openDatabase();
@@ -140,6 +150,8 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
       print(
         '${DateTime.now()}: Completed DB load in ${DateTime.now().difference(start)}',
       );
+      print('${DateTime.now()}: Loading Market data from ${_marketApiService.url}');
+      await _marketApiService.loadMarketData();
 
       if (PlatformHelper.isMobile) {
         await logEvent(

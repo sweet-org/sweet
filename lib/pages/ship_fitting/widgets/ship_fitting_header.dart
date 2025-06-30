@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sweet/pages/ship_fitting/bloc/ship_fitting_bloc/ship_fitting.dart';
 import 'package:sweet/pages/ship_fitting/widgets/power_usage_bar.dart';
+import 'package:sweet/pages/ship_fitting/widgets/fitting_total_price.dart';
 import 'package:sweet/repository/localisation_repository.dart';
 import 'package:sweet/util/localisation_constants.dart';
 import 'package:sweet/util/sweet_icons.dart';
@@ -238,6 +239,7 @@ class _ShipFittingHeaderState extends State<ShipFittingHeader>
                                 fontSize: 14,
                               ),
                             ),
+                            FittingTotalPrice(fitting: fitting.loadout),
                           ],
                         ),
                       ),
