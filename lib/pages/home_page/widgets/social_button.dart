@@ -29,12 +29,9 @@ class SocialButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(Theme.of(context).brightness == Brightness.dark);
-    print('SocialButton: $assetName, darkAssetName: $darkAssetName, socialUrl: $socialUrl, title: $title, size: $size');
     final asset = Theme.of(context).brightness == Brightness.dark && darkAssetName != null
         ? darkAssetName!
         : assetName;
-    print('Using asset: $asset');
     return ElevatedButton(
       onPressed: () => _openUrl(socialUrl),
       style: ElevatedButton.styleFrom(
