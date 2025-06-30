@@ -15,6 +15,7 @@ import 'package:sweet/pages/item_details/widgets/item_raw_properties_list.dart';
 import 'package:sweet/repository/item_repository.dart';
 import 'package:sweet/repository/localisation_repository.dart';
 import 'package:sweet/util/platform_helper.dart';
+import 'package:sweet/widgets/item_market_details.dart';
 import 'package:sweet/widgets/ship_bonus_widget.dart';
 
 import 'widgets/item_details_header.dart';
@@ -159,6 +160,7 @@ class ItemDetailsWidget extends StatelessWidget {
                         e.bonusSkillNameId ?? e.bonusSkillId).entries.toList();
                 return ListView(
                   children: [
+                    ItemMarketDetails(itemId: item.id),
                     ItemDetailDescripton(
                       itemDescription: desc,
                     ),

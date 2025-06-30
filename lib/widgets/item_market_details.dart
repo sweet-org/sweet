@@ -3,9 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import 'package:sweet/service/ee_market_api/ee_market_api_service.dart';
-import 'package:sweet/util/localisation_constants.dart';
 
-import 'localised_text.dart';
+final DateFormat _dateFormat = DateFormat('yyyy-MM-dd HH:mm');
 
 class ItemMarketDetails extends StatelessWidget {
   final int itemId;
@@ -22,8 +21,10 @@ class ItemMarketDetails extends StatelessWidget {
     final marketDetails = market.marketDataForItem(itemId: itemId);
     final formatter = NumberFormat.compact();
     final price = formatter.format(marketDetails.price);
+    final time = _dateFormat.format(marketDetails.time);
 
     return Card(
+      color: Theme.of(context).colorScheme.surfaceContainer,
       child: Padding(
         padding: EdgeInsets.all(8),
         child: Column(
@@ -34,11 +35,12 @@ class ItemMarketDetails extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Row(
                 children: [
-                  Text('${StaticLocalisationStrings.sell}: '),
+                  Text('Estimated market price: '),
                   Text('$price ISK'),
                 ],
               ),
             ),
+            Text('Time of data: $time')
           ],
         ),
       ),
