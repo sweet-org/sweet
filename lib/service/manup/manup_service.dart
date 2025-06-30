@@ -32,6 +32,7 @@ class ManUpService {
   final OptionalUrlGetter? fallback;
   final Client http;
   final String os;
+  bool _firstTime = true;
 
   ManUpStatus _status = ManUpStatus.unknown;
 
@@ -49,14 +50,15 @@ class ManUpService {
   }) : os = os ?? (kIsWeb ? 'web' : Platform.operatingSystem);
 
   Future<ManUpStatus> validate() async {
-    print("ManUpService: Validating...");
+    if (_firstTime) print("ManUpService: Validating...");
     await _fetchConfig();
     if (_metadata == null) {
-      print("ManUpService: Failed to fetch config");
+      if (_firstTime) print("ManUpService: Failed to fetch config");
       return _status;
     }
     await _validateVersion();
-    print("ManUpService: Validation complete, status: $_status");
+    if (_firstTime) print("ManUpService: Validation complete, status: $_status");
+    _firstTime = false;
     return _status;
   }
 
@@ -83,8 +85,10 @@ class ManUpService {
     } else {
       _status = ManUpStatus.latest;
     }
-    print("ManUpService: Current version: $currentVersion, "
-        "min version: $minVersion, latest version: $latestVersion");
+    if (_firstTime) {
+      print("ManUpService: Current version: $currentVersion, "
+          "min version: $minVersion, latest version: $latestVersion");
+    }
   }
 
   Future<bool> _tryFetchConfig(String url) async {
