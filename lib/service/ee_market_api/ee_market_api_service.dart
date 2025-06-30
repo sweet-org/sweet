@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -24,9 +25,8 @@ class EEMarketApiService {
 
   String? url;
   String keyId = 'id';
-  String keyTime = 'date_updated';
+  String? keyTime;
   String keyPrice = 'estimated_price';
-
 
   EEMarketApiService({
     required this.http,
@@ -94,6 +94,9 @@ class EEMarketApiService {
       final isValid = await _parseMarketData(data);
       if (isValid) {
         await _storeMarketData(data);
+        print('Market data fetched and stored successfully');
+      } else {
+        print('Invalid market data received from $url');
       }
 
       return true;
@@ -106,7 +109,6 @@ class EEMarketApiService {
   Future<bool> _parseMarketData(String marketData) async {
     final lines = const CsvToListConverter().convert(
       marketData,
-      eol: "\n",
     );
 
     if (lines.isEmpty) return false;
@@ -117,35 +119,61 @@ class EEMarketApiService {
     final indexPrice = lines[0].indexOf(keyPrice);
     final minLen = max(indexId, max(indexTime, indexPrice)) + 1;
 
-    if (indexPrice < 0 || indexTime < 0 || indexId < 0) return false;
+    if (indexPrice < 0 || indexId < 0) return false;
+    DateTime? globalTime;
+    int errors = 0;
+
+    if (lines.length > 1 &&
+        lines[1][indexId] is String &&
+        lines[1][indexId] == "date") {
+      // The first data line may have the item ID as "date"
+      try {
+        globalTime = DateTime.parse(lines[1][indexPrice] as String);
+      } catch (e) {
+        print("Error parsing global time from market data: $e");
+        return false;
+      }
+    } else if (indexTime < 0) {
+      print("Error: Date column not found in market data");
+      globalTime = DateTime(1970, 1, 1); // Fallback to a default date
+    }
 
     final entries = lines
-        .sublist(1)
+        .sublist(globalTime == null ? 1 : 2)
         .where((line) => line.length >= minLen && line[indexId] is! String)
         .map(
-      (line) {
-        try {
-          return EEMarketItem(
-            itemId: line[indexId] as int? ?? 0,
-            time: DateTime.parse(line[indexTime]),
-            price: line[indexPrice] is double ? line[indexPrice] as double : 0,
-          );
-        } catch (e, stacktrace) {
-          reportError(
-            e,
-            stacktrace,
-            info: [DiagnosticsNode.message('Line $line')],
-          );
-          return EEMarketItem.zero;
-        }
-      },
-    ).map(
-      (e) => MapEntry(e.itemId, e),
-    );
+          (line) {
+            try {
+              final price = line[indexPrice] is double
+                  ? line[indexPrice] as double
+                  : null;
+              final time = globalTime ?? DateTime.parse(line[indexTime]);
+              final itemId = line[indexId] as int?;
+              if (itemId == null || itemId <= 0 || price == null) {
+                errors++;
+                return null;
+              }
+              return EEMarketItem(itemId: itemId, time: time, price: price);
+            } catch (e, stacktrace) {
+              reportError(
+                e,
+                stacktrace,
+                info: [DiagnosticsNode.message('Line $line')],
+              );
+              errors++;
+              return null;
+            }
+          },
+        )
+        .nonNulls
+        .map(
+          (e) => MapEntry(e.itemId, e),
+        );
 
     _marketData.clear();
     _marketData.addEntries(entries);
-    print('Refreshed Market data with ${_marketData.length} entries');
+    print('Refreshed Market data with ${_marketData.length} entries, '
+        'got $errors errors');
 
     return _marketData.isNotEmpty;
   }

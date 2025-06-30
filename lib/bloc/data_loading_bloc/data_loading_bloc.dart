@@ -130,7 +130,7 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
       _manUpService.setting<Map>(key: 'market', orElse: {});
       _marketApiService.url = marketSettings['url'];
       _marketApiService.keyId = marketSettings['key_id'] ?? 'id';
-      _marketApiService.keyTime = marketSettings['key_time'] ?? 'time';
+      _marketApiService.keyTime = marketSettings['key_time'];
       _marketApiService.keyPrice = marketSettings['key_price'] ?? 'price';
 
       emit(LoadingRepositoryState('Loading data...\nOpening DB'));
