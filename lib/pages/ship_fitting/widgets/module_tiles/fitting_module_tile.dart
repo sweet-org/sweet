@@ -86,16 +86,13 @@ class FittingModuleTile extends StatelessWidget with FittingItemDetailsMixin {
                   )
                 : Container(),
             Expanded(
-              child: Row(
-                children: [
-                  LocalisedText(
-                    item: module.item,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  extraText != "" ? Text(extraText) : Container()
-                ],
-              ),
-            ),
+                child: LocalisedText(
+              autoSize: true,
+              maxLines: 1,
+              item: module.item,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              suffix: extraText,
+            )),
             IconButton(
               padding: EdgeInsets.zero,
               constraints: BoxConstraints.tight(Size.square(32)),
