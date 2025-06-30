@@ -55,13 +55,18 @@ class MarketBrowser extends StatelessWidget {
 typedef ItemCallback = void Function(Item item);
 
 class MarketGroupTile extends StatelessWidget {
-  const MarketGroupTile(
-      {super.key, required this.marketGroup, required this.onItemSelected, List<int>? blacklistItems })
-      : blacklistItems = blacklistItems ?? const [];
+  const MarketGroupTile({
+    super.key,
+    required this.marketGroup,
+    required this.onItemSelected,
+    List<int>? blacklistItems,
+    this.level = 0,
+  }) : blacklistItems = blacklistItems ?? const [];
 
   final MarketGroup marketGroup;
   final ItemCallback onItemSelected;
   final List<int> blacklistItems;
+  final int level;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +79,11 @@ class MarketGroupTile extends StatelessWidget {
       sorted.sort((a, b) => a.id < b.id ? -1 : 1);
       children = sorted
           .where((item) => !blacklistItems.any((itemId) => item.id == itemId))
-          .map((item) => ItemListTile(item: item, onSelected: onItemSelected))
+          .map((item) => ItemListTile(
+                item: item,
+                onSelected: onItemSelected,
+                level: level + 2,
+              ))
           .toList();
     } else {
       var sorted = marketGroup.children;
@@ -84,13 +93,17 @@ class MarketGroupTile extends StatelessWidget {
                 marketGroup: mg,
                 onItemSelected: onItemSelected,
                 blacklistItems: blacklistItems,
+                level: level + 1,
               ))
           .toList();
     }
 
     var title = localisation.getLocalisedStringForMarketGroup(marketGroup);
     return ExpansionTile(
-      title: Text(title),
+      title: Padding(
+        padding: EdgeInsets.only(left: 8.0 * level),
+        child: Text(title),
+      ),
       children: children,
     );
   }
@@ -101,10 +114,12 @@ class ItemListTile extends StatelessWidget {
     super.key,
     required this.item,
     required this.onSelected,
+    this.level = 0,
   });
 
   final Item item;
   final ItemCallback onSelected;
+  final int level;
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +128,7 @@ class ItemListTile extends StatelessWidget {
         onSelected(item);
       },
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.only(left: 8.0 * level + 8, top: 8.0, bottom: 8.0),
         child: Align(
           alignment: Alignment.centerLeft,
           child: LocalisedText(item: item),
