@@ -28,6 +28,11 @@ on:
         required: false
         type: string
         default: ''
+      fastlane_args:
+          description: 'Extra Fastlane arguments for iOS'
+          required: false
+          type: string
+          default: ''
 
 jobs:
   job-linux:
@@ -212,7 +217,7 @@ jobs:
       if: ${{ inputs.build_ios && inputs.deploy_ios }}
       run: |
         bundle install
-        bundle exec fastlane ios beta
+        bundle exec fastlane ios beta ${{ inputs.fastlane_args || '' }}
       env:
         SWEET_MATCH_ACCESS_TOKEN: ${{ secrets.SWEET_MATCH_ACCESS_TOKEN }}
         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
