@@ -27,9 +27,7 @@ workflows:
           # Not sure if this is really needed, but I believe in "if it works, don't change it"
           find . -name "Podfile" -execdir pod install \;
       - name: Generate build number
-        env:
-          NUM: ${{ github.run_number }}
-        run: |
+        script: |
           echo "BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number --platform=IOS "$APP_ID") + 1))" >> CM_ENV
       - name: Flutter build ipa and automatic versioning
         script: |
