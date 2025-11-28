@@ -13,7 +13,11 @@ enum ModifierChangeType {
   TARGET,
   CHARACTER,
   STRUCTURE,
+  // ToDo: Maybe implement STRUCTURE_MODULE ??
+  STRUCTURE_MODULE,
   TARGET_MODULE,
+  // ToDo: Find out what this is for (doomsday weapons? only a single modifier exists at time of writing)
+  TARGET_DRONE_MODULE,
   IMPLANT,
   FILM,
   SUB_IMPLANT,
@@ -27,9 +31,11 @@ final changeTypeValues = EnumValues({
   'self': ModifierChangeType.SELF,
   'ship': ModifierChangeType.SHIP,
   'structure': ModifierChangeType.STRUCTURE,
+  'structuremodule': ModifierChangeType.STRUCTURE_MODULE,
   'target': ModifierChangeType.TARGET,
   'target_module': ModifierChangeType.TARGET_MODULE,
   'targetModule': ModifierChangeType.TARGET_MODULE,
+  'targetDroneModule': ModifierChangeType.TARGET_DRONE_MODULE,
   'implant': ModifierChangeType.IMPLANT,
   'film': ModifierChangeType.FILM,
   'subImplant': ModifierChangeType.SUB_IMPLANT,
