@@ -214,6 +214,7 @@ jobs:
         bundler-cache: true
 
     - name: Build and upload to TestFlight
+      id: build_and_upload
       if: ${{ inputs.build_ios && inputs.deploy_ios }}
       run: |
         bundle install
@@ -226,6 +227,14 @@ jobs:
         FASTLANE_APPLE_ID: ${{ secrets.FASTLANE_APPLE_ID }}
         FASTLANE_ITC_TEAM_ID: ${{ secrets.FASTLANE_ITC_TEAM_ID }}
         FASTLANE_TEAM_ID: ${{ secrets.FASTLANE_TEAM_ID }}
+
+    # Ok if the build fails, well dump some logs. Bot only for the build_and_upload step
+    - name: Dump logs
+      if: ${{ failure() && steps.build_and_upload.outcome != 'success' }}
+      run: |
+        echo "Build failed, dumping certificate information"
+        security find-identity -v -p codesigning /Users/runner/Library/Keychains/fastlane_tmp_keychain-db
+        
 
     - name: Building ${{ steps.app_build.outputs.name }} MacOS
       if: ${{ inputs.build_desktop }}
