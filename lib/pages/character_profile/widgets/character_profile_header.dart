@@ -99,7 +99,7 @@ class _CharacterProfileHeaderState extends State<CharacterProfileHeader>
   Widget build(BuildContext context) {
     return Material(
         elevation: 5,
-        color: Theme.of(context).colorScheme.primaryContainer,
+        color: Theme.of(context).primaryColor,
         child: SafeArea(
           child: Container(
             child: ConstrainedBox(
@@ -122,28 +122,28 @@ class _CharacterProfileHeaderState extends State<CharacterProfileHeader>
                             IconButton(
                               icon: Icon(
                                 Icons.arrow_back,
-                                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                color: Colors.white,
                               ),
                               onPressed: () => Navigator.pop(context),
                             ),
                             IconButton(
                               icon: Icon(
                                 editMode ? Icons.save : Icons.edit,
-                                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                color: Colors.white,
                               ),
                               onPressed: () => toggleEdit(),
                             ),
                             IconButton(
                               icon: Icon(
                                 Icons.qr_code,
-                                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                color: Colors.white,
                               ),
                               onPressed: () => showQRCode(state.character),
                             ),
                             IconButton(
                               icon: Icon(
                                 Icons.import_export,
-                                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                color: Colors.white,
                               ),
                               onPressed: () => showImportExportDialog(
                                 context,
@@ -163,7 +163,7 @@ class _CharacterProfileHeaderState extends State<CharacterProfileHeader>
                                     fit: BoxFit.fill,
                                     child: Icon(
                                       Icons.person,
-                                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -295,25 +295,25 @@ class CharacterProfileHeaderDetails extends StatelessWidget {
           character.name,
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
+            color: Colors.white,
             fontSize: 30,
           ),
         ),
         CharacterTotalSkillPoints(
           character: character,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(180),
+                color: Colors.white.withAlpha(96),
               ),
         ),
         Text("${character.totalImplantLevels} Implant Levels",
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(180),
+              color: Colors.white.withAlpha(96),
               fontSize: 14,
             )),
         Text(
           character.id,
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(180),
+            color: Colors.white.withAlpha(96),
             fontSize: 14,
           ),
         ),

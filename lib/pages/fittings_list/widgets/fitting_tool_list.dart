@@ -202,21 +202,18 @@ class _FittingToolListState extends State<FittingToolList>
   }
 
   SpeedDialFab _buildFab(BuildContext context) {
-    final colorBg = Theme.of(context).colorScheme.secondary;
-    final colorOnBg = Theme.of(context).colorScheme.onSecondary;
     return SpeedDialFab(
-      buttonOpenedColor: Theme.of(context).colorScheme.surfaceBright,
-      buttonClosedColor: Theme.of(context).colorScheme.tertiary,
+      buttonClosedColor: Theme.of(context).primaryColor,
       children: [
         SizedBox.fromSize(
           size: Size.square(48),
           child: RawMaterialButton(
             onPressed: () => addFolder(),
-            fillColor: colorBg,
+            fillColor: Theme.of(context).primaryColor,
             shape: CircleBorder(),
             child: Icon(
               Icons.create_new_folder,
-              color: colorOnBg,
+              color: Colors.white,
             ),
           ),
         ),
@@ -224,11 +221,11 @@ class _FittingToolListState extends State<FittingToolList>
           size: Size.square(48),
           child: RawMaterialButton(
             onPressed: () => showShipList(context),
-            fillColor: colorBg,
+            fillColor: Theme.of(context).primaryColor,
             shape: CircleBorder(),
             child: Icon(
               Icons.add,
-              color: colorOnBg,
+              color: Colors.white,
             ),
           ),
         ),
@@ -236,11 +233,11 @@ class _FittingToolListState extends State<FittingToolList>
           size: Size.square(48),
           child: RawMaterialButton(
             onPressed: () => fittingFromClipboard(context),
-            fillColor: colorBg,
+            fillColor: Theme.of(context).primaryColor,
             shape: CircleBorder(),
             child: Icon(
               Icons.content_paste,
-              color: colorOnBg,
+              color: Colors.white,
             ),
           ),
         ),
@@ -249,12 +246,12 @@ class _FittingToolListState extends State<FittingToolList>
                 size: Size.square(48),
                 child: RawMaterialButton(
                   onPressed: () => fittingFromQrCode(context),
-                  fillColor: colorBg,
+                  fillColor: Theme.of(context).primaryColor,
                   shape: CircleBorder(),
                   child: Center(
                       child: Icon(
                     Icons.qr_code_scanner,
-                    color: colorOnBg,
+                    color: Colors.white,
                   )),
                 ),
               )

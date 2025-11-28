@@ -29,7 +29,6 @@ class ImplantFittingCard extends StatelessWidget {
     return ChangeNotifierProvider.value(
       value: loadout,
       child: Card(
-        color: Theme.of(context).colorScheme.surfaceContainer,
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: () => onTap(loadout),
@@ -72,11 +71,7 @@ class ImplantFittingCard extends StatelessWidget {
                                 if (snapshot.data != null) {
                                   return LocalisedText(
                                     item: snapshot.data,
-                                    style: Theme.of(context).textTheme
-                                        .bodyMedium?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme.onSurface,
-                                    ),
+                                    style: Theme.of(context).textTheme.bodyMedium,
                                     autoSize: true,
                                     suffix: ' (Lvl. ${loadout.level})',
                                   );
@@ -85,7 +80,11 @@ class ImplantFittingCard extends StatelessWidget {
                                   'ID ${loadout.implantItemId} (Lvl. ${loadout.level})',
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: Theme.of(context).colorScheme.onSurface,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .color!
+                                        .withAlpha(96),
                                   ),
                                   maxLines: 1,
                                 );

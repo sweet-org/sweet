@@ -47,7 +47,6 @@ class _ShipFittingToolbarState extends State<ShipFittingToolbar>
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Theme.of(context).colorScheme.surfaceContainerLow,
       elevation: 35.0,
       child: Padding(
         padding: const EdgeInsets.symmetric(

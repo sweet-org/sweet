@@ -47,7 +47,7 @@ class _AppDrawerState extends State<AppDrawer> with FileSelector {
                 ),
                 Container(
                   height: 1,
-                  color: Theme.of(context).colorScheme.secondary,
+                  color: Theme.of(context).secondaryHeaderColor,
                 ),
                 Expanded(
                   child: ListView(
@@ -59,7 +59,7 @@ class _AppDrawerState extends State<AppDrawer> with FileSelector {
                         leading: Icon(
                           Icons.airline_seat_recline_extra_outlined,
                           size: 24,
-                          color: Theme.of(context).colorScheme.primary,
+                          color: Theme.of(context).primaryColor,
                         ),
                         title: Text(StaticLocalisationStrings.defaultPilot),
                         subtitle: Text(charRepo.defaultPilot.name),
@@ -112,7 +112,7 @@ class _AppDrawerState extends State<AppDrawer> with FileSelector {
                         leading: Icon(
                           Icons.import_export,
                           size: 24,
-                          color: Theme.of(context).colorScheme.primary,
+                          color: Theme.of(context).primaryColor,
                         ),
                         title: Text(StaticLocalisationStrings.importExport),
                         onTap: _importExportDialog,
@@ -121,13 +121,16 @@ class _AppDrawerState extends State<AppDrawer> with FileSelector {
                   ),
                 ),
                 VersionLabel(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  color: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .color!
+                      .withAlpha(128),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: SocialButton(
-                    darkAssetName: 'assets/branding/discord-logo-white.svg',
-                    assetName: 'assets/branding/discord-logo-black.svg',
+                    assetName: 'assets/branding/discord-logo-white.svg',
                     socialUrl: 'https://discord.gg/2QyVpSJKte',
                   ),
                 ),
@@ -147,7 +150,7 @@ class _AppDrawerState extends State<AppDrawer> with FileSelector {
       leading: Icon(
         icon,
         size: 24,
-        color: Theme.of(context).colorScheme.primary,
+        color: Theme.of(context).primaryColor,
       ),
       title: Text(title),
       onTap: () {

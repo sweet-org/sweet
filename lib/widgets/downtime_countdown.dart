@@ -46,7 +46,7 @@ class DowntimeCountdown extends StatelessWidget {
         .setting(key: kPatchHourManUpKey, orElse: 0);
     final patchMin = RepositoryProvider.of<ManUpService>(context)
         .setting(key: kPatchMinuteManUpKey, orElse: 0);
-    final style = Theme.of(context).textTheme.bodyMedium;
+    final style = TextStyle(color: Colors.white);
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: 4.0),

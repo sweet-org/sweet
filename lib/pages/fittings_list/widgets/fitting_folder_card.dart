@@ -30,7 +30,6 @@ class _FittingFolderState extends State<FittingFolderCard> {
     return ChangeNotifierProvider.value(
       value: widget.folder,
       child: Card(
-        color: Theme.of(context).colorScheme.surfaceContainer,
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: _toggleFolder,
@@ -53,44 +52,40 @@ class _FittingFolderState extends State<FittingFolderCard> {
                         child: Icon(
                           _isExpaned ? Icons.folder_open : Icons.folder,
                           size: 48.0,
-                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                       Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AutoSizeText(
-                                widget.folder.name,
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .titleLarge,
-                                maxLines: 1,
-                              ),
-                              AutoSizeText(
-                                _isExpaned ? "Tap to close" : "Tap to open",
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .bodyMedium,
-                                maxLines: 1,
-                              ),
-                              AutoSizeText(
-                                widget.folder.getSize().toString() +
-                                    (widget.folder.getSize() == 1
-                                        ? " Fitting"
-                                        : " Fittings"),
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .bodyMedium,
-                                maxLines: 1,
-                              )
-                            ],
-                          ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            AutoSizeText(
+                              widget.folder.name,
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .titleLarge,
+                              maxLines: 1,
+                            ),
+                            AutoSizeText(
+                              _isExpaned ? "Tap to close" : "Tap to open",
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .bodyMedium,
+                              maxLines: 1,
+                            ),
+                            AutoSizeText(
+                              widget.folder.getSize().toString() +
+                                  (widget.folder.getSize() == 1
+                                      ? " Fitting"
+                                      : " Fittings"),
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .bodyMedium,
+                              maxLines: 1,
+                            )
+                          ],
                         ),
                       ),
                       IconButton(
@@ -106,8 +101,10 @@ class _FittingFolderState extends State<FittingFolderCard> {
                   _isExpaned
                       ? Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                      borderRadius: BorderRadius.circular(4),
+                      color: Theme
+                          .of(context)
+                          .hoverColor,
                     ),
                     child: ReorderableListView.builder(
                         itemCount: widget.folder.contents.length,

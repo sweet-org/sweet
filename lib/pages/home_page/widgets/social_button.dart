@@ -6,14 +6,12 @@ class SocialButton extends StatelessWidget {
   SocialButton({
     super.key,
     required this.assetName,
-    this.darkAssetName,
     required this.socialUrl,
     this.title = '',
     this.size = 20,
   });
 
   final String assetName;
-  final String? darkAssetName;
   final String socialUrl;
   final String title;
   final double size;
@@ -29,19 +27,16 @@ class SocialButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final asset = Theme.of(context).brightness == Brightness.dark && darkAssetName != null
-        ? darkAssetName!
-        : assetName;
     return ElevatedButton(
       onPressed: () => _openUrl(socialUrl),
       style: ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-      ),
+          backgroundColor: Theme.of(context).primaryColor),
       child: Container(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(asset,
+            SvgPicture.asset(
+              assetName,
               height: size,
             ),
             title.isNotEmpty
