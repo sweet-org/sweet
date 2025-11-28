@@ -1382,6 +1382,13 @@ class FittingSimulator extends ChangeNotifier {
     await updateAttributes(skills: fittingSkills.toList());
   }
 
+  /// For unit-testing only, otherwise handled by the pilot. Setting this to a
+  /// non-null value will override the pilot's implant levels.
+  void setTotalImplantLevels(int? levels) {
+    _totalImplantLevels = levels;
+    _pilotListener();
+  }
+
   void setShipMode({required bool enabled}) {
     ship.setShipModeEnabled(enabled);
 
