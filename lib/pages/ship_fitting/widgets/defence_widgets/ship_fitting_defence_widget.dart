@@ -56,7 +56,7 @@ class _ShipFittingDefenceWidgetState extends State<ShipFittingDefenceWidget> {
         Container(
           margin: EdgeInsets.all(6),
           height: 1,
-          color: Theme.of(context).colorScheme.scrim,
+          color: Colors.black.withAlpha(64),
         ),
         RechargeRates(
           showEhp: _showEHP,
@@ -65,7 +65,7 @@ class _ShipFittingDefenceWidgetState extends State<ShipFittingDefenceWidget> {
         Container(
           margin: EdgeInsets.all(6),
           height: 1,
-          color: Theme.of(context).colorScheme.scrim,
+          color: Colors.black.withAlpha(64),
         ),
         DamagePatternWidget(
           rowHeight: widget.rowHeight,

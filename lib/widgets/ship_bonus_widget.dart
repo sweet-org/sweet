@@ -25,7 +25,6 @@ class ShipBonusWidget extends StatelessWidget {
     }
 
     return Card(
-      color: Theme.of(context).colorScheme.surfaceContainer,
       child: Padding(
         padding: EdgeInsets.all(8),
         child: Column(

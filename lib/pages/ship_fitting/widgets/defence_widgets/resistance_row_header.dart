@@ -71,9 +71,6 @@ class ResistanceRowHeader extends StatelessWidget {
               alignment: Alignment.center,
               height: rowHeight,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-                ),
                 onPressed: onEHPToggle,
                 child: AutoSizeText(
                   showEHP ? 'EHP' : 'Raw',

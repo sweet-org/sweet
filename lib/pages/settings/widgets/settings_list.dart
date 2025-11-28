@@ -98,7 +98,7 @@ class _SettingsListState extends State<SettingsList> {
               leading: Icon(
                 Icons.nightlight_round,
                 size: 24,
-                color: Theme.of(context).colorScheme.onSurface,
+                color: Theme.of(context).colorScheme.primary,
               ),
               title: Text(StaticLocalisationStrings.theme),
               subtitle: Text(currentMode),
