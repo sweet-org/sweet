@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -6,6 +8,7 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 
 import 'package:sweet/model/character/character.dart';
 import 'package:sweet/model/character/learned_skill.dart';
+import 'package:sweet/model/fitting/fitting_patterns.dart';
 import 'package:sweet/model/fitting/fitting_ship.dart';
 import 'package:sweet/model/implant/implant_fitting_loadout.dart';
 import 'package:sweet/model/implant/implant_handler.dart';
@@ -21,6 +24,28 @@ import 'package:sweet/service/attribute_calculator_service.dart';
 import 'package:sweet/util/constants.dart';
 
 import 'mock_platform_paths.dart';
+
+/// Helper to await the next notification from a FittingSimulator, i.e. the next
+/// calculation update.
+Future<void> waitForNextNotification(FittingSimulator fitting,
+    {Duration timeout = const Duration(seconds: 2)}) {
+  final completer = Completer<void>();
+  void listener() {
+    if (!completer.isCompleted) {
+      completer.complete();
+      fitting.removeListener(listener);
+    }
+  }
+
+  fitting.addListener(listener);
+
+  return completer.future.whenComplete(() {
+    if (fitting.hasListeners) fitting.removeListener(listener);
+  }).timeout(timeout, onTimeout: () {
+    fitting.removeListener(listener);
+    throw TimeoutException('Timed out waiting for FittingSimulator notification');
+  });
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -259,6 +284,180 @@ void main() {
           droneDps.toStringAsFixed(2),
           '19840.00',
         );
+      });
+    });
+
+    /// Adaptive Invulnerability Fields are subject to the
+    /// stacking penalty
+    group('Non-Stackable Modifiers', () {
+      late FittingSimulator fitting;
+
+      // Extract required items, and create fitting
+      // Fitting:
+      // Ship: Probe Covert Ops 10100000217
+      // Low Slots:
+      //  - 2x MK5 Adaptive Invulnerability Field 11313400006
+      //  - 1x MK7 Adaptive Invulnerability Field 11313400008
+      // Skills:
+      // - Shield Hardening: Lv 5
+      // - Frigate Defense Upgrade: Lv 5
+      // 33 Total Implant Levels
+      setUpAll(() async {
+        var ship = await itemRepo.ship(id: 10100000217);
+        expect(ship, isNotNull, reason: 'Cannot find Probe Covert Ops item');
+        expect(ship.categoryId == EveEchoesCategory.ships.categoryId, true,
+            reason: 'Item is not a ship');
+        fitting = await FittingSimulator.fromShipLoadout(
+          pilot: Character.empty,
+          attributeCalculatorService: attrCalc,
+          itemRepository: itemRepo,
+          ship: ship,
+          loadout: ShipFittingLoadout.fromShip(ship.itemId,
+              await itemRepo.getShipLoadoutDefinition(ship.itemId)),
+        );
+
+        var invulFieldMk5 = await itemRepo.module(id: 11313400006);
+        expect(
+          invulFieldMk5,
+          isNotNull,
+          reason: 'Cannot find MK5 Adaptive Invulnerability Field item',
+        );
+        var invulFieldMk7 = await itemRepo.module(id: 11313400008);
+        expect(
+          invulFieldMk7,
+          isNotNull,
+          reason: 'Cannot find MK7 Adaptive Invulnerability Field item',
+        );
+        fitting.fitItem(
+          invulFieldMk5,
+          slot: SlotType.low,
+          index: 0,
+          notify: false,
+        );
+        fitting.fitItem(
+          invulFieldMk5,
+          slot: SlotType.low,
+          index: 1,
+          notify: false,
+        );
+        fitting.fitItem(
+          invulFieldMk7,
+          slot: SlotType.low,
+          index: 2,
+          notify: false,
+        );
+        var skills = [
+          LearnedSkill(
+            skillId: Skills.ShieldHardening,
+            skillLevel: 5,
+          ),
+          LearnedSkill(
+            skillId: Skills.FrigateDefenseUpgrade,
+            skillLevel: 5,
+          ),
+        ];
+        fitting.setTotalImplantLevels(33);
+        await fitting.updateSkills(skills: skills);
+      });
+
+      setHardeners(bool mk5A, bool mk5B, bool mk7A) async {
+        var waiter = waitForNextNotification(fitting);
+        fitting.setModuleState(
+          mk5A ? ModuleState.active : ModuleState.inactive,
+          slot: SlotType.low,
+          index: 0,
+        );
+        await waiter;
+        waiter = waitForNextNotification(fitting);
+        fitting.setModuleState(
+          mk5B ? ModuleState.active : ModuleState.inactive,
+          slot: SlotType.low,
+          index: 1,
+        );
+        await waiter;
+        waiter = waitForNextNotification(fitting);
+        fitting.setModuleState(
+          mk7A ? ModuleState.active : ModuleState.inactive,
+          slot: SlotType.low,
+          index: 2,
+        );
+        await waiter;
+      }
+
+      expectValues({
+        required String shieldRes,
+        required String shieldPoints,
+        required String shieldEhp,
+        required String weakestEhp,
+      }) {
+        var actShieldResist = fitting.getValueForItem(
+            attribute: EveEchoesAttribute.shieldEmDamageResonance,
+            item: fitting.ship);
+        var actShieldPoints = fitting.getValueForItem(
+            attribute: EveEchoesAttribute.shieldCapacity, item: fitting.ship);
+        var actShieldEhp = fitting.calculateEHPForAttribute(
+            hpAttribute: EveEchoesAttribute.shieldCapacity,
+            damagePattern: FittingPattern.uniform);
+        var actDefense = fitting.calculateWeakestEHP();
+        expect(shieldRes, actShieldResist.toStringAsFixed(2));
+        expect(shieldPoints, actShieldPoints.toStringAsFixed(0));
+        expect(shieldEhp, actShieldEhp.toStringAsFixed(0));
+        expect(weakestEhp, actDefense.toStringAsFixed(0));
+      }
+
+      test('No Hardeners on', () async {
+        // Turn off all invulnerability fields
+        await setHardeners(false, false, false);
+        expectValues(
+          shieldRes: "0.90",
+          shieldPoints: "692",
+          shieldEhp: "989",
+          weakestEhp: "2284");
+      });
+
+      test('One MK5 Hardener', () async {
+        await setHardeners(true, false, false);
+        expectValues(
+            shieldRes: "0.71",
+            shieldPoints: "692",
+            shieldEhp: "1261",
+            weakestEhp: "2496");
+      });
+
+      test('Two MK5 Hardeners', () async {
+        await setHardeners(true, true, false);
+        expectValues(
+            shieldRes: "0.57",
+            shieldPoints: "692",
+            shieldEhp: "1554",
+            weakestEhp: "2723");
+      });
+
+      test('One MK7 Hardener', () async {
+        await setHardeners(false, false, true);
+        expectValues(
+            shieldRes: "0.69",
+            shieldPoints: "692",
+            shieldEhp: "1294",
+            weakestEhp: "2521");
+      });
+
+      test('One MK5 + One MK7 Hardener', () async {
+        await setHardeners(true, false, true);
+        expectValues(
+            shieldRes: "0.56",
+            shieldPoints: "692",
+            shieldEhp: "1594",
+            weakestEhp: "2754");
+      });
+
+      test('Two MK5 + One MK7 Hardener', () async {
+        await setHardeners(true, true, true);
+        expectValues(
+            shieldRes: "0.49",
+            shieldPoints: "692",
+            shieldEhp: "1818",
+            weakestEhp: "2929");
       });
     });
 

@@ -23,6 +23,16 @@ on:
         required: true
         type: boolean
         default: true
+      build_number:
+        description: 'Build number override'
+        required: false
+        type: string
+        default: ''
+      fastlane_args:
+          description: 'Extra Fastlane arguments for iOS'
+          required: false
+          type: string
+          default: ''
 
 jobs:
   job-linux:
@@ -52,10 +62,16 @@ jobs:
     
     # This is to give an offset since builds before this repo were in the 100's
     - name: Generate run number with offset
+      if: ${{ inputs.build_number == '' }}
       env:
         NUM: ${{ github.run_number }}
       run: |
         echo "BUILD_NUMBER=$(($NUM + 200))" >> $GITHUB_ENV
+
+    - name: Generate run number with offset
+      if: ${{ inputs.build_number != '' }}
+      run: |
+        echo "BUILD_NUMBER=${{ inputs.build_number }}" >> $GITHUB_ENV
 
     - name: Generate app build name
       shell: bash
@@ -101,11 +117,18 @@ jobs:
     
     # This is to give an offset since builds before this repo were in the 100's
     - name: Generate run number with offset
+      if: ${{ inputs.build_number == '' }}
       shell: bash
       env:
         NUM: ${{ github.run_number }}
       run: |
         echo "BUILD_NUMBER=$(($NUM + 200))" >> $GITHUB_ENV
+
+    - name: Generate run number with offset
+      if: ${{ inputs.build_number != '' }}
+      shell: bash
+      run: |
+        echo "BUILD_NUMBER=${{ inputs.build_number }}" >> $GITHUB_ENV
 
     - name: Generate app build name
       shell: bash
@@ -165,10 +188,16 @@ jobs:
     
     # This is to give an offset since builds before this repo were in the 100's
     - name: Generate run number with offset
+      if: ${{ inputs.build_number == '' }}
       env:
         NUM: ${{ github.run_number }}
       run: |
         echo "BUILD_NUMBER=$(($NUM + 200))" >> $GITHUB_ENV
+
+    - name: Generate run number with offset
+      if: ${{ inputs.build_number != '' }}
+      run: |
+        echo "BUILD_NUMBER=${{ inputs.build_number }}" >> $GITHUB_ENV
 
     - name: Generate app build name
       shell: bash
@@ -185,10 +214,11 @@ jobs:
         bundler-cache: true
 
     - name: Build and upload to TestFlight
+      id: build_and_upload
       if: ${{ inputs.build_ios && inputs.deploy_ios }}
       run: |
         bundle install
-        bundle exec fastlane ios beta
+        bundle exec fastlane ios beta ${{ inputs.fastlane_args || '' }}
       env:
         SWEET_MATCH_ACCESS_TOKEN: ${{ secrets.SWEET_MATCH_ACCESS_TOKEN }}
         MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
@@ -197,6 +227,14 @@ jobs:
         FASTLANE_APPLE_ID: ${{ secrets.FASTLANE_APPLE_ID }}
         FASTLANE_ITC_TEAM_ID: ${{ secrets.FASTLANE_ITC_TEAM_ID }}
         FASTLANE_TEAM_ID: ${{ secrets.FASTLANE_TEAM_ID }}
+
+    # Ok if the build fails, well dump some logs. Bot only for the build_and_upload step
+    - name: Dump logs
+      if: ${{ failure() && steps.build_and_upload.outcome != 'success' }}
+      run: |
+        echo "Build failed, dumping certificate information"
+        security find-identity -v -p codesigning /Users/runner/Library/Keychains/fastlane_tmp_keychain-db
+        
 
     - name: Building ${{ steps.app_build.outputs.name }} MacOS
       if: ${{ inputs.build_desktop }}
@@ -250,10 +288,16 @@ jobs:
     
     # This is to give an offset since builds before this repo were in the 100's
     - name: Generate run number with offset
+      if: ${{ inputs.build_number == '' }}
       env:
         NUM: ${{ github.run_number }}
       run: |
         echo "BUILD_NUMBER=$(($NUM + 200))" >> $GITHUB_ENV
+
+    - name: Generate run number with offset
+      if: ${{ inputs.build_number != '' }}
+      run: |
+          echo "BUILD_NUMBER=${{ inputs.build_number }}" >> $GITHUB_ENV
 
     - name: Generate app build name
       shell: bash

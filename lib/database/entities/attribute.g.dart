@@ -13,7 +13,6 @@ Attribute _$AttributeFromJson(Map<String, dynamic> json) => Attribute(
       available: json['available'] as bool,
       chargeRechargeTimeId: (json['chargeRechargeTimeId'] as num).toInt(),
       defaultValue: (json['defaultValue'] as num).toDouble(),
-      highIsGood: json['highIsGood'] as bool,
       maxAttributeId: (json['maxAttributeId'] as num).toInt(),
       attributeOperator: (json['attributeOperator'] as List<dynamic>)
           .map((e) => (e as num).toInt())
@@ -40,7 +39,6 @@ Map<String, dynamic> _$AttributeToJson(Attribute instance) => <String, dynamic>{
       'available': instance.available,
       'chargeRechargeTimeId': instance.chargeRechargeTimeId,
       'defaultValue': instance.defaultValue,
-      'highIsGood': instance.highIsGood,
       'maxAttributeId': instance.maxAttributeId,
       'attributeOperator': instance.attributeOperator,
       'stackable': instance.stackable,

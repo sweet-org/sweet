@@ -41,7 +41,10 @@ class AttributeDao extends BaseDao<Attribute> with BaseDaoMixin {
         'available': 'INTEGER NOT NULL',
         'chargeRechargeTimeId': 'INTEGER NOT NULL',
         'defaultValue': 'REAL NOT NULL',
-        'highIsGood': 'INTEGER NOT NULL',
+        // Removed in patch 2025-10-22
+        // We don't really need this here, but it is used in the generation code
+        // to provide backwards compatibility with older versions of sweet
+        'highIsGood': 'INTEGER GENERATED ALWAYS AS (1) VIRTUAL',
         'maxAttributeId': 'INTEGER NOT NULL',
         'attributeOperator': 'TEXT NOT NULL',
         'stackable': 'INTEGER NOT NULL',
@@ -60,7 +63,7 @@ class AttributeDao extends BaseDao<Attribute> with BaseDaoMixin {
       {bool complete = true}) async {
     final selectParams = complete
         ? 'item_attributes.value as baseValue, attributes.*'
-        : 'item_attributes.value as baseValue, attributes.id, attributes.attributeFormula, attributes.toAttrId, attributes.attributeOperator, attributes.highIsGood';
+        : 'item_attributes.value as baseValue, attributes.id, attributes.attributeFormula, attributes.toAttrId, attributes.attributeOperator';
     return select_raw(query: '''
         SELECT $selectParams
         FROM item_attributes 

@@ -518,10 +518,6 @@ class AttributeCalculatorService {
         _log(message: 'Sorting non-stackable modifiers');
         modifierList.sort(
             (a, b) => a.modifierValue.abs() > b.modifierValue.abs() ? -1 : 1);
-
-        if (!attrDefinition.highIsGood) {
-          modifierList = modifierList.reversed.toList();
-        }
       }
 
       double? modValue;
@@ -550,7 +546,7 @@ class AttributeCalculatorService {
               message:
                   'Performing $op aggregation on $modValue with $modifierValue from <${modifier.item.itemId}, ${modifier.changeScope.name}, ${modifier.changeRange}>');
           modValue = op.performAggregation(
-            highIsGood: attrDefinition.highIsGood,
+            //highIsGood: attrDefinition.highIsGood,
             a: modValue!,
             b: modifierValue,
           );
@@ -565,7 +561,7 @@ class AttributeCalculatorService {
             message:
                 'Performing final $op aggregation on $opModValue with $modValue');
         opModValue = op.performAggregation(
-          highIsGood: itemAttribute.highIsGood,
+          //highIsGood: itemAttribute.highIsGood,
           a: opModValue,
           b: modValue ?? 0,
         );
