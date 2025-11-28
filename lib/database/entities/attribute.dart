@@ -26,7 +26,6 @@ class Attribute {
     required this.available,
     required this.chargeRechargeTimeId,
     required this.defaultValue,
-    required this.highIsGood,
     required this.maxAttributeId,
     required this.attributeOperator,
     required this.stackable,
@@ -48,7 +47,9 @@ class Attribute {
   final bool available;
   final int chargeRechargeTimeId;
   final double defaultValue;
-  final bool highIsGood;
+  // highIsGood has been removed in patch 2025-10-26, now all attributes
+  // should behave as if highIsGood is true
+  //final bool highIsGood;
   final int maxAttributeId;
   final List<int> attributeOperator;
   final bool stackable;
@@ -91,7 +92,6 @@ class Attribute {
           available: true,
           defaultValue: 0,
           chargeRechargeTimeId: 0,
-          highIsGood: true,
           maxAttributeId: 0,
           stackable: false,
           toAttrId: [],
@@ -110,7 +110,6 @@ class Attribute {
         chargeRechargeTimeId: chargeRechargeTimeId,
         baseValue: baseValue ?? this.baseValue,
         defaultValue: defaultValue,
-        highIsGood: highIsGood,
         maxAttributeId: maxAttributeId,
         attributeOperator: attributeOperator,
         stackable: stackable,

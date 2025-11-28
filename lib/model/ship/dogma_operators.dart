@@ -43,7 +43,6 @@ extension DogmaOperatorsExtenstion on DogmaOperators {
   }
 
   double performAggregation({
-    bool highIsGood = true,
     required double a,
     required double b,
   }) {
@@ -53,7 +52,7 @@ extension DogmaOperatorsExtenstion on DogmaOperators {
       case DogmaOperators.PreMul:
         return a * b;
       case DogmaOperators.PreAssignment:
-        return highIsGood ? max(a, b) : min(a, b);
+        return max(a, b);
       case DogmaOperators.ModPercent:
         return a + b;
       case DogmaOperators.ModAdd:
@@ -65,7 +64,7 @@ extension DogmaOperatorsExtenstion on DogmaOperators {
       case DogmaOperators.PostMul:
         return a * b;
       case DogmaOperators.PostAssignment:
-        return highIsGood ? max(a, b) : min(a, b);
+        return max(a, b);
     }
   }
 }
