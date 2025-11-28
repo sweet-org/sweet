@@ -36,18 +36,55 @@ class _ShipFittingContextDrawerState extends State<ShipFittingContextDrawer> {
   }
 
   Future<void> _filterItems(String filterString) async {
-    Iterable<Item> items = widget.initialItems;
-    if (widget.marketGroup == MarketGroup.invalid) {
-      // TODO: Add in proper filtering here
-      // As we really need the item name to be with the item
-      items = widget.initialItems;
-    } else {
-      final itemRepository = RepositoryProvider.of<ItemRepository>(context);
-      items = await itemRepository.itemsFilteredOnNameAndMarketGroup(
-        filter: filterString.toLowerCase(),
-        marketGroupId: widget.marketGroup.id,
-      );
+    // ToDo: This is still not correct, not all items have a fixed localization
+    //       string in the db, but are using composed names that can't be
+    //       handled by an SQL query alone.
+    filterString = filterString.trim();
+    if (filterString.isEmpty) {
+      setState(() {
+        _filteredItems = [];
+      });
+      return;
     }
+
+    // The items we want to filter. This assumes the market groups, or its
+    // children, are already loaded with items.
+    Iterable<Item> baseItems;
+
+    // The market groups to search in, to narrow down the search.
+    final List<int> marketGroupIds = [widget.marketGroup.id];
+    if (widget.marketGroup == MarketGroup.invalid) {
+      for (var item in widget.initialItems) {
+        final marketGroupId = item.marketGroupId;
+        if (marketGroupId == null) {
+          continue;
+        }
+        final topGroup = marketGroupId * 100000;
+        if (!marketGroupIds.contains(topGroup)) {
+          marketGroupIds.add(topGroup);
+        }
+      }
+      baseItems = widget.initialItems;
+    } else {
+      if (!widget.marketGroup.isValid) {
+        // Pseudo-Market group, used in the fitting list to combine ships and
+        // structures. Is a bit confusing with MarketGroup.invalid...
+        for (var child in widget.marketGroup.children) {
+          marketGroupIds.add(child.id);
+        }
+      }
+      baseItems = widget.marketGroup.getAllItemsRecursive();
+    }
+    final itemRepository = RepositoryProvider.of<ItemRepository>(context);
+
+    final itemIds = Set<int>.from(await itemRepository.itemsFilteredOnNameAndMarketGroups(
+      filter: filterString.toLowerCase(),
+      marketGroupIds: marketGroupIds,
+    ));
+
+    final items = baseItems.where((item) =>
+        itemIds.contains(item.id) &&
+        !widget.blacklistItems.contains(item.id));
 
     setState(() {
       _filteredItems = items.toList();

@@ -138,18 +138,19 @@ extension ItemRepositoryDb on ItemRepository {
       await _echoesDatabase.itemDao
           .filterOnName(filter: filter, languageCode: _currentLanguageCode);
 
-  Future<Iterable<Item>> itemsFilteredOnNameAndMarketGroup(
-      {required String filter, required int marketGroupId}) async {
-    if (marketGroupId == MarketGroupFilters.drones.marketGroupId) {
-      return itemsFilteredOnNameAndCategory(
+  Future<Iterable<int>> itemsFilteredOnNameAndMarketGroups(
+      {required String filter, required List<int> marketGroupIds}) async {
+    if (marketGroupIds.length == 1 &&
+        marketGroupIds[0] == MarketGroupFilters.drones.marketGroupId) {
+      return (await itemsFilteredOnNameAndCategory(
         filter: filter,
         category: EveEchoesCategory.drones,
-      );
+      )).map((e) => e.id);
     } else {
-      return await _echoesDatabase.itemDao.filterOnNameAndMarketGroup(
+      return await _echoesDatabase.itemDao.filterIdsOnNameAndMarketGroups(
         filter: filter,
         languageCode: _currentLanguageCode,
-        marketGroupId: marketGroupId,
+        marketGroupIds: marketGroupIds,
       );
     }
   }

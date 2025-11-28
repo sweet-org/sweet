@@ -37,6 +37,7 @@ class MarketGroup with EquatableMixin {
   }) : children = children ?? [];
 
   bool get isTopLevel => parentId == null;
+  bool get isValid => id > 0;
 
   factory MarketGroup.clone(
           MarketGroup other, List<MarketGroup>? children, List<Item>? items) =>
@@ -48,6 +49,15 @@ class MarketGroup with EquatableMixin {
           localisationIndex: other.localisationIndex,
           sourceName: other.sourceName,
           iconIndex: other.iconIndex);
+
+  Iterable<Item> getAllItemsRecursive() sync* {
+    if (items != null) {
+      yield* items!;
+    }
+    for (final child in children) {
+      yield* child.getAllItemsRecursive();
+    }
+  }
 
   factory MarketGroup.fromJson(Map<String, dynamic> json) =>
       _$MarketGroupFromJson(json);

@@ -118,16 +118,68 @@ class ItemDao extends BaseDao<Item> with BaseDaoMixin {
       ''');
   }
 
-  Future<Iterable<Item>> filterOnNameAndMarketGroup(
+  Future<Iterable<Item>> filterOnNameAndMarketGroups(
           {required String filter,
           required String languageCode,
-          required int marketGroupId}) async =>
-      await select_raw(query: '''
+          required List<int> topLvlMarketGroupIds}) async {
+    final marketGroupIdsString = topLvlMarketGroupIds.map((m) => m.toString()).join(",");
+    return await select_raw(query: '''
       SELECT $tableName.*, ${db.localisedStringDao.tableName}.$languageCode AS langString, ${db.localisedStringDao.tableName}.source AS sourceString
       FROM $tableName
       LEFT JOIN ${db.localisedStringDao.tableName} ON $tableName.nameKey = ${db.localisedStringDao.tableName}.id
-      WHERE (LOWER(langString) LIKE LOWER("%$filter%") OR LOWER(sourceString) LIKE LOWER("%$filter%")) AND marketGroupId / 100000 = $marketGroupId
+      WHERE (LOWER(langString) LIKE LOWER("%$filter%") OR LOWER(sourceString) LIKE LOWER("%$filter%")) AND marketGroupId / 100000 in ($marketGroupIdsString)
       ''');
+  }
+
+  Future<Iterable<int>> filterIdsOnNameAndMarketGroups(
+          {required String filter,
+          required String languageCode,
+          required List<int> marketGroupIds}) async {
+    filter = filter.toLowerCase();
+    const midMarketGroupIdDivisor = 100;
+    const topMarketGroupIdDivisor = 100000;
+    // Okay, so market groups are hierarchical.
+    // The top level has range 0-9999
+    // The mid level has range 1000000-9999999
+    // The low level has range 100000000-999999999
+    // We need to group the marketGroupIds by their level and query accordingly
+
+    final topLevelIds = <int>[];
+    final midLevelIds = <int>[];
+    final lowLevelIds = <int>[];
+    for (final id in marketGroupIds) {
+      if (id < 0) {
+        continue;
+      } else if (id < 1000000) {
+        topLevelIds.add(id);
+      } else if (id < 100000000) {
+        midLevelIds.add(id);
+      } else {
+        lowLevelIds.add(id);
+      }
+    }
+    if (topLevelIds.isEmpty &&
+        midLevelIds.isEmpty &&
+        lowLevelIds.isEmpty) {
+      return [];
+    }
+    final topLevelQuery = topLevelIds.isNotEmpty
+        ? 'marketGroupId / $topMarketGroupIdDivisor IN (${topLevelIds.map((m) => m.toString()).join(",")})'
+        : 'FALSE';
+    final midLevelQuery = midLevelIds.isNotEmpty
+        ? 'marketGroupId / $midMarketGroupIdDivisor IN (${midLevelIds.map((m) => m.toString()).join(",")})'
+        : 'FALSE';
+    final lowLevelQuery = lowLevelIds.isNotEmpty
+        ? 'marketGroupId IN (${lowLevelIds.map((m) => m.toString()).join(",")})'
+        : 'FALSE';
+    return await db.db.rawQuery('''
+      SELECT $tableName.id
+      FROM $tableName
+               LEFT JOIN ${db.localisedStringDao.tableName} ON $tableName.nameKey = ${db.localisedStringDao.tableName}.id
+      WHERE (${db.localisedStringDao.tableName}.$languageCode LIKE '%$filter%' OR ${db.localisedStringDao.tableName}.source LIKE '%$filter%')
+        AND ($topLevelQuery OR $midLevelQuery OR $lowLevelQuery)
+      ''').then((values) => values.map((value) => value["id"] as int));
+  }
 
   Future<Iterable<Item>> filterOnNameAndCategory({
     required String filter,
