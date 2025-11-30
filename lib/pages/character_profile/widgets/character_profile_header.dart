@@ -244,7 +244,7 @@ class _CharacterProfileHeaderState extends State<CharacterProfileHeader>
             },
           ),
           TextFormField(
-            initialValue: "0",
+            initialValue: character.totalImplantLevels.toString(),
             cursorColor: Colors.black,
             style: TextStyle(color: Colors.white),
             decoration: InputDecoration(
