@@ -132,6 +132,7 @@ class DataLoadingBloc extends Bloc<DataLoadingBlocEvent, DataLoadingBlocState> {
       _marketApiService.keyId = marketSettings['key_id'] ?? 'id';
       _marketApiService.keyTime = marketSettings['key_time'];
       _marketApiService.keyPrice = marketSettings['key_price'] ?? 'price';
+      _marketApiService.colDelimiter = marketSettings['col_delimiter'] ?? ',';
 
       emit(LoadingRepositoryState('Loading data...\nOpening DB'));
       print('${DateTime.now()}: Opening DB');

@@ -11,6 +11,8 @@ import 'package:sweet/util/crash_reporting.dart';
 
 import 'models/market_csv_line.dart';
 
+final _tzRegex = RegExp(r'([zZ]|[+-]\d{2}(:\d{2})?)$');
+
 class EEMarketApiService {
   final Client http;
 
@@ -23,10 +25,15 @@ class EEMarketApiService {
   Timer? _fetchTimer;
   DateTime? _lastFetch;
 
+  /// Stores the time when the data was last updated from the game servers, as
+  /// indicated by the data itself.
+  DateTime? _timeOfData;
+
   String? url;
   String keyId = 'id';
   String? keyTime;
   String keyPrice = 'estimated_price';
+  String colDelimiter = ',';
 
   EEMarketApiService({
     required this.http,
@@ -50,19 +57,24 @@ class EEMarketApiService {
     try {
       if (timeSinceLastFetch.inMinutes >= _fetchTimeInMinutes * 0.75) {
         ok = await _fetchMarketData();
+      } else {
+        print(
+            'Skipping market data fetch, last fetch was only ${timeSinceLastFetch.inMinutes} minutes ago');
       }
 
       if (!ok) {
+        print("Loading cached market data");
         final lastMarketData = prefs.getString(_marketDataKey);
         ok = await _parseMarketData(lastMarketData ?? '');
       }
 
       // Set up fetch timer
-      _fetchTimer?.cancel();
-      _fetchTimer = Timer.periodic(
-        Duration(minutes: _fetchTimeInMinutes),
-        (timer) => _fetchMarketData(),
-      );
+      // Don't need that, we only reload on app start for now
+      //_fetchTimer?.cancel();
+      //_fetchTimer = Timer.periodic(
+      //  Duration(minutes: _fetchTimeInMinutes),
+      //  (timer) => _fetchMarketData(),
+      //);
     } catch (ex) {
       print('Exception loading EE Market: $ex');
       return false;
@@ -106,40 +118,69 @@ class EEMarketApiService {
     }
   }
 
+  static int? getIndexOfKey(List<dynamic> header, String keyName) {
+    if (header.isEmpty) return null;
+    final index = header.indexOf(keyName);
+    if (index >= 0) return index;
+    // Check if keyName is numeric and use as index if valid
+    final keyAsInt = int.tryParse(keyName);
+    if (keyAsInt == null) return null;
+    if (keyAsInt < 0 || keyAsInt >= header.length) return null;
+    return keyAsInt;
+  }
+
+  static DateTime? tryParseTime(String timeString) {
+    DateTime? result;
+    try {
+      result = DateTime.parse(timeString);
+    } catch (e) {
+      return null;
+    }
+    if (!_tzRegex.hasMatch(timeString)) {
+      return result.copyWith(isUtc: true).toLocal();
+    }
+    return result.toLocal();
+  }
+
   Future<bool> _parseMarketData(String marketData) async {
-    final lines = const CsvToListConverter().convert(
+    final lines = CsvToListConverter(fieldDelimiter: colDelimiter).convert(
       marketData,
     );
 
     if (lines.isEmpty) return false;
 
     // Verify the header
-    final indexId = lines[0].indexOf(keyId);
-    final indexTime = lines[0].indexOf(keyTime);
-    final indexPrice = lines[0].indexOf(keyPrice);
+    final indexId = getIndexOfKey(lines[0], keyId) ?? -1;
+    final indexTime =
+        keyTime != null ? (getIndexOfKey(lines[0], keyTime!) ?? -1) : -1;
+    final indexPrice = getIndexOfKey(lines[0], keyPrice) ?? -1;
     final minLen = max(indexId, max(indexTime, indexPrice)) + 1;
 
     if (indexPrice < 0 || indexId < 0) return false;
     DateTime? globalTime;
     int errors = 0;
+    bool skipFirstDataLine = false;
 
-    if (lines.length > 1 &&
+    if (keyTime == null && lines.isNotEmpty && lines[0].isNotEmpty) {
+      // Header may contain date in first column
+      globalTime = tryParseTime(lines[0][0] as String);
+    }
+    if (keyTime == null &&
+        globalTime == null &&
+        lines.length > 1 &&
         lines[1][indexId] is String &&
         lines[1][indexId] == "date") {
       // The first data line may have the item ID as "date"
-      try {
-        globalTime = DateTime.parse(lines[1][indexPrice] as String);
-      } catch (e) {
-        print("Error parsing global time from market data: $e");
-        return false;
-      }
-    } else if (indexTime < 0) {
-      print("Error: Date column not found in market data");
+      globalTime = tryParseTime(lines[1][indexPrice] as String);
+      skipFirstDataLine = true;
+    }
+    if (keyTime == null && globalTime == null) {
+      print("Error: Date not found in market data");
       globalTime = DateTime(1970, 1, 1); // Fallback to a default date
     }
 
     final entries = lines
-        .sublist(globalTime == null ? 1 : 2)
+        .sublist(skipFirstDataLine ? 1 : 2)
         .where((line) => line.length >= minLen && line[indexId] is! String)
         .map(
           (line) {
@@ -147,7 +188,7 @@ class EEMarketApiService {
               final price = line[indexPrice] is double
                   ? line[indexPrice] as double
                   : null;
-              final time = globalTime ?? DateTime.parse(line[indexTime]);
+              final time = globalTime ?? tryParseTime(line[indexTime])!;
               final itemId = line[indexId] as int?;
               if (itemId == null || itemId <= 0 || price == null) {
                 errors++;
@@ -172,8 +213,10 @@ class EEMarketApiService {
 
     _marketData.clear();
     _marketData.addEntries(entries);
-    print('Refreshed Market data with ${_marketData.length} entries, '
+    print('Refreshed Market data for $globalTime '
+        'with ${_marketData.length} entries, '
         'got $errors errors');
+    _timeOfData = globalTime;
 
     return _marketData.isNotEmpty;
   }
