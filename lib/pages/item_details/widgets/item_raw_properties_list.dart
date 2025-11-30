@@ -29,7 +29,7 @@ class ItemRawPropertiesList extends StatelessWidget {
         var entry = entriesList[index];
         return Container(
             child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(4.0),
           child: Row(
             children: [
               Expanded(
