@@ -15,6 +15,7 @@ class FittingItem {
 
   List<String> get mainCalCode => [item.mainCalCode ?? ''];
   List<String> get activeCalCode => [item.activeCalCode ?? item.onlineCalCode ?? ''];
+  List<int>? get sizeLicense => item.sizeLicense;
 
   final List<Attribute> baseAttributes;
   final List<ItemModifier> modifiers;

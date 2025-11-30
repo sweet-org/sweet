@@ -1483,7 +1483,20 @@ class FittingSimulator extends ChangeNotifier {
       (m) => m.groupId == module.groupId && !m.inSameSlot(module),
     );
 
-    return fittedModulesInGroup.length < maxGroupActive.toInt();
+    if (fittedModulesInGroup.length >= maxGroupActive.toInt()) {
+      return false;
+    }
+
+    if (module.item.sizeLicense != null) {
+      // I don't think the ship size is changing dynamically, so we use the
+      // fixed value here for performance reasons
+      final shipSize = ship.shipSize;
+      if (!module.item.sizeLicense!.contains(shipSize)) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   bool _canActivateModule(FittingModule module) {

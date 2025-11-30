@@ -6,7 +6,7 @@ extension ItemRepositoryFitting on ItemRepository {
   Future<FittingShip> ship({required int id}) async {
     final item = await itemWithId(id: id);
     final shipMode = await shipModeModule(shipId: id);
-    final baseAttributes = await getBaseAttributesForItemId(id: id);
+    final baseAttributes = (await getBaseAttributesForItemId(id: id)).toList();
     final modifiers = await db.itemModifierDao.attributeBonusesForItemId(id);
 
     if (item == null) {
@@ -16,7 +16,7 @@ extension ItemRepositoryFitting on ItemRepository {
     return FittingShip(
       item: item,
       shipMode: shipMode,
-      baseAttributes: baseAttributes.toList(),
+      baseAttributes: baseAttributes,
       modifiers: modifiers.toList(),
     );
   }

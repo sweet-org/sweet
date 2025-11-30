@@ -31,6 +31,9 @@ Item _$ItemFromJson(Map<String, dynamic> json) => Item(
           ?.map((e) => (e as num).toInt())
           .toList(),
       product: (json['product'] as num?)?.toInt(),
+      sizeLicense: (json['sizeLicense'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
     );
 
 Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
@@ -50,4 +53,5 @@ Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
       'published': instance.published,
       'shipBonusCodeList': instance.shipBonusCodeList,
       'shipBonusSkillList': instance.shipBonusSkillList,
+      'sizeLicense': instance.sizeLicense,
     };

@@ -24,6 +24,7 @@ class ItemDao extends BaseDao<Item> with BaseDaoMixin {
     'preSkill': StringListTypeConverter(),
     'shipBonusCodeList': StringListTypeConverter(),
     // 'corpCamera': DoubleListTypeConverter(),
+    'sizeLicense': IntNullableListTypeConverter(),
   };
 
   @override
@@ -90,6 +91,7 @@ class ItemDao extends BaseDao<Item> with BaseDaoMixin {
         'shipBonusCodeList': 'TEXT NOT NULL',
         'shipBonusSkillList': 'TEXT NOT NULL',
         // 'isRookieInsurance': 'INTEGER NOT NULL DEFAULT 0',
+        'sizeLicense': 'TEXT NULL',
       };
 
   Future<Iterable<Item>> selectWithCategory({required int categoryId}) async =>

@@ -11,6 +11,18 @@ class IntListTypeConverter extends TypeConverter<List<int?>, String> {
   String mapToDatabase(List<int?> inputValue) => jsonEncode(inputValue);
 }
 
+class IntNullableListTypeConverter extends TypeConverter<List<int>?, String?> {
+  @override
+  List<int>? mapFromDatabase(String? databaseValue) => databaseValue == null
+      ? null
+      : List<int>.from(jsonDecode(databaseValue) ?? []);
+
+  @override
+  String? mapToDatabase(List<int>? inputValue) => inputValue == null
+      ? null
+      : jsonEncode(inputValue);
+}
+
 class IntListListTypeConverter extends TypeConverter<List<List<int>>, String> {
   @override
   List<List<int>> mapFromDatabase(String databaseValue) {

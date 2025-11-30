@@ -74,6 +74,7 @@ class Item {
     // this.baseDropRate,
     // this.normalDebris,
     // this.isRookieInsurance,
+    this.sizeLicense,
   });
 
   final int id;
@@ -144,6 +145,7 @@ class Item {
   final List<int>? shipBonusSkillList;
   // @JsonKey(defaultValue: 0)
   // final double? isRookieInsurance;
+  final List<int>? sizeLicense;
 
   int get categoryId => id ~/ Category.itemToCategoryIdDivisor;
   int get groupId => id ~/ Group.itemToGroupIdDivisor;

@@ -232,6 +232,7 @@ enum EveEchoesAttribute {
   maxGroupFitted,
   maxLockedTargets,
   moduleSize,
+  shipSize,
 
   // Fitting constraints
   moduleCanFitAttributeID,
@@ -453,6 +454,8 @@ extension ShipAttributeExtenstion on EveEchoesAttribute {
 
   int get attributeId {
     switch (this) {
+      case EveEchoesAttribute.shipSize:
+        return 2;
       case EveEchoesAttribute.highSlotCount:
         return 164;
       case EveEchoesAttribute.midSlotCount:
