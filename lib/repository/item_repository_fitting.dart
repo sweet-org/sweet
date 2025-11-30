@@ -525,6 +525,13 @@ extension ItemRepositoryFitting on ItemRepository {
             ?.toInt() ??
         0;
 
+    final defenceRigSlots = (await attributeValue(
+          id: EveEchoesAttribute.defenceRigSlots.attributeId,
+          itemId: shipId,
+        ))
+            ?.toInt() ??
+        0;
+
     if (numHangarRigSlots == 0) {
       final shipDef = await this.ship(id: shipId);
       for (var mod in shipDef.modifiers) {
@@ -548,6 +555,7 @@ extension ItemRepositoryFitting on ItemRepository {
       numLightCruisersSlots: numLightCruisersSlots,
       numLightBattlecruisersSlots: numLightBattlecruisersSlots,
       numHangarRigSlots: numHangarRigSlots,
+      numDefenceRigSlots: defenceRigSlots,
     );
   }
 

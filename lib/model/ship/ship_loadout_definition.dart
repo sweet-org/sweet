@@ -16,6 +16,7 @@ class ShipLoadoutDefinition {
   final int numLightCruisersSlots;
   final int numLightBattlecruisersSlots;
   final int numHangarRigSlots;
+  final int numDefenceRigSlots;
 
   ShipLoadoutDefinition({
     required this.numHighSlots,
@@ -30,6 +31,7 @@ class ShipLoadoutDefinition {
     required this.numLightCruisersSlots,
     required this.numLightBattlecruisersSlots,
     required this.numHangarRigSlots,
+    required this.numDefenceRigSlots,
   });
 
   factory ShipLoadoutDefinition.fromJson(Map<String, dynamic> json) =>

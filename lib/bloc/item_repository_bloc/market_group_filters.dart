@@ -17,6 +17,7 @@ enum MarketGroupFilters {
   lightweightCruisers,
   lightweightBattlecruisers,
   hangarRigs,
+  shipSystemsModRigs, // Defence rigs
 
   lightweightShips,
   all,
@@ -105,6 +106,8 @@ extension MarketGroupFilterExtension on MarketGroupFilters {
 
       case MarketGroupFilters.hangarRigs:
         return 1050080;
+      case MarketGroupFilters.shipSystemsModRigs:
+        return 1040080;
 
       case MarketGroupFilters.advancedImplants:
         return 2000040;

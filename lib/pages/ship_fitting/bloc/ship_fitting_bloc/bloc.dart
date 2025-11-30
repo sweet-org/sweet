@@ -152,8 +152,12 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
         group = _itemRepository.marketGroupMap[filter.marketGroupId]!;
         initialItems = group.items ?? [];
         break;
+      case SlotType.defenceRigSlots:
+        group = _itemRepository.marketGroupMap[filter.marketGroupId]!;
+        initialItems = group.items ?? [];
+        break;
       // We fall through here, and deal with any exclusions
-      // which at present are only on Midslots
+      // which at present are only on Midslots and CombatRigs
       case SlotType.high:
         if (fitting.ship.marketGroupId ==
             MarketGroupFilters.pos.marketGroupId) {
@@ -192,7 +196,8 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
           group = _itemRepository.marketGroupMap[filter.marketGroupId]!;
 
           // Same deal here to strip them out
-          if (event.slotType == SlotType.mid) {
+          if (event.slotType == SlotType.mid ||
+              event.slotType == SlotType.combatRig) {
             group = MarketGroup.clone(
               group,
               group.children
@@ -201,7 +206,9 @@ class ShipFittingBloc extends Bloc<ShipFittingEvent, ShipFittingState> {
                         e.id != MarketGroupFilters.drones.marketGroupId &&
                         e.id != MarketGroupFilters.fighters.marketGroupId &&
                         e.id !=
-                            MarketGroupFilters.lightweightShips.marketGroupId,
+                            MarketGroupFilters.lightweightShips.marketGroupId &&
+                        e.id !=
+                            MarketGroupFilters.shipSystemsModRigs.marketGroupId
                   )
                   .toList(),
               null,

@@ -15,6 +15,7 @@ enum SlotType {
   lightBCSlot,
   //lightBBSlot,
   hangarRigSlots,
+  defenceRigSlots,
 }
 
 extension SlotTypeExtensions on SlotType {
@@ -50,6 +51,8 @@ extension SlotTypeExtensions on SlotType {
 
       case SlotType.hangarRigSlots:
         return MarketGroupFilters.hangarRigs;
+      case SlotType.defenceRigSlots:
+        return MarketGroupFilters.shipSystemsModRigs;
     }
   }
 }

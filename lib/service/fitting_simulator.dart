@@ -1075,6 +1075,9 @@ class FittingSimulator extends ChangeNotifier {
       case SlotType.hangarRigSlots:
         numSlotAttr = EveEchoesAttribute.hangarRigSlots;
         break;
+      case SlotType.defenceRigSlots:
+        numSlotAttr = EveEchoesAttribute.defenceRigSlots;
+        break;
       case SlotType.implantSlots:
         // Implants behaves like normal modules, but don't get
         // fitted into normal slots
@@ -1100,6 +1103,7 @@ class FittingSimulator extends ChangeNotifier {
       numLightCruisersSlots: numSlotsForType(SlotType.lightCASlot),
       numLightBattlecruisersSlots: numSlotsForType(SlotType.lightBCSlot),
       numHangarRigSlots: numSlotsForType(SlotType.hangarRigSlots),
+      numDefenceRigSlots: numSlotsForType(SlotType.defenceRigSlots),
     );
 
     _fitting.updateLoadout(updatedLoadout);

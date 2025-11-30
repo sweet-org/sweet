@@ -102,6 +102,7 @@ enum EveEchoesAttribute {
   droneBayCount,
   nanocoreSlotCount,
   hangarRigSlots,
+  defenceRigSlots,
   lightFFSlot,
   lightDDSlot,
   lightCASlot,
@@ -472,6 +473,8 @@ extension ShipAttributeExtenstion on EveEchoesAttribute {
         return 178;
       case EveEchoesAttribute.hangarRigSlots:
         return 10128;
+      case EveEchoesAttribute.defenceRigSlots:
+        return 10137;
       case EveEchoesAttribute.lightFFSlot:
         return 820;
       case EveEchoesAttribute.lightDDSlot:

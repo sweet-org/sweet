@@ -35,6 +35,8 @@ ShipFittingLoadout _$ShipFittingLoadoutFromJson(Map<String, dynamic> json) =>
           json['lightBattlecruisersSlots'] as Map<String, dynamic>),
       hangarRigSlots: ShipFittingSlot.fromJson(
           json['hangarRigSlots'] as Map<String, dynamic>),
+      defenceRigSlots: ShipFittingSlot.fromJson(
+          json['defenceRigSlots'] as Map<String, dynamic>),
       implantIds: (json['implantIds'] as List<dynamic>?)
           ?.map((e) => e as String?)
           .toList(),
@@ -59,4 +61,5 @@ Map<String, dynamic> _$ShipFittingLoadoutToJson(ShipFittingLoadout instance) =>
       'lightCruisersSlots': instance.lightCruisersSlots,
       'lightBattlecruisersSlots': instance.lightBattlecruisersSlots,
       'hangarRigSlots': instance.hangarRigSlots,
+      'defenceRigSlots': instance.defenceRigSlots,
     };

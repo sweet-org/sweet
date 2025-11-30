@@ -22,6 +22,7 @@ ShipLoadoutDefinition _$ShipLoadoutDefinitionFromJson(
       numLightBattlecruisersSlots:
           (json['numLightBattlecruisersSlots'] as num).toInt(),
       numHangarRigSlots: (json['numHangarRigSlots'] as num).toInt(),
+      numDefenceRigSlots: (json['numDefenceRigSlots'] as num).toInt(),
     );
 
 Map<String, dynamic> _$ShipLoadoutDefinitionToJson(
@@ -39,4 +40,5 @@ Map<String, dynamic> _$ShipLoadoutDefinitionToJson(
       'numLightCruisersSlots': instance.numLightCruisersSlots,
       'numLightBattlecruisersSlots': instance.numLightBattlecruisersSlots,
       'numHangarRigSlots': instance.numHangarRigSlots,
+      'numDefenceRigSlots': instance.numDefenceRigSlots,
     };

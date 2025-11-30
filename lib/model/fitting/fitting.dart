@@ -45,6 +45,8 @@ class Fitting {
         List.filled(definition.numNanocoreSlots, FittingModule.empty);
     _fittingData[SlotType.hangarRigSlots] =
         List.filled(definition.numHangarRigSlots, FittingModule.empty);
+    _fittingData[SlotType.defenceRigSlots] =
+        List.filled(definition.numDefenceRigSlots, FittingModule.empty);
     _fittingData[SlotType.lightFFSlot] =
         List.filled(definition.numLightFrigatesSlots, FittingModule.empty);
     _fittingData[SlotType.lightDDSlot] =
@@ -75,6 +77,8 @@ class Fitting {
 
     _fittingData[SlotType.hangarRigSlots] =
         List.filled(loadout.hangarRigSlots.maxSlots, FittingModule.empty);
+    _fittingData[SlotType.defenceRigSlots] =
+        List.filled(loadout.defenceRigSlots.maxSlots, FittingModule.empty);
     _fittingData[SlotType.lightFFSlot] =
         List.filled(loadout.lightFrigatesSlots.maxSlots, FittingModule.empty);
     _fittingData[SlotType.lightDDSlot] =
@@ -99,6 +103,7 @@ class Fitting {
       SlotType.lightCASlot: updatedLoadout.numLightCruisersSlots,
       SlotType.lightBCSlot: updatedLoadout.numLightBattlecruisersSlots,
       SlotType.hangarRigSlots: updatedLoadout.numHangarRigSlots,
+      SlotType.defenceRigSlots: updatedLoadout.numDefenceRigSlots,
     };
 
     mapped.forEach((key, value) {

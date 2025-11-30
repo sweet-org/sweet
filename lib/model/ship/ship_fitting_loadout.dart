@@ -79,6 +79,7 @@ class ShipFittingLoadout extends ChangeNotifier
   final ShipFittingSlot lightCruisersSlots;
   final ShipFittingSlot lightBattlecruisersSlots;
   final ShipFittingSlot hangarRigSlots;
+  final ShipFittingSlot defenceRigSlots;
 
   ShipFittingLoadout({
     String? id,
@@ -96,12 +97,14 @@ class ShipFittingLoadout extends ChangeNotifier
     required this.lightCruisersSlots,
     required this.lightBattlecruisersSlots,
     required this.hangarRigSlots,
+    required this.defenceRigSlots,
     List<String?>? implantIds,
   })  : _id = id ?? Uuid().v1(),
         _name = name,
         _implantIds = implantIds ?? List.filled(2, null);
 
   factory ShipFittingLoadout.fromJson(Map<String, dynamic> json) {
+    // This is for backward compatibility with older saved fittings
     json['lightFrigatesSlots'] =
         json['lightFrigatesSlots'] ?? <String, dynamic>{};
     json['lightDestroyersSlots'] =
@@ -111,6 +114,7 @@ class ShipFittingLoadout extends ChangeNotifier
     json['lightBattlecruisersSlots'] =
         json['lightBattlecruisersSlots'] ?? <String, dynamic>{};
     json['hangarRigSlots'] = json['hangarRigSlots'] ?? <String, dynamic>{};
+    json['defenceRigSlots'] = json['defenceRigSlots'] ?? <String, dynamic>{};
     json['type'] = json['type'] ?? 'LOADOUT';
     if (json['implantId'] != null) {
       json['implantIds'] = [json['implantId']];
@@ -161,6 +165,9 @@ class ShipFittingLoadout extends ChangeNotifier
         ),
         hangarRigSlots: ShipFittingSlot(
           maxSlots: loadoutDefinition.numHangarRigSlots,
+        ),
+        defenceRigSlots: ShipFittingSlot(
+          maxSlots: loadoutDefinition.numDefenceRigSlots,
         ),
       );
 
@@ -214,6 +221,9 @@ class ShipFittingLoadout extends ChangeNotifier
         hangarRigSlots: ShipFittingSlot(
           maxSlots: 0,
         ),
+        defenceRigSlots: ShipFittingSlot(
+          maxSlots: 0,
+        ),
       );
 
   List<ShipFittingSlot> get allSlots => [
@@ -230,6 +240,7 @@ class ShipFittingLoadout extends ChangeNotifier
         lightCruisersSlots,
         lightBattlecruisersSlots,
         hangarRigSlots,
+        defenceRigSlots,
       ];
 
   List<ShipFittingSlotModule> get allFittedModules {
@@ -271,6 +282,7 @@ class ShipFittingLoadout extends ChangeNotifier
         lightCruisersSlots,
         lightBattlecruisersSlots,
         hangarRigSlots,
+        defenceRigSlots,
       ];
 
   void fitItem(FittingModule module) {
@@ -319,6 +331,9 @@ class ShipFittingLoadout extends ChangeNotifier
       case SlotType.hangarRigSlots:
         hangarRigSlots.modules[module.index] = fittedModule;
         break;
+      case SlotType.defenceRigSlots:
+        defenceRigSlots.modules[module.index] = fittedModule;
+        break;
       case SlotType.implantSlots:
         print("Error: Can't fit implant directly via fitItem");
         break;
@@ -340,6 +355,7 @@ class ShipFittingLoadout extends ChangeNotifier
         lightCruisersSlots: lightCruisersSlots.copy(),
         lightBattlecruisersSlots: lightBattlecruisersSlots.copy(),
         hangarRigSlots: hangarRigSlots.copy(),
+        defenceRigSlots: defenceRigSlots.copy(),
       );
 
   void updateSlotDefinition(ShipLoadoutDefinition definition) {
@@ -367,6 +383,9 @@ class ShipFittingLoadout extends ChangeNotifier
     );
     hangarRigSlots.updateSlotCount(
       maxSlots: definition.numHangarRigSlots,
+    );
+    defenceRigSlots.updateSlotCount(
+      maxSlots: definition.numDefenceRigSlots,
     );
   }
 
