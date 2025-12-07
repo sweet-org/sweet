@@ -61,7 +61,7 @@ android {
 
     defaultConfig {
         applicationId "dev.sillykat.eve.sweet"
-        minSdkVersion 22
+        minSdkVersion flutter.minSdkVersion
         targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
