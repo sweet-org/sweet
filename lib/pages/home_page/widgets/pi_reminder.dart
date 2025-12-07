@@ -54,7 +54,7 @@ class _PIReminderState extends State<PIReminder> {
             .then(
               (prefs) =>
                   prefs.setInt(endTimePrefsKey, date.millisecondsSinceEpoch),
-            )
+          /*) // ToDo: Notifications have been disabled due to build issues and it is a useless feature anyways
             .then(
               (_) => notificationService.scheduleNotification(
                 title: localiseRepo.getLocalisedStringForIndex(
@@ -62,7 +62,7 @@ class _PIReminderState extends State<PIReminder> {
                 ),
                 message: 'Your timer is about to expire', // TODO: Localise
                 duration: duration - Duration(hours: 1),
-              ),
+              ),*/
             );
         endTime = date;
       }),

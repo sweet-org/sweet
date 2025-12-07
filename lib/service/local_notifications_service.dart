@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class LocalNotificationsService {
-  final FlutterLocalNotificationsPlugin _notificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  //final FlutterLocalNotificationsPlugin _notificationsPlugin =
+  //    FlutterLocalNotificationsPlugin();
 
   LocalNotificationsService() {
     init();
@@ -15,7 +15,7 @@ class LocalNotificationsService {
 
   Future<void> init() async {
     tz.initializeTimeZones();
-
+    /*
     const initializationSettingsAndroid =
         AndroidInitializationSettings('ic_launcher_foreground');
 
@@ -53,7 +53,7 @@ class LocalNotificationsService {
           debugPrint('notification payload: $details.payload');
         }
       },
-    );
+    );*/
   }
 
   Future<int> scheduleNotification({
@@ -61,6 +61,7 @@ class LocalNotificationsService {
     required String message,
     required Duration duration,
   }) async {
+    throw UnimplementedError("Local notifications have been removed");/*
     // ToDo: Windows is supported since 19.0.0, but haven't looked into it yet
     if (!Platform.isWindows) {
       await _notificationsPlugin.zonedSchedule(
@@ -77,12 +78,14 @@ class LocalNotificationsService {
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       );
     }
+    */
 
     return 0;
   }
-
+  /*
   Future<void> cancelNotification({required int id}) =>
       _notificationsPlugin.cancel(id);
 
   Future<void> cancelAllNotifications() => _notificationsPlugin.cancelAll();
+*/
 }
