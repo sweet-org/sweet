@@ -1,5 +1,5 @@
 app_identifier("de.blaumeise03.sweet.dev") # The iOS bundle identifier of your app
-package_name("de.blaumeise03.sweet.dev") # The Android bundle identifier of your app
+package_name("dev.sillykat.eve.sweet") # The Android bundle identifier of your app
 
 # Set in Environment
 apple_id("#{ENV["FASTLANE_APPLE_ID"]}") # Your Apple email address
