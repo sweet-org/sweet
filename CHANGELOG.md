@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Changes
 - Added indentations to the item-selection dialog to better visualize the market group hierarchy
 - Merged new iOS build config into main
+- Removed local notification service due build issues
+- Updated gradle plugins to latest versions
+- Dropped support for Android 6 (API level 23) and below (due to Flutter requirements)
 
 #### Fixed
 - Fixed changes in static data regarding non-stackable modifiers and new modifier change types
@@ -60,6 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed issues where it was not possible to rename characters if the total implant levels is set to 0
 - Fixed attribute calculations for drones/fighters (again)
 - Fixed missing missile range attribute
+- Fixed market browser search bar
 
 ### [0.3.6]
 #### Added
