@@ -1,4 +1,4 @@
-app_identifier("de.blaumeise03.sweet.dev") # The iOS bundle identifier of your app
+app_identifier("dev.sillykat.eve.sweet") # The iOS bundle identifier of your app
 package_name("dev.sillykat.eve.sweet") # The Android bundle identifier of your app
 
 # Set in Environment

@@ -8,9 +8,9 @@ workflows:
     environment:
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: de.blaumeise03.sweet.dev
+        bundle_identifier: dev.sillykat.eve.sweet
       vars:
-        APP_ID: 6747888536
+        APP_ID: 1664398994
       flutter: stable
       xcode: latest
       cocoapods: default
